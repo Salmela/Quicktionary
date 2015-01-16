@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1088"
+   height="448"
+   id="svg2998"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="concept_ui.svg"
+   inkscape:export-filename="/media/data1/sources/all/quicktionary/concept_ui.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs3000">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3253">
+      <rect
+         style="color:#000000;fill:#ffffff;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3255"
+         width="390"
+         height="246"
+         x="120.5"
+         y="126.86218" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.73892659"
+     inkscape:cx="736.71049"
+     inkscape:cy="211.77207"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:object-nodes="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:object-paths="true"
+     inkscape:snap-nodes="true"
+     inkscape:snap-midpoints="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1115"
+     inkscape:window-height="701"
+     inkscape:window-x="249"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:snap-page="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3064"
+       empspacing="2"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingx="0.5px"
+       spacingy="0.5px"
+       originx="64px"
+       originy="-576px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3003">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(64,-28.362183)">
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 127,84.862183 c -3.57308,0 -6.46875,2.895672 -6.46875,6.468752 l 0,275.062495 0,6.46875 6.46875,0 377.03125,0 6.46875,0 0,-6.46875 0,-275.062495 c 0,-3.57308 -2.89568,-6.468752 -6.46875,-6.468752 z"
+       id="rect3015"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssccccccsss" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,126.86218 389.9375,0"
+       id="path3023"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3025"
+       width="19"
+       height="19"
+       x="485.5"
+       y="102.86218"
+       rx="3.1100478"
+       ry="3.1100478" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 493.83575,91.971324 8.20447,8.035296"
+       id="path3027"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3029"
+       d="m 493.83575,100.00662 8.20447,-8.035296"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <g
+       id="g3075"
+       transform="translate(21.684786,-0.32493238)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3033"
+         d="m 468.92177,109.70716 8.7869,0"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 468.92177,112.68708 8.7869,0"
+         id="path3035"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3037"
+         d="m 468.92177,115.66707 8.7869,0"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <rect
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3049"
+       width="39"
+       height="19"
+       x="125.5"
+       y="102.86218"
+       rx="3.1100478"
+       ry="3.1100478" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 145,102.86218 0,19"
+       id="path3051"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       id="path3055"
+       style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 137.82101,117.22078 -4.99214,-4.53367 4.99214,-4.53368"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       sodipodi:nodetypes="ccc"
+       inkscape:connector-curvature="0"
+       d="m 152.47872,117.22078 4.99214,-4.53367 -4.99214,-4.53368"
+       style="fill:none;stroke:#888a85;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path3058" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 237.625 74.5 C 235.90203 74.5 234.5 75.902034 234.5 77.625 L 234.5 90.375 C 234.5 92.097966 235.90203 93.5 237.625 93.5 L 258.875 93.5 L 518.375 93.5 L 539.65625 93.5 C 541.37922 93.5 542.75 92.097966 542.75 90.375 L 542.75 77.625 C 542.75 75.902034 541.37922 74.5 539.65625 74.5 L 518.375 74.5 L 258.875 74.5 L 237.625 74.5 z "
+       transform="translate(-64,28.362183)"
+       id="rect3062" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1.13083732;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3080"
+       sodipodi:cx="444.85645"
+       sodipodi:cy="110.1373"
+       sodipodi:rx="6.2200956"
+       sodipodi:ry="6.2200956"
+       d="m 451.07654,110.1373 a 6.2200956,6.2200956 0 1 1 -12.44019,0 6.2200956,6.2200956 0 1 1 12.44019,0 z"
+       transform="matrix(0.76588196,0,0,0.76588196,126.76766,26.464791)" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 470.4789,114.62295 3.4689,4.60526"
+       id="path3082"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.00117"
+       y="141.71057"
+       id="text3084"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3086"
+         x="130.00117"
+         y="141.71057">car</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="175.71417"
+       y="115.85342"
+       id="text3088"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3090"
+         x="175.71417"
+         y="115.85342">l.e-f car</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.47467"
+       y="154.79842"
+       id="text3092"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3094"
+         x="130.47467"
+         y="154.79842">A wheeled vehicle that moves independently, with at least three wheels, ... </tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,160.712 389.96875,0"
+       id="path3098"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,126.86218 389.9375,0"
+       id="path3100"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3102"
+       y="175.56039"
+       x="130.00117"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="175.56039"
+         x="130.00117"
+         id="tspan3104"
+         sodipodi:role="line">motor car</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3106"
+       y="188.64824"
+       x="130.47467"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="188.64824"
+         x="130.47467"
+         id="tspan3108"
+         sodipodi:role="line">An enclosed passenger vehicle powered by an engine.</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path3112"
+       d="m 120.5,194.56182 389.96875,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.00117"
+       y="209.41022"
+       id="text3139"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3141"
+         x="130.00117"
+         y="209.41022">estate car</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.47467"
+       y="222.49806"
+       id="text3143"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3145"
+         x="130.47467"
+         y="222.49806">A body style for cars in which the roof is extended rearward to produce an enclosed...</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,228.41164 389.96875,0"
+       id="path3147"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="3.4707747"
+       y="119.6256"
+       id="text3161"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="3.4707747"
+         y="119.6256"
+         id="tspan3165">First definition</tspan><tspan
+         sodipodi:role="line"
+         x="3.4707747"
+         y="134.62561"
+         id="tspan3261">without tags</tspan><tspan
+         sodipodi:role="line"
+         x="3.4707747"
+         y="149.62561"
+         id="tspan3181">at en.wikipedia</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3169"
+       y="243.26004"
+       x="130.00117"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="243.26004"
+         x="130.00117"
+         id="tspan3171"
+         sodipodi:role="line">car park</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3173"
+       y="256.3479"
+       x="130.47467"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="256.3479"
+         x="130.47467"
+         id="tspan3175"
+         sodipodi:role="line">An outdoor area or a multi-storey building where cars may be parked. </tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path3177"
+       d="m 120.5,262.26146 389.96875,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.00117"
+       y="277.10986"
+       id="text3189"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3191"
+         x="130.00117"
+         y="277.10986">sleeping car</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.47467"
+       y="290.19772"
+       id="text3193"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3195"
+         x="130.47467"
+         y="290.19772">A railroad car with sleeping facilities for passengers travelling overnight.</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,296.11128 389.96875,0"
+       id="path3197"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,296.11128 389.96875,0"
+       id="path3199"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3201"
+       y="310.95969"
+       x="130.00117"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="310.95969"
+         x="130.00117"
+         id="tspan3203"
+         sodipodi:role="line">smoking car</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3205"
+       y="324.04755"
+       x="130.47467"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="324.04755"
+         x="130.47467"
+         id="tspan3207"
+         sodipodi:role="line">A railroad car in which smoking is allowed.</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path3209"
+       d="m 120.5,329.9611 389.96875,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3211"
+       d="m 120.5,329.9611 389.96875,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.00117"
+       y="344.80951"
+       id="text3213"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3215"
+         x="130.00117"
+         y="344.80951">dining car</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="130.47467"
+       y="357.89737"
+       id="text3217"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3219"
+         x="130.47467"
+         y="357.89737">A carriage on a train that functions as a restaurant.</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,363.81092 389.96875,0"
+       id="path3221"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 120.5,363.81092 389.96875,0"
+       id="path3223"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3245"
+       y="378.65933"
+       x="130.00117"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"
+       clip-path="url(#clipPath3253)"><tspan
+         y="378.65933"
+         x="130.00117"
+         id="tspan3247"
+         sodipodi:role="line">electric car</tspan></text>
+    <path
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 129.83529,148.46013 97.424382,131.58902"
+       id="path3257"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 128.17512,143.07918 1.66017,5.38095 -5.43098,1.74041"
+       id="path3259"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc"
+       inkscape:transform-center-x="3.21329"
+       inkscape:transform-center-y="-1.8671" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:0.73832357;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 543.81705,125.69532 0,12.57187 -20.08613,0 0,12.91257 20.08613,0 0,12.58891 20.55218,-19.04519 z"
+       id="rect3263"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       sodipodi:nodetypes="ssccccccsss"
+       inkscape:connector-curvature="0"
+       id="path3269"
+       d="m 583.74361,84.862183 c -3.57308,0 -6.46875,2.895672 -6.46875,6.468752 l 0,348.141475 0,6.46875 6.46875,0 377.03125,0 6.46875,0 0,-6.46875 0,-348.141475 c 0,-3.57308 -2.89568,-6.468752 -6.46875,-6.468752 z"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3271"
+       d="m 577.24361,126.86218 389.9375,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       ry="3.1100478"
+       rx="3.1100478"
+       y="102.86218"
+       x="942.24365"
+       height="19"
+       width="19"
+       id="rect3273"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3275"
+       d="m 950.57936,91.971324 8.20447,8.035296"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 950.57936,100.00662 8.20447,-8.035296"
+       id="path3277"
+       inkscape:connector-curvature="0" />
+    <g
+       transform="translate(478.4284,-0.32493238)"
+       id="g3279">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 468.92177,109.70716 8.7869,0"
+         id="path3281"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3283"
+         d="m 468.92177,112.68708 8.7869,0"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 468.92177,115.66707 8.7869,0"
+         id="path3285"
+         inkscape:connector-curvature="0" />
+    </g>
+    <rect
+       ry="3.1100478"
+       rx="3.1100478"
+       y="102.86218"
+       x="582.24359"
+       height="19"
+       width="39"
+       id="rect3287"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path3289"
+       d="m 601.74361,102.86218 0,19"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       sodipodi:nodetypes="ccc"
+       inkscape:connector-curvature="0"
+       d="m 594.56462,117.22078 -4.99214,-4.53367 4.99214,-4.53368"
+       style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path3291" />
+    <path
+       id="path3293"
+       style="fill:none;stroke:#888a85;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 609.22233,117.22078 4.99214,-4.53367 -4.99214,-4.53368"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 694.34375 74.5 C 692.62078 74.5 691.25 75.902034 691.25 77.625 L 691.25 90.375 C 691.25 92.097966 692.62078 93.5 694.34375 93.5 L 715.625 93.5 L 975.125 93.5 L 996.375 93.5 C 998.09797 93.5 999.5 92.097966 999.5 90.375 L 999.5 77.625 C 999.5 75.902034 998.09797 74.5 996.375 74.5 L 975.125 74.5 L 715.625 74.5 L 694.34375 74.5 z "
+       transform="translate(-64,28.362183)"
+       id="rect3295" />
+    <path
+       transform="matrix(0.76588196,0,0,0.76588196,583.51127,26.464791)"
+       d="m 451.07654,110.1373 a 6.2200956,6.2200956 0 1 1 -12.44019,0 6.2200956,6.2200956 0 1 1 12.44019,0 z"
+       sodipodi:ry="6.2200956"
+       sodipodi:rx="6.2200956"
+       sodipodi:cy="110.1373"
+       sodipodi:cx="444.85645"
+       id="path3297"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1.13083732;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3299"
+       d="m 927.22251,114.62295 3.4689,4.60526"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3301"
+       y="147.21295"
+       x="586.74481"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="147.21295"
+         x="586.74481"
+         id="tspan3303"
+         sodipodi:role="line"
+         style="font-size:24px">car</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3305"
+       y="115.85342"
+       x="632.45776"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="115.85342"
+         x="632.45776"
+         id="tspan3307"
+         sodipodi:role="line">car</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3309"
+       y="193.22482"
+       x="587.21826"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="193.22482"
+         x="587.21826"
+         id="tspan3311"
+         sodipodi:role="line">1. A wheeled vehicle that moves independently, with at least three wheels, powered</tspan><tspan
+         y="205.72482"
+         x="587.21826"
+         sodipodi:role="line"
+         id="tspan4206">    mechanically, steered by a driver and mostly for personal transportation; a</tspan><tspan
+         y="218.22482"
+         x="587.21826"
+         sodipodi:role="line"
+         id="tspan4210">    motorcar or automobile.</tspan><tspan
+         y="230.72482"
+         x="587.21826"
+         sodipodi:role="line"
+         id="tspan4212">2. (dated) A wheeled vehicle, drawn by a horse or other animal.</tspan></text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path3315"
+       d="m 577.24361,126.86218 389.9375,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="588.57159"
+       y="163.7151"
+       id="text3387"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3389"
+         x="588.57159"
+         y="163.7151">(UK) /kɑː/</tspan><tspan
+         sodipodi:role="line"
+         x="588.57159"
+         y="176.34256"
+         id="tspan4202">(US) /kɑɹ/</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path3391"
+       d="M 183.31875,105.9045 168.40255,73.62015"
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:transform-center-y="-2.974875"
+       inkscape:transform-center-x="2.038735"
+       sodipodi:nodetypes="ccc"
+       inkscape:connector-curvature="0"
+       id="path3393"
+       d="m 185.32069,100.64113 -2.00194,5.26337 -5.35217,-1.96946"
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3395"
+       y="64.082161"
+       x="118.49651"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         id="tspan3401"
+         y="64.082161"
+         x="118.49651"
+         sodipodi:role="line">Shorthand form for &quot;lang:en-fi&quot;</tspan></text>
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 112.90625,47.8125 0,25.59375 178.71875,0 0,-18.5625 -7.0625,-7.03125 -171.65625,0 z"
+       id="rect3408"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 291.625,54.84375 -7.0625,-7.03125 0,7.03125 7.0625,0 z"
+       id="rect3412"
+       inkscape:connector-curvature="0" />
+    <path
+       id="path4186"
+       d="m -0.77216036,106.035 0,51.30672 98.19654236,0 0,-44.27547 -7.0625,-7.03125 z"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4188"
+       d="m 97.424382,113.06625 -7.0625,-7.03125 0,7.03125 7.0625,0 z"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="452.93671"
+       y="64.082161"
+       id="text4190"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="452.93671"
+         y="64.082161"
+         id="tspan4192">More options menu</tspan></text>
+    <path
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 494.62328,103.95911 492.43605,73.40625"
+       id="path4198"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       id="path4194"
+       d="m 444.47563,47.8125 0,25.59375 123.69483,0 0,-18.5625 -7.0625,-7.03125 z"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4196"
+       d="m 568.17046,54.84375 -7.0625,-7.03125 0,7.03125 7.0625,0 z"
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       style="fill:none;stroke:#555753;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 498.2272,99.632151 -3.60392,4.326959 -4.4215,-3.60207"
+       id="path4200"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc"
+       inkscape:transform-center-x="0.24628"
+       inkscape:transform-center-y="-2.63633" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="12.271173"
+       y="414.49838"
+       id="text4214"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4216"
+         x="12.271173"
+         y="414.49838"
+         style="font-size:10px">Text snipets inside the window are copyrighted by wiktionary contributors</tspan><tspan
+         sodipodi:role="line"
+         x="12.271173"
+         y="426.99838"
+         id="tspan4218"
+         style="font-size:10px">with Atribution-ShareAlike license.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="586.74481"
+       y="254.38998"
+       id="text4220"
+       sodipodi:linespacing="125%"><tspan
+         style="font-size:16px"
+         sodipodi:role="line"
+         id="tspan4222"
+         x="586.74481"
+         y="254.38998">Translations</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="587.21826"
+       y="268.82291"
+       id="text4224"
+       sodipodi:linespacing="125%"><tspan
+         id="tspan4232"
+         sodipodi:role="line"
+         x="587.21826"
+         y="268.82291"
+         style="font-weight:bold;-inkscape-font-specification:Cantarell Bold">automobile, a vehicle steered by a driver</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="281.33282"
+         id="tspan4245">    finnish: auto</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="293.82291"
+         id="tspan4243"
+         style="font-weight:bold;-inkscape-font-specification:Cantarell Bold">carriage</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="306.32291"
+         id="tspan4247"
+         style="font-weight:bold;-inkscape-font-specification:Cantarell Bold">    wheeled vehicle, generally drawn by horse power</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="318.83282"
+         id="tspan4249">        finnish: vaunut, kärryt</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="331.32291"
+         id="tspan4251"
+         style="font-weight:bold;-inkscape-font-specification:Cantarell Bold">    railroad car</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="343.83282"
+         id="tspan4255">        finnish: vaunu, junavaunu</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="356.32291"
+         id="tspan4259"
+         style="font-weight:bold;-inkscape-font-specification:Cantarell Bold">passenger-carrying unit in a subway or elevated train, whether powered or not</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="368.83282"
+         id="tspan4261">    finnish: vaunu</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="381.32291"
+         id="tspan4263"
+         style="font-weight:bold;-inkscape-font-specification:Cantarell Bold">moving, load-carrying component of an elevator</tspan><tspan
+         sodipodi:role="line"
+         x="587.21826"
+         y="393.83282"
+         id="tspan4265">    finnish: hissikori</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4271"
+       y="420.84766"
+       x="586.74481"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="420.84766"
+         x="586.74481"
+         id="tspan4273"
+         sodipodi:role="line"
+         style="font-size:16px">Sources</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#0043a7;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="587.21826"
+       y="437.05359"
+       id="text4275"
+       sodipodi:linespacing="125%"><tspan
+         id="tspan4283"
+         sodipodi:role="line"
+         x="587.21826"
+         y="437.05359">https://en.wiktionary.org/wiki/car</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       x="276.27045"
+       y="98.37175"
+       id="text3494"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3496"
+         x="276.27045"
+         y="98.37175">Quicktionary</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3498"
+       y="98.37175"
+       x="733.01404"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Cantarell;-inkscape-font-specification:Cantarell"
+       xml:space="preserve"><tspan
+         y="98.37175"
+         x="733.01404"
+         id="tspan3500"
+         sodipodi:role="line">Quicktionary</tspan></text>
+  </g>
+</svg>
