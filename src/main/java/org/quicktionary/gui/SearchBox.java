@@ -25,16 +25,23 @@ import java.awt.event.*;
  * Search box widget that is at the header of the main window.
  * TODO: add a button aligned to the right. The component may have to be turned into compound component.
  */
-public class SearchBox extends JTextField implements FocusListener {
+public class SearchBox extends JTextField implements FocusListener, ActionListener {
+	static final String SEARCH_EVENT = "search-event";
+	static final String SEARCH_ENTER_EVENT = "search-enter-event";
+
 	private boolean hasPlaceHolder;
-	final Color placeHolderColor;
+	private final Color placeHolderColor;
+	private final ActionListener searchListener;
 
 	public SearchBox(ActionListener searchListener) {
 		DocumentListener changeListener;
 
+		this.searchListener = searchListener;
+
 		changeListener = new onChangeEvents(this, searchListener);
 		getDocument().addDocumentListener(changeListener);
 		addFocusListener(this);
+		addActionListener(this);
 
 		hasPlaceHolder = true;
 		setText("Search");
@@ -52,7 +59,10 @@ public class SearchBox extends JTextField implements FocusListener {
 			this.searchBox = searchBox;
 		}
 		private void emitEvent() {
-			listener.actionPerformed(new ActionEvent(searchBox, ActionEvent.ACTION_PERFORMED, "search-event"));
+			ActionEvent event;
+
+			event = new ActionEvent(searchBox, ActionEvent.ACTION_PERFORMED, SEARCH_EVENT);
+			listener.actionPerformed(event);
 		}
 		public void changedUpdate(DocumentEvent event) {
 			emitEvent();
@@ -78,5 +88,10 @@ public class SearchBox extends JTextField implements FocusListener {
 			hasPlaceHolder = true;
 			setText("Search");
 		}
+	}
+	public void actionPerformed(ActionEvent e) {
+		ActionEvent event;
+		event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, SEARCH_ENTER_EVENT);
+		searchListener.actionPerformed(event);
 	}
 }
