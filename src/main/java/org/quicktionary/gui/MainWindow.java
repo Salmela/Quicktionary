@@ -16,8 +16,8 @@
  */
 package org.quicktionary.gui;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.awt.*;
 import org.quicktionary.backend.Quicktionary;
 
 public class MainWindow extends JFrame {
@@ -29,5 +29,35 @@ public class MainWindow extends JFrame {
 		setTitle("Quicktionary");
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		makeComponents();
+	}
+
+	private void makeComponents() {
+		JPanel     headerBar;
+		JTextField searchBox;
+		JButton    backButton, nextButton;
+		Dimension  headerSize;
+
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		backButton = new JButton("Back");
+		nextButton = new JButton("Next");
+		searchBox = new JTextField("Search");
+
+		headerBar = new JPanel();
+		headerBar.setLayout(new BoxLayout(headerBar, BoxLayout.X_AXIS));
+		headerBar.add(backButton);
+		headerBar.add(nextButton);
+		headerBar.add(searchBox);
+		headerBar.add(new JButton("Settings"));
+
+		/* set the headerBar height to same as backButton height */
+		headerSize = headerBar.getPreferredSize();
+		headerSize.width = Short.MAX_VALUE;
+		System.out.println("size " + headerSize.width + ", "+ headerSize.height);
+		headerBar.setMaximumSize(headerSize);
+
+		this.add(headerBar);
+		this.add(new JTextArea());
 	}
 }
