@@ -21,11 +21,20 @@ import java.awt.*;
 import java.awt.event.*;
 import org.quicktionary.backend.Quicktionary;
 
+/*
+ * The MainWindow is only class that communicates with the backend.
+ */
 public class MainWindow extends JFrame implements ActionListener {
 	private Quicktionary dictionary;
+	private boolean showSearchResults;
+
+	private JScrollPane mainPane;
+	private JList searchResults;
+	private JTextArea pageArea;
 
 	public MainWindow(Quicktionary dictionary) {
 		this.dictionary = dictionary;
+		this.showSearchResults = false;
 
 		setTitle("Quicktionary");
 		setSize(600, 400);
@@ -41,10 +50,13 @@ public class MainWindow extends JFrame implements ActionListener {
 		Dimension  headerSize;
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+		/* create the header bar components */
 		backButton = new JButton("Back");
 		nextButton = new JButton("Next");
 		searchBox = new SearchBox(this);
 
+		/* pack the components into header bar */
 		headerBar = new JPanel();
 		headerBar.setLayout(new BoxLayout(headerBar, BoxLayout.X_AXIS));
 		headerBar.add(backButton);
@@ -58,8 +70,14 @@ public class MainWindow extends JFrame implements ActionListener {
 		System.out.println("size " + headerSize.width + ", "+ headerSize.height);
 		headerBar.setMaximumSize(headerSize);
 
+		/* create components for the main view */
+		mainPane = new JScrollPane();
+		searchResults = new SearchResults();
+		pageArea = new JTextArea();
+		mainPane.setViewportView(searchResults);
+
 		this.add(headerBar);
-		this.add(new JTextArea());
+		this.add(mainPane);
 	}
 
 	public void actionPerformed(ActionEvent event) {
