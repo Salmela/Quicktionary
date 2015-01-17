@@ -63,6 +63,20 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		System.out.println("main window event");
+		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
+			SearchBox searchBox = (SearchBox)event.getSource();
+			System.out.println("main window: search event " + searchBox.getText());
+
+			//dictionary.search(searchBox.getText());
+
+		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
+			SearchBox searchBox = (SearchBox)event.getSource();
+			System.out.println("main window: search event " + searchBox.getText());
+
+			//dictionary.search(searchBox.getText());
+			//show the first item's page
+		} else {
+			System.out.println("main window: unknown event");
+		}
 	}
 }
