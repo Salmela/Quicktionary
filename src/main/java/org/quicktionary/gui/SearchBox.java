@@ -17,20 +17,30 @@
 package org.quicktionary.gui;
 
 import javax.swing.*;
-import java.awt.event.*;
 import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
 
 /*
  * Search box widget that is at the header of the main window.
- * TODO: add placeholder text
- * TODO: add a button aligned to the right.
+ * TODO: add a button aligned to the right. The component may have to be turned into compound component.
  */
-public class SearchBox extends JTextField {
+public class SearchBox extends JTextField implements FocusListener {
+	private boolean hasPlaceHolder;
+	final Color placeHolderColor;
 
 	public SearchBox(ActionListener searchListener) {
 		DocumentListener changeListener;
+
 		changeListener = new onChangeEvents(this, searchListener);
 		getDocument().addDocumentListener(changeListener);
+		addFocusListener(this);
+
+		hasPlaceHolder = true;
+		setText("Search");
+
+		placeHolderColor = Color.GRAY;
+		setForeground(placeHolderColor);
 	}
 
 	private class onChangeEvents implements DocumentListener {
@@ -52,6 +62,21 @@ public class SearchBox extends JTextField {
 		}
 		public void removeUpdate(DocumentEvent event) {
 			emitEvent();
+		}
+	}
+
+	public void focusGained(FocusEvent event) {
+		if(hasPlaceHolder) {
+			setForeground(Color.BLACK);
+			hasPlaceHolder = false;
+			setText("");
+		}
+	}
+	public void focusLost(FocusEvent event) {
+		if(getText().length() == 0) {
+			setForeground(placeHolderColor);
+			hasPlaceHolder = true;
+			setText("Search");
 		}
 	}
 }
