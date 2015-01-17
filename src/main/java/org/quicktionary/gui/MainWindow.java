@@ -19,7 +19,6 @@ package org.quicktionary.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.event.*;
 import org.quicktionary.backend.Quicktionary;
 
 public class MainWindow extends JFrame implements ActionListener {
