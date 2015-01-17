@@ -18,10 +18,14 @@ package org.quicktionary.gui;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import org.quicktionary.backend.Quicktionary;
 
 public class MainWindow extends JFrame {
+	private Quicktionary dictionary;
 
-	public MainWindow() {
+	public MainWindow(Quicktionary dictionary) {
+		this.dictionary = dictionary;
+
 		setTitle("Quicktionary");
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

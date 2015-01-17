@@ -16,15 +16,22 @@
  */
 package org.quicktionary.gui;
 
+import org.quicktionary.backend.Quicktionary;
+
 /**
- *
+ * The Main class parses the command line arguments and starts the main window.
  */
 public class Main {
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		MainWindow window = new MainWindow();
+		Quicktionary quicktionary;
+		MainWindow window;
+
+		quicktionary = new Quicktionary();
+		window = new MainWindow(quicktionary);
+
 		window.setVisible(true);
 		System.out.println("Hello world!");
 	}
