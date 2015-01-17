@@ -35,14 +35,14 @@ public class SearchBox extends JTextField {
 
 	private class onChangeEvents implements DocumentListener {
 		private final ActionListener listener;
-		private final Object source;
+		private final SearchBox searchBox;
 
-		public onChangeEvents(Object source, ActionListener listener) {
-			this.listener = listener;
-			this.source   = source;
+		public onChangeEvents(SearchBox searchBox, ActionListener listener) {
+			this.listener  = listener;
+			this.searchBox = searchBox;
 		}
 		private void emitEvent() {
-			listener.actionPerformed(new ActionEvent(source, ActionEvent.ACTION_PERFORMED, "search-event"));
+			listener.actionPerformed(new ActionEvent(searchBox, ActionEvent.ACTION_PERFORMED, "search-event"));
 		}
 		public void changedUpdate(DocumentEvent event) {
 			emitEvent();
