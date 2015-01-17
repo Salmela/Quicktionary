@@ -61,6 +61,9 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 		private void emitEvent() {
 			ActionEvent event;
 
+			if(searchBox.getText().length() == 0) {
+				return;
+			}
 			event = new ActionEvent(searchBox, ActionEvent.ACTION_PERFORMED, SEARCH_EVENT);
 			listener.actionPerformed(event);
 		}
