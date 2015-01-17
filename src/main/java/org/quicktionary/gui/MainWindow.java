@@ -18,9 +18,11 @@ package org.quicktionary.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.event.*;
 import org.quicktionary.backend.Quicktionary;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements ActionListener {
 	private Quicktionary dictionary;
 
 	public MainWindow(Quicktionary dictionary) {
@@ -42,7 +44,7 @@ public class MainWindow extends JFrame {
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		backButton = new JButton("Back");
 		nextButton = new JButton("Next");
-		searchBox = new JTextField("Search");
+		searchBox = new SearchBox(this);
 
 		headerBar = new JPanel();
 		headerBar.setLayout(new BoxLayout(headerBar, BoxLayout.X_AXIS));
@@ -59,5 +61,9 @@ public class MainWindow extends JFrame {
 
 		this.add(headerBar);
 		this.add(new JTextArea());
+	}
+
+	public void actionPerformed(ActionEvent event) {
+		System.out.println("main window event");
 	}
 }
