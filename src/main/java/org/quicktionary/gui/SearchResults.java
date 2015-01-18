@@ -17,6 +17,7 @@
 package org.quicktionary.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.ListCellRenderer;
 import java.awt.*;
 
@@ -49,11 +50,17 @@ public class SearchResults extends JList implements SearchResultListener {
 		setListData(items);
 	}
 
-	/*
+	/**
 	 * Custom cell renderer that transforms the backend objects to JLabels.
 	 */
 	private class ResultRenderer extends JLabel implements ListCellRenderer {
 		static final long serialVersionUID = 1L;
+
+		public ResultRenderer() {
+			Border paddingBorder;
+			paddingBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
+			this.setBorder(paddingBorder);
+		}
 
 		public Component getListCellRendererComponent(JList list, Object object,
 		                                              int index, boolean isSelected,
