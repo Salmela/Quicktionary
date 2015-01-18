@@ -16,6 +16,7 @@
  */
 package org.quicktionary.gui;
 
+import java.lang.IllegalStateException;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -46,10 +47,44 @@ public class MainWindow extends JFrame implements ActionListener {
 		makeComponents();
 	}
 
+	private void makeRoundedBorders(JComponent component, boolean top, boolean right,
+	                                boolean bottom, boolean left) {
+		CompoundBorder compoundBorder;
+		RoundedBorder  roundedBorder;
+		int topLeft, topRight, bottomRight, bottomLeft;
+
+		topLeft = topRight = bottomRight = bottomLeft = 4;
+
+		if(!top) {
+			topLeft = topRight = 0;
+		}
+		if(!right) {
+			topRight = bottomRight = 0;
+		}
+		if(!bottom) {
+			bottomLeft = bottomRight = 0;
+		}
+		if(!left) {
+			topLeft = bottomLeft = 0;
+		}
+
+		compoundBorder = (CompoundBorder) component.getBorder();
+		if(!(compoundBorder instanceof CompoundBorder)) {
+			throw new IllegalStateException("The component must use compound border.");
+		}
+
+		roundedBorder = new RoundedBorder(new Color(0x555753));
+		roundedBorder.setThickness(top, right, bottom, left);
+		roundedBorder.setRadii(topLeft, topRight, bottomRight, bottomLeft);
+
+		compoundBorder = new CompoundBorder(roundedBorder, compoundBorder.getInsideBorder());
+		component.setBorder(compoundBorder);
+	}
+
 	private void makeComponents() {
 		JPanel     headerBar;
 		JTextField searchBox;
-		JButton    backButton, nextButton;
+		JButton    backButton, nextButton, settingsButton;
 		Dimension  headerSize, fillerDim;
 		Border     paddingBorder;
 		Box.Filler filler, filler2;
@@ -59,10 +94,18 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* create the header bar components */
 		backButton = new JButton("Back");
 		nextButton = new JButton("Next");
+		settingsButton = new JButton("Settings");
 		searchBox = new SearchBox(this);
+
 		fillerDim = new Dimension(2, 2);
 		filler  = new Box.Filler(fillerDim, fillerDim, fillerDim);
 		filler2 = new Box.Filler(fillerDim, fillerDim, fillerDim);
+
+		makeRoundedBorders(backButton, true, false, true, true);
+		makeRoundedBorders(nextButton, true, true, true, false);
+		makeRoundedBorders(settingsButton, true, true, true, true);
+		/*TODO: ugly hack remove */
+		((RoundedBorder)((CompoundBorder) backButton.getBorder()).getOutsideBorder()).setThickness(true, true, true, true);
 
 		/* pack the components into header bar */
 		headerBar = new JPanel();
@@ -72,7 +115,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		headerBar.add(filler);
 		headerBar.add(searchBox);
 		headerBar.add(filler2);
-		headerBar.add(new JButton("Settings"));
+		headerBar.add(settingsButton);
 
 		/* add some padding to the header */
 		paddingBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
