@@ -1,12 +1,10 @@
 quicktionary-gui
 
+*.swp
 *.class
 
 # Dia program autosaves
 *.autosave
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar
