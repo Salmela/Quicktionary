@@ -22,7 +22,7 @@ import java.awt.*;
 import java.awt.event.*;
 import org.quicktionary.backend.Quicktionary;
 
-/*
+/**
  * The MainWindow is only class that communicates with the backend.
  */
 public class MainWindow extends JFrame implements ActionListener {

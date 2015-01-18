@@ -21,7 +21,7 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/*
+/**
  * Search box widget that is at the header of the main window.
  * TODO: add a button aligned to the right. The component may have to be turned into compound component.
  */

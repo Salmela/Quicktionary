@@ -41,7 +41,7 @@ public class SearchResults extends JList implements SearchResultListener {
 		setCellRenderer(new ResultRenderer());
 	}
 
-	/*
+	/**
 	 * Main window passes list of backend objects to this object.
 	 */
 	public void setSearchResults(SearchItem[] items, int totalCount) {
