@@ -16,41 +16,26 @@
  */
 package org.quicktionary.backend;
 
-import java.lang.UnsupportedOperationException;
-
 /**
- * The backend class for the quicktionary.
+ * The search queries send by the interface are parsed and processed in this class.
  */
-public class Quicktionary {
-	private WordDatabase database;
-	private Searcher     searcher;
-	//private History    history;
+public class Searcher {
+	private Quicktionary dictionary;
 
-	public Quicktionary() {
-		database = new WordDatabase(this);
-		searcher = new Searcher(this);
-		//history = new History(this);
+	public Searcher(Quicktionary dictionary) {
+		this.dictionary = dictionary;
 	}
 
 	public void search(String query) {
-		searcher.search(query);
+		WordDatabase db;
+
+		parseSearchQuery(query);
+
+		db = dictionary.getDatabase();
+		db.requestResults(query);
 	}
 
-	public void setSearchResultListener(SearchResultListener listener) {
-		throw new UnsupportedOperationException("Not implemented yet");
-	}
-
-	public void getPageContent(SearchItem item, String searchQuery) {
-		//history.saveEvent("search", searchQuery);
-		//history.saveEvent("page", "" + item.getID());
-		database.fetchPage(item);
-	}
-
-	/**
-	 * Get the database object.
-	 * Used by the Searcher:search
-	 */
-	protected WordDatabase getDatabase() {
-		return database;
+	private String parseSearchQuery(String query) {
+		return query;
 	}
 }
