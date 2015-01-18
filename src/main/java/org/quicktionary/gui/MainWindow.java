@@ -17,6 +17,7 @@
 package org.quicktionary.gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import org.quicktionary.backend.Quicktionary;
@@ -49,7 +50,9 @@ public class MainWindow extends JFrame implements ActionListener {
 		JPanel     headerBar;
 		JTextField searchBox;
 		JButton    backButton, nextButton;
-		Dimension  headerSize;
+		Dimension  headerSize, fillerDim;
+		Border     paddingBorder;
+		Box.Filler filler, filler2;
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -57,14 +60,23 @@ public class MainWindow extends JFrame implements ActionListener {
 		backButton = new JButton("Back");
 		nextButton = new JButton("Next");
 		searchBox = new SearchBox(this);
+		fillerDim = new Dimension(2, 2);
+		filler  = new Box.Filler(fillerDim, fillerDim, fillerDim);
+		filler2 = new Box.Filler(fillerDim, fillerDim, fillerDim);
 
 		/* pack the components into header bar */
 		headerBar = new JPanel();
 		headerBar.setLayout(new BoxLayout(headerBar, BoxLayout.X_AXIS));
 		headerBar.add(backButton);
 		headerBar.add(nextButton);
+		headerBar.add(filler);
 		headerBar.add(searchBox);
+		headerBar.add(filler2);
 		headerBar.add(new JButton("Settings"));
+
+		/* add some padding to the header */
+		paddingBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
+		headerBar.setBorder(paddingBorder);
 
 		/* set the headerBar height to same as backButton height */
 		headerSize = headerBar.getPreferredSize();
