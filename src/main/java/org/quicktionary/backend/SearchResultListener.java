@@ -20,5 +20,5 @@ package org.quicktionary.backend;
  * The interface for getting search results.
  */
 public interface SearchResultListener {
-	void setSearchResults(SearchItem items[], int count);
+	void setSearchResults(SearchItem items[], int totalCount);
 }

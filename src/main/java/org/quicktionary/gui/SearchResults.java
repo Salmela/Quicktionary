@@ -20,10 +20,14 @@ import javax.swing.*;
 import javax.swing.ListCellRenderer;
 import java.awt.*;
 
+import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
 
-public class SearchResults extends JList {
+public class SearchResults extends JList implements SearchResultListener {
 	static final long serialVersionUID = 1L;
+
+	/*TODO implement custom AbstractListModel with getSize method overwriten */
+	private long itemCount;
 
 	public SearchResults() {
 		SearchItem[] data = {
@@ -40,8 +44,9 @@ public class SearchResults extends JList {
 	/*
 	 * Main window passes list of backend objects to this object.
 	 */
-	public void setResults(Object[] data) {
-		setListData(data);
+	public void setSearchResults(SearchItem[] items, int totalCount) {
+		itemCount = totalCount;
+		setListData(items);
 	}
 
 	/*
