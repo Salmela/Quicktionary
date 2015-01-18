@@ -21,6 +21,8 @@ import javax.swing.ListCellRenderer;
 import java.awt.*;
 
 public class SearchResults extends JList {
+	static final long serialVersionUID = 1L;
+
 	public SearchResults() {
 		DummySearchItem[] data = {
 			new DummySearchItem("hello", "ghsfgrkshrg"),
@@ -44,6 +46,8 @@ public class SearchResults extends JList {
 	 * Custom cell renderer that transforms the backend objects to JLabels.
 	 */
 	private class ResultRenderer extends JLabel implements ListCellRenderer {
+		static final long serialVersionUID = 1L;
+
 		public Component getListCellRendererComponent(JList list, Object object,
 		                                              int index, boolean isSelected,
 		                                              boolean cellHasFocus)

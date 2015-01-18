@@ -26,6 +26,8 @@ import java.awt.event.*;
  * TODO: add a button aligned to the right. The component may have to be turned into compound component.
  */
 public class SearchBox extends JTextField implements FocusListener, ActionListener {
+	static final long serialVersionUID = 1L;
+
 	static final String SEARCH_EVENT = "search-event";
 	static final String SEARCH_ENTER_EVENT = "search-enter-event";
 

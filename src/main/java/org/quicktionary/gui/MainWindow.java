@@ -25,6 +25,8 @@ import org.quicktionary.backend.Quicktionary;
  * The MainWindow is only class that communicates with the backend.
  */
 public class MainWindow extends JFrame implements ActionListener {
+	static final long serialVersionUID = 1L;
+
 	private Quicktionary dictionary;
 	private boolean showSearchResults;
 
