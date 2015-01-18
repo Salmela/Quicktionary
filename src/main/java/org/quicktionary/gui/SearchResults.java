@@ -20,14 +20,16 @@ import javax.swing.*;
 import javax.swing.ListCellRenderer;
 import java.awt.*;
 
+import org.quicktionary.backend.SearchItem;
+
 public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
 
 	public SearchResults() {
-		DummySearchItem[] data = {
-			new DummySearchItem("hello", "ghsfgrkshrg"),
-			new DummySearchItem("hi", "ehguje seusg"),
-			new DummySearchItem("bye", "ouoq ewfrhw")
+		SearchItem[] data = {
+			new SearchItem("hello", "ghsfgrkshrg"),
+			new SearchItem("hi", "ehguje seusg"),
+			new SearchItem("bye", "ouoq ewfrhw")
 		};
 
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -52,9 +54,9 @@ public class SearchResults extends JList {
 		                                              int index, boolean isSelected,
 		                                              boolean cellHasFocus)
 		{
-			DummySearchItem item;
+			SearchItem item;
 
-			item = (DummySearchItem)object;
+			item = (SearchItem)object;
 			/* ugly way to format the search items */
 			setText("<html><body><font size='+2'><b>" + item.getWord() + "</b></font>" +
 			        "<br><font size='+1'>" + item.getDescription() + "</font></body></html>");
@@ -70,26 +72,6 @@ public class SearchResults extends JList {
 			setOpaque(true);
 
 			return this;
-		}
-	}
-
-	/*
-	 * TODO: move this to the backend
-	 */
-	private class DummySearchItem {
-		private String word, description;
-
-		public DummySearchItem(String word, String description) {
-			this.word = word;
-			this.description = description;
-		}
-
-		/* the getters could lazy load the data from word database */
-		public String getWord() {
-			return word;
-		}
-		public String getDescription() {
-			return description;
 		}
 	}
 }
