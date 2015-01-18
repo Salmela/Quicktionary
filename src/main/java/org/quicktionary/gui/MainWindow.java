@@ -73,6 +73,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* create components for the main view */
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults();
+		//dictionary.setSearchResultListener(searchResults);
 		pageArea = new JTextArea();
 		mainPane.setViewportView(searchResults);
 
