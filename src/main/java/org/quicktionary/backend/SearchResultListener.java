@@ -16,16 +16,9 @@
  */
 package org.quicktionary.backend;
 
-import java.lang.UnsupportedOperationException;
-
 /**
- * The backend class for the quicktionary.
+ * The interface for getting search results.
  */
-public class Quicktionary {
-	public Quicktionary() {
-	}
-
-	public void setSearchResultListener(SearchResultListener listener) {
-		throw new UnsupportedOperationException("Not implemented yet");
-	}
+public interface SearchResultListener {
+	void setSearchResults(SearchItem items[], int count);
 }
