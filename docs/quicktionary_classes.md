@@ -30,7 +30,7 @@ Open questions: how much WordDatabase knows about context in other words can it 
 This class glues all backend’s internal comments to single api. The main task of the Dictionary object is serve the frontends queries.
 
 ### Methods
-* void **Search**(String query):
+* void **search**(String query):
  * *[Called by gui.MainWindow::actionPerformed()]*
  * Sends search query to Searcher object.
 * void **setSearchResultListener**(SearchResultListener listener):
@@ -47,7 +47,7 @@ This class glues all backend’s internal comments to single api. The main task 
  * Pass this call to the DBParser
 
 ## 2.1. Searcher
-
+The search queries send by the interface are parsed and processed in this class.
 
 ## 2.2. Interface SearchResultListener
 When new search results are found this listener is called. This listener is implemented by atleast gui.SearchResultList and maybe Searcher.
