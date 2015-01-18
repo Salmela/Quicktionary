@@ -30,20 +30,20 @@ Open questions: how much WordDatabase knows about context in other words can it 
 This class glues all backend’s internal comments to single api. The main task of the Dictionary object is serve the frontends queries.
 
 ### Methods
-* void Search(String query):
- * [Called by gui.MainWindow::actionPerformed()]
+* void **Search**(String query):
+ * *[Called by gui.MainWindow::actionPerformed()]*
  * Sends search query to Searcher object.
- * void setSearchResultListener(SearchResultListener listener):
-* [Called by gui.MainWindow::makeComponents()]
+* void **setSearchResultListener**(SearchResultListener listener):
+ * *[Called by gui.MainWindow::makeComponents()]*
  * Register a search result listener.
  * This call can be done only once.
-* int getResultCount(): (will be removed?)
+* int **getResultCount**(): *[will be removed?]*
 * Returns the number of found search items.
  * This information maybe send through the SearchResultListener.
-* void getPageContent(SearchItem item, String searchTerm):
+* void **getPageContent**(SearchItem item, String searchTerm):
  * Tell the history object that gui requested a page.
  * Ask the page from WordDatabase object.
-* void readDatabaseDump(String filename):
+* void **readDatabaseDump**(String filename):
  * Pass this call to the DBParser
 
 ## 2.1. Searcher
@@ -53,24 +53,24 @@ This class glues all backend’s internal comments to single api. The main task 
 When new search results are found this listener is called. This listener is implemented by atleast gui.SearchResultList and maybe Searcher.
 
 ### Methods
-* void setSearchResults(SearchItem items[], int count)
+* void **setSearchResults**(SearchItem items[], int count)
  * The count parameter is the total number of search results.
 
 ## 2.3. SearchItem
 The Searcher object or the WordDatabase creates array of SearchItem objects and passes them to SearchResultListener. The object contains some metadata that is used by the WordDatabase object.
 
 ### Methods
-* SearchItem(String word, String Description)
-* String getWord()
-* String getDescription()
+* **SearchItem**(String word, String Description)
+* String **getWord**()
+* String **getDescription**()
 
 ## 2.3. Interface Fetcher
 Fetches a page with a name and domain name. The fetcher returns only the wiki markup.
 
 ### Methods
-* void setFetchListener(fetchListener listener)
+* void **setFetchListener**(fetchListener listener)
  * The listener is called when the page is fetched
-* void fetchPage(String title, String domain)
+* void **fetchPage**(String title, String domain)
 
 ## 2.4. FetchListener
 This interface is implemented by the wikibackends.
@@ -87,22 +87,23 @@ example query: https://en.wiktionary.org/w/api.php?format=json&action=query&titl
 * Same as methods of interface Fetcher.
 
 ## 2.6. WikiParser
-
 Parses the markup used in the wikimedia projects. The class returns a tree of TextElements.
+
+The documentation of the markup can be found at:
 https://www.mediawiki.org/wiki/Help:Formatting
 
 ### Methods
 
-* TextElement[] parseMarkup(String Text)
+* TextElement[] **parseMarkup**(String Text)
 
 ## 2.6.1. WikiParser::TextElement
 Public child class of the wikiparser that contains all informatin about one wiki markup element.
 
 ## Methods
 
-* String getText()
-* String getType()
-* String getSource()
+* String **getText**()
+* String **getType**()
+* String **getSource**()
  * returns debugging string
 
 ## 2.7. DBParser
@@ -114,8 +115,8 @@ https://dumps.wikimedia.org/backup-index.html
 
 ### Methods
 
-* boolean parseDB(String filename)
-* boolean parseDB(fileHandle) [maybe for the tests]
+* boolean **parseDB**(String filename)
+* boolean **parseDB**(fileHandle) *[maybe for the tests]*
 
 ## 2.8. WordDatabase
 
