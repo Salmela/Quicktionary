@@ -1,4 +1,4 @@
-/* Quicktionary gui - Word translator app
+/* Quicktionary backend - Word translator app
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *
  * This program is free software: you can redistribute it and/or modify
