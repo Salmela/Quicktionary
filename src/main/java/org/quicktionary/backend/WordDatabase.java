@@ -19,31 +19,20 @@ package org.quicktionary.backend;
 import java.lang.UnsupportedOperationException;
 
 /**
- * The backend class for the quicktionary.
+ * The database class for the quicktionary.
  */
-public class Quicktionary {
-	private WordDatabase database;
-	//private History    history;
+public class WordDatabase {
+	private Quicktionary dictionary;
 
-	public Quicktionary() {
-		database = new WordDatabase(this);
-		//history = new History(this);
+	public WordDatabase(Quicktionary dictionary) {
+		this.dictionary = dictionary;
 	}
 
-	public void setSearchResultListener(SearchResultListener listener) {
+	protected void fetchPage(SearchItem item) {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
-	public void getPageContent(SearchItem item, String searchQuery) {
-		//history.saveEvent("search", searchQuery);
-		//history.saveEvent("page", "" + item.getID());
-		database.fetchPage(item);
-	}
-
-	/**
-	 * Get the database object.
-	 */
-	protected WordDatabase getDatabase() {
-		return database;
+	protected void requestResults(String word) {
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }
