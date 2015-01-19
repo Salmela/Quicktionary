@@ -70,8 +70,8 @@ public class SearchResults extends JList implements SearchResultListener {
 
 			item = (SearchItem)object;
 			/* ugly way to format the search items */
-			setText("<html><body><font size='+2'><b>" + item.getWord() + "</b></font>" +
-			        "<br><font size='+1'>" + item.getDescription() + "</font></body></html>");
+			setText("<html><body><font size='+1'><b>" + item.getWord() + "</b></font>" +
+			        "<br>" + item.getDescription() + "</body></html>");
 
 			if(isSelected) {
 				setBackground(list.getSelectionBackground());
@@ -80,6 +80,7 @@ public class SearchResults extends JList implements SearchResultListener {
 				setBackground(list.getBackground());
 				setForeground(list.getForeground());
 			}
+
 			setFont(list.getFont());
 			setOpaque(true);
 
