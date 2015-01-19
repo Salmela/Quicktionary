@@ -83,9 +83,13 @@ public class SettingsButton extends JButton implements ActionListener {
 
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand().equals(PRESSED_EVENT)) {
-			int menuWidth = menu.getWidth();
-			int buttonWidth  = this.getWidth();
-			int buttonHeight = this.getHeight();
+			int menuWidth, buttonWidth, buttonHeight;
+
+			menu.pack();
+			menuWidth = menu.getWidth();
+			buttonWidth  = this.getWidth();
+			buttonHeight = this.getHeight();
+
 			menu.show(this, buttonWidth - menuWidth, buttonHeight);
 
 		} else {
