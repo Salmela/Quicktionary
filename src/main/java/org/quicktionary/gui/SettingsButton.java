@@ -27,7 +27,7 @@ import java.awt.event.ActionEvent;
 /**
  * The MainWindow is only class that communicates with the backend.
  */
-public class SettingsButton extends JButton implements ActionListener, PopupMenuListener {
+public class SettingsButton extends HeaderButton implements ActionListener, PopupMenuListener {
 	static final long serialVersionUID = 1L;
 	static final String PRESSED_EVENT       = "pressed-event";
 

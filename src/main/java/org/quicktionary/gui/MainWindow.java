@@ -128,8 +128,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 		/* create the header bar components */
-		backButton = new JButton("Back");
-		nextButton = new JButton("Next");
+		backButton = new HeaderButton("Back");
+		nextButton = new HeaderButton("Next");
 		searchBox  = new SearchBox(this);
 		settingsButton = new SettingsButton(this);
 
