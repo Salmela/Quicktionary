@@ -17,6 +17,8 @@
 package org.quicktionary.gui;
 
 import javax.swing.JButton;
+import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -28,6 +30,7 @@ public class SettingsButton extends JButton implements ActionListener {
 	static final String PRESSED_EVENT = "pressed-event";
 
 	private MainWindow window;
+	private JPopupMenu menu;
 
 	public SettingsButton(MainWindow window) {
 		this.window = window;
@@ -35,10 +38,30 @@ public class SettingsButton extends JButton implements ActionListener {
 		addActionListener(this);
 		setActionCommand(PRESSED_EVENT);
 
+		makeMenu();
+	}
+
+	private void makeMenu() {
+		JMenuItem menuItem;
+
+		menu = new JPopupMenu();
+		menuItem = new JMenuItem("New word");
+		menu.add(menuItem);
+		menuItem = new JMenuItem("Remove word");
+		menu.add(menuItem);
+		menuItem = new JMenuItem("Read database");
+		menu.add(menuItem);
+		menu.addSeparator();
+		menuItem = new JMenuItem("Preferences");
+		menu.add(menuItem);
 	}
 
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand().equals(PRESSED_EVENT)) {
+			int menuWidth = menu.getWidth();
+			int buttonWidth  = this.getWidth();
+			int buttonHeight = this.getHeight();
+			menu.show(this, buttonWidth - menuWidth, buttonHeight);
 		}
 	}
 }
