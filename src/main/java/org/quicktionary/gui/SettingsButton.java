@@ -92,6 +92,17 @@ public class SettingsButton extends JButton implements ActionListener {
 
 			menu.show(this, buttonWidth - menuWidth, buttonHeight);
 
+		} else if(event.getActionCommand().equals(READ_DATABASE_ITEM_EVENT)) {
+			ReadDatabaseDialog dialog;
+			ActionEvent event2;
+			String filename;
+
+			dialog = new ReadDatabaseDialog(this);
+			dialog.showDialog();
+			filename = dialog.getFilename();
+
+			event2 = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, READ_DATABASE_EVENT);
+			listener.actionPerformed(event2);
 		} else {
 			System.out.println("setting button: unknown event (" +
 			                   event.getActionCommand() + ")");
