@@ -27,13 +27,25 @@ import java.awt.event.ActionEvent;
  */
 public class SettingsButton extends JButton implements ActionListener {
 	static final long serialVersionUID = 1L;
-	static final String PRESSED_EVENT = "pressed-event";
+	static final String PRESSED_EVENT       = "pressed-event";
 
-	private MainWindow window;
+	/* menu item events */
+	static final String NEW_WORD_ITEM_EVENT      = "new-word-item-event";
+	static final String REMOVE_WORD_ITEM_EVENT   = "remove-word-item-event";
+	static final String READ_DATABASE_ITEM_EVENT = "read-database-item-event";
+	static final String PREFERENCES_ITEM_EVENT   = "preferences-item-event";
+
+	/* events send to the parent class */
+	static final String NEW_WORD_EVENT      = "new-word-event";
+	static final String REMOVE_WORD_EVENT   = "remove-word-event";
+	static final String READ_DATABASE_EVENT = "read-database-event";
+	static final String PREFERENCES_EVENT   = "preferences-event";
+
+	private ActionListener listener;
 	private JPopupMenu menu;
 
-	public SettingsButton(MainWindow window) {
-		this.window = window;
+	public SettingsButton(ActionListener listener) {
+		this.listener = listener;
 		setText("Settings");
 		addActionListener(this);
 		setActionCommand(PRESSED_EVENT);
@@ -45,14 +57,27 @@ public class SettingsButton extends JButton implements ActionListener {
 		JMenuItem menuItem;
 
 		menu = new JPopupMenu();
+
 		menuItem = new JMenuItem("New word");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand(NEW_WORD_ITEM_EVENT);
 		menu.add(menuItem);
+
 		menuItem = new JMenuItem("Remove word");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand(REMOVE_WORD_ITEM_EVENT);
 		menu.add(menuItem);
+
 		menuItem = new JMenuItem("Read database");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand(READ_DATABASE_ITEM_EVENT);
 		menu.add(menuItem);
+
 		menu.addSeparator();
+
 		menuItem = new JMenuItem("Preferences");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand(PREFERENCES_ITEM_EVENT);
 		menu.add(menuItem);
 	}
 
@@ -62,6 +87,10 @@ public class SettingsButton extends JButton implements ActionListener {
 			int buttonWidth  = this.getWidth();
 			int buttonHeight = this.getHeight();
 			menu.show(this, buttonWidth - menuWidth, buttonHeight);
+
+		} else {
+			System.out.println("setting button: unknown event (" +
+			                   event.getActionCommand() + ")");
 		}
 	}
 }
