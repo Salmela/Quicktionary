@@ -81,31 +81,17 @@ public class MainWindow extends JFrame implements ActionListener {
 		component.setBorder(compoundBorder);
 	}
 
-	private void makeComponents() {
+	private JPanel makeHeaderBar(JButton backButton, JButton nextButton,
+	                             JButton settingsButton, JTextField searchBox) {
 		JPanel     headerBar;
-		JTextField searchBox;
-		JButton    backButton, nextButton, settingsButton;
-		Dimension  headerSize, fillerDim;
-		Border     paddingBorder;
 		Box.Filler filler, filler2;
+		Border     paddingBorder;
+		Dimension  fillerDim, headerSize;
 
-		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-		/* create the header bar components */
-		backButton = new JButton("Back");
-		nextButton = new JButton("Next");
-		settingsButton = new JButton("Settings");
-		searchBox = new SearchBox(this);
-
+		/* create filler components */
 		fillerDim = new Dimension(2, 2);
 		filler  = new Box.Filler(fillerDim, fillerDim, fillerDim);
 		filler2 = new Box.Filler(fillerDim, fillerDim, fillerDim);
-
-		makeRoundedBorders(backButton, true, false, true, true);
-		makeRoundedBorders(nextButton, true, true, true, false);
-		makeRoundedBorders(settingsButton, true, true, true, true);
-		/*TODO: ugly hack remove */
-		((RoundedBorder)((CompoundBorder) backButton.getBorder()).getOutsideBorder()).setThickness(true, true, true, true);
 
 		/* pack the components into header bar */
 		headerBar = new JPanel();
@@ -124,8 +110,32 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* set the headerBar height to same as backButton height */
 		headerSize = headerBar.getPreferredSize();
 		headerSize.width = Short.MAX_VALUE;
-		System.out.println("size " + headerSize.width + ", "+ headerSize.height);
 		headerBar.setMaximumSize(headerSize);
+
+		return headerBar;
+	}
+
+	private void makeComponents() {
+		JPanel     headerBar;
+		JButton    backButton, nextButton, settingsButton;
+		JTextField searchBox;
+
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+		/* create the header bar components */
+		backButton = new JButton("Back");
+		nextButton = new JButton("Next");
+		searchBox  = new SearchBox(this);
+		settingsButton = new JButton("Settings");
+
+		makeRoundedBorders(backButton, true, false, true, true);
+		makeRoundedBorders(nextButton, true, true, true, false);
+		makeRoundedBorders(settingsButton, true, true, true, true);
+		/*TODO: ugly hack remove */
+		/* add a right border to the backButton */
+		((RoundedBorder)((CompoundBorder) backButton.getBorder()).getOutsideBorder()).setThickness(true, true, true, true);
+
+		headerBar = makeHeaderBar(backButton, nextButton, settingsButton, searchBox);
 
 		/* create components for the main view */
 		mainPane = new JScrollPane();
@@ -133,6 +143,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		//dictionary.setSearchResultListener(searchResults);
 		pageArea = new JTextArea();
 		mainPane.setViewportView(searchResults);
+		//mainPane.setViewportView(pageArea);
 
 		this.add(headerBar);
 		this.add(mainPane);
