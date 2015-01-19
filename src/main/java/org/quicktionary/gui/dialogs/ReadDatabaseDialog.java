@@ -16,7 +16,6 @@
  */
 package org.quicktionary.gui;
 
-import java.lang.IllegalStateException;
 import javax.swing.JOptionPane;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
