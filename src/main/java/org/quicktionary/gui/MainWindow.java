@@ -112,6 +112,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		headerSize.width = Short.MAX_VALUE;
 		headerBar.setMaximumSize(headerSize);
 
+		headerBar.setBackground(new Color(0x3c3b37));
+
 		return headerBar;
 	}
 
