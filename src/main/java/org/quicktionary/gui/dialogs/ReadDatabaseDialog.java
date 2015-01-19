@@ -22,6 +22,8 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 
 public class ReadDatabaseDialog extends JOptionPane {
+	static final long serialVersionUID = 1L;
+
 	private String filename;
 	private JDialog dialog;
 
