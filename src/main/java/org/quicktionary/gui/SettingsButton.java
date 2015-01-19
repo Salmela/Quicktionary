@@ -16,6 +16,7 @@
  */
 package org.quicktionary.gui;
 
+import javax.swing.JComponent;
 import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
@@ -116,8 +117,7 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 			ActionEvent event2;
 			String filename;
 
-			dialog = new ReadDatabaseDialog(this);
-			dialog.showDialog();
+			dialog = ReadDatabaseDialog.createDialog((JComponent)this);
 			filename = dialog.getFilename();
 
 			event2 = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, READ_DATABASE_EVENT);

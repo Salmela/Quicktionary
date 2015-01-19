@@ -19,22 +19,61 @@ package org.quicktionary.gui;
 import javax.swing.JOptionPane;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
 
 public class ReadDatabaseDialog extends JOptionPane {
 	static final long serialVersionUID = 1L;
 
 	private String filename;
 	private JDialog dialog;
+	private JTextField filenameField;
 
-	public ReadDatabaseDialog(JComponent parent) {
+	public ReadDatabaseDialog(Object message,
+	                          int messageType, int optionType,
+	                          Object[] options, Object initialValue) {
+		super(message, messageType, optionType, null, options, initialValue);
+
 		this.filename = new String();
-
-		dialog = createDialog(parent, "Read a database");
 	}
 
-	public void showDialog() {
+	public static ReadDatabaseDialog createDialog(JComponent parent) {
+		JTextField filenameField;
+		JPanel fileSelectorBox;
+		JButton fileSelectorButton;
+		ReadDatabaseDialog pane;
+		JDialog dialog;
+		String descString;
+
+		descString = "Select the wikimedia database dump that you want to use.";
+
+		fileSelectorBox = new JPanel();
+		fileSelectorBox.setLayout(new BoxLayout(fileSelectorBox, BoxLayout.X_AXIS));
+
+		/* create the file chooser */
+		filenameField      = new JTextField(20);
+		fileSelectorButton = new JButton("Choose file");
+		fileSelectorBox.add(filenameField);
+		fileSelectorBox.add(fileSelectorButton);
+
+		Object[] components = {descString, fileSelectorBox};
+		Object[] buttons = {"Parse", "Cancel"};
+
+		pane = new ReadDatabaseDialog(components, JOptionPane.PLAIN_MESSAGE,
+		                              JOptionPane.OK_CANCEL_OPTION,
+		                              buttons, buttons[0]);
+		dialog = pane.createDialog(parent, "Read a database");
+
+		pane.dialog = dialog;
+
+		/* the following call will wait until the dialog is closed */
 		dialog.setVisible(true);
+
+		return pane;
 	}
+
 
 	public String getFilename() {
 		return filename;
