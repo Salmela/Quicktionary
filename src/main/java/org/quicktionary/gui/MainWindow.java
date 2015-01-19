@@ -31,6 +31,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	private Quicktionary dictionary;
 	private boolean showSearchResults;
+	private StyleManager styleManager;
 
 	private JScrollPane mainPane;
 	private JList searchResults;
@@ -44,6 +45,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+		styleManager = new StyleManager();
+		styleManager.changeStyle("light");
 		makeComponents();
 	}
 
@@ -73,7 +76,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		}
 
 		compoundBorder = (CompoundBorder) component.getBorder();
-		roundedBorder = new RoundedBorder(new Color(0x555753));
+		roundedBorder = new RoundedBorder(StyleManager.getColor("header-button-border"));
 		roundedBorder.setThickness(top, right, bottom, left);
 		roundedBorder.setRadii(topLeft, topRight, bottomRight, bottomLeft);
 
@@ -112,7 +115,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		headerSize.width = Short.MAX_VALUE;
 		headerBar.setMaximumSize(headerSize);
 
-		headerBar.setBackground(new Color(0x3c3b37));
+		headerBar.setBackground(StyleManager.getColor("header-bg"));
 
 		return headerBar;
 	}
