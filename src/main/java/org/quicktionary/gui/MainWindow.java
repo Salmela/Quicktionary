@@ -68,11 +68,11 @@ public class MainWindow extends JFrame implements ActionListener {
 			topLeft = bottomLeft = 0;
 		}
 
-		compoundBorder = (CompoundBorder) component.getBorder();
-		if(!(compoundBorder instanceof CompoundBorder)) {
+		if(!(component.getBorder() instanceof CompoundBorder)) {
 			throw new IllegalStateException("The component must use compound border.");
 		}
 
+		compoundBorder = (CompoundBorder) component.getBorder();
 		roundedBorder = new RoundedBorder(new Color(0x555753));
 		roundedBorder.setThickness(top, right, bottom, left);
 		roundedBorder.setRadii(topLeft, topRight, bottomRight, bottomLeft);
