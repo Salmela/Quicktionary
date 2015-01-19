@@ -163,7 +163,8 @@ public class MainWindow extends JFrame implements ActionListener {
 			//dictionary.search(searchBox.getText());
 			//show the first item's page
 		} else {
-			System.out.println("main window: unknown event");
+			System.out.println("main window: unknown event (" +
+			                   event.getActionCommand() + ")");
 		}
 	}
 }
