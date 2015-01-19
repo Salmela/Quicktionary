@@ -23,8 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
+import java.awt.FileDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ReadDatabaseDialog extends JOptionPane {
+public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 	static final long serialVersionUID = 1L;
 
 	private String filename;
@@ -67,6 +70,8 @@ public class ReadDatabaseDialog extends JOptionPane {
 		dialog = pane.createDialog(parent, "Read a database");
 
 		pane.dialog = dialog;
+		pane.filenameField = filenameField;
+		fileSelectorButton.addActionListener(pane);
 
 		/* the following call will wait until the dialog is closed */
 		dialog.setVisible(true);
@@ -74,6 +79,16 @@ public class ReadDatabaseDialog extends JOptionPane {
 		return pane;
 	}
 
+	public void actionPerformed(ActionEvent event) {
+		FileDialog dialog;
+
+		dialog = new FileDialog(this.dialog, "Select the database file", FileDialog.LOAD);
+
+		/* the following call will wait until the filedialog is closed */
+		dialog.setVisible(true);
+		filename = dialog.getDirectory() + dialog.getFile();
+		filenameField.setText(filename);
+	}
 
 	public String getFilename() {
 		return filename;
