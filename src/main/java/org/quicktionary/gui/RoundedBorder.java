@@ -19,6 +19,7 @@ package org.quicktionary.gui;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Area;
 
 import java.lang.UnsupportedOperationException;
 
@@ -98,6 +99,36 @@ public class RoundedBorder extends AbstractBorder {
 		checkRadii();
 	}
 
+	private void paintMasks(Component component, Graphics2D graphics2d,
+		                    GeneralPath path) {
+		Component parent;
+
+		parent = component.getParent();
+
+		/* Code inspired by Andrew Thompson's answer
+		 * http://stackoverflow.com/questions/15025092/border-with-rounded-corners-transparency
+		 */
+		if(parent != null) {
+			Color backgroundColor = parent.getBackground();
+			Rectangle bounds = new Rectangle(0, 0, component.getWidth(), component.getHeight());
+			Area borderRegion = new Area(bounds);
+
+			/* Fill the corner area that is outside of the borders with
+			 * color of parent widget's background.
+			 */
+			borderRegion.subtract(new Area(path));
+			graphics2d.setClip(borderRegion);
+			graphics2d.setColor(backgroundColor);
+			graphics2d.fillRect(0, 0, bounds.width, bounds.height);
+			graphics2d.setClip(null);
+		}
+		graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+		                            RenderingHints.VALUE_ANTIALIAS_ON);
+
+		graphics2d.setColor(color);
+	    graphics2d.draw(path);
+	}
+
 	@Override
 	public void paintBorder(Component component, Graphics graphics,
 	                        int x, int y, int width, int height) {
@@ -158,7 +189,7 @@ public class RoundedBorder extends AbstractBorder {
 			path.lineTo(0, radius);
 		}
 
-		graphics2d.draw(path);
+		paintMasks(component, graphics2d, path);
 	}
 
 	public Insets getBorderInsets(Component component) {
