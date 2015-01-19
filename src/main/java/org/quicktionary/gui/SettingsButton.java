@@ -19,13 +19,15 @@ package org.quicktionary.gui;
 import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 /**
  * The MainWindow is only class that communicates with the backend.
  */
-public class SettingsButton extends JButton implements ActionListener {
+public class SettingsButton extends JButton implements ActionListener, PopupMenuListener {
 	static final long serialVersionUID = 1L;
 	static final String PRESSED_EVENT       = "pressed-event";
 
@@ -57,6 +59,7 @@ public class SettingsButton extends JButton implements ActionListener {
 		JMenuItem menuItem;
 
 		menu = new JPopupMenu();
+		menu.addPopupMenuListener(this);
 
 		menuItem = new JMenuItem("New word");
 		menuItem.addActionListener(this);
@@ -81,16 +84,32 @@ public class SettingsButton extends JButton implements ActionListener {
 		menu.add(menuItem);
 	}
 
+	public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
+		/* release the pressed button */
+		this.getModel().setPressed(false);
+	}
+
+	public void popupMenuCanceled(PopupMenuEvent event) {
+		/* release the pressed button */
+		this.getModel().setPressed(false);
+	}
+
+	public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand().equals(PRESSED_EVENT)) {
 			int menuWidth, buttonWidth, buttonHeight;
 
 			menu.setVisible(true);
+			menu.setVisible(false);
 			menuWidth = menu.getWidth();
 			buttonWidth  = this.getWidth();
 			buttonHeight = this.getHeight();
 
 			menu.show(this, buttonWidth - menuWidth, buttonHeight);
+			/* simulate toggle button by making the button look pressed after the press */
+			this.getModel().setPressed(true);
 
 		} else if(event.getActionCommand().equals(READ_DATABASE_ITEM_EVENT)) {
 			ReadDatabaseDialog dialog;
