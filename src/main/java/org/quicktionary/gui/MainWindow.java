@@ -126,7 +126,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		backButton = new JButton("Back");
 		nextButton = new JButton("Next");
 		searchBox  = new SearchBox(this);
-		settingsButton = new JButton("Settings");
+		settingsButton = new SettingsButton(this);
 
 		makeRoundedBorders(backButton, true, false, true, true);
 		makeRoundedBorders(nextButton, true, true, true, false);
