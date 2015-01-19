@@ -26,6 +26,8 @@ import java.lang.UnsupportedOperationException;
  *  Creates border with adjustable rounding per corner.
  */
 public class RoundedBorder extends AbstractBorder {
+	static final long serialVersionUID = 1L;
+
 	static final int CORNER_TOP_LEFT = 0;
 	static final int CORNER_TOP_RIGHT = 1;
 	static final int CORNER_BOTTOM_RIGHT = 2;
