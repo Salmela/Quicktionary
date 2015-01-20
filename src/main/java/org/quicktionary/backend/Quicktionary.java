@@ -37,6 +37,14 @@ public class Quicktionary {
 	}
 
 	public void readDatabase(String filename) {
+		/* should we create file description here,
+		 * so that testing would be easier?
+		 */
+		WikiDBReader parser;
+		Thread thread;
+		parser = new WikiDBReader();
+		thread = new Thread(parser);
+		thread.start();
 	}
 
 	public void setSearchResultListener(SearchResultListener listener) {
