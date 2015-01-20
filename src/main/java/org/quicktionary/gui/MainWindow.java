@@ -167,6 +167,13 @@ public class MainWindow extends JFrame implements ActionListener {
 
 			//dictionary.search(searchBox.getText());
 			//show the first item's page
+
+		} else if(event.getActionCommand() == SettingsButton.READ_DATABASE_EVENT) {
+			SettingsButton.ReadDatabaseEvent dataEvent;
+
+			dataEvent = (SettingsButton.ReadDatabaseEvent) event;
+			dictionary.readDatabase(dataEvent.getFilename());
+
 		} else {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");

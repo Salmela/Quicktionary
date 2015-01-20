@@ -36,6 +36,9 @@ public class Quicktionary {
 		searcher.search(query);
 	}
 
+	public void readDatabase(String filename) {
+	}
+
 	public void setSearchResultListener(SearchResultListener listener) {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
