@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
  */
 public class SettingsButton extends HeaderButton implements ActionListener, PopupMenuListener {
 	static final long serialVersionUID = 1L;
+
+	/* event for pressed event of the button */
 	static final String PRESSED_EVENT       = "pressed-event";
 
 	/* menu item events */
@@ -56,6 +58,9 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		makeMenu();
 	}
 
+	/**
+	 * Create popup menu and its menu items.
+	 */
 	private void makeMenu() {
 		JMenuItem menuItem;
 
@@ -98,34 +103,49 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 	public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
 	}
 
+	private void openReadDatabaseDialog() {
+		ReadDatabaseDialog dialog;
+		ActionEvent event2;
+		String filename;
+
+		dialog = ReadDatabaseDialog.createDialog((JComponent)this);
+		filename = dialog.getFilename();
+
+		event2 = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, READ_DATABASE_EVENT);
+		listener.actionPerformed(event2);
+	}
+
+	/**
+	 * Handle the button press and menu items.
+	 */
 	public void actionPerformed(ActionEvent event) {
+		/* open popup menu when user clicks the button */
 		if(event.getActionCommand().equals(PRESSED_EVENT)) {
 			int menuWidth, buttonWidth, buttonHeight;
 
+			/* update the size of the menu component */
 			menu.setVisible(true);
 			menu.setVisible(false);
+
 			menuWidth = menu.getWidth();
 			buttonWidth  = this.getWidth();
 			buttonHeight = this.getHeight();
 
+			/* open the popup menu */
 			menu.show(this, buttonWidth - menuWidth, buttonHeight);
+
 			/* simulate toggle button by making the button look pressed after the press */
 			this.getModel().setPressed(true);
 
 			return;
 		}
+
+		/* hide the popup menu after menu item is selected */
 		menu.setVisible(false);
 
+		/* handle events from menu items */
 		if(event.getActionCommand().equals(READ_DATABASE_ITEM_EVENT)) {
-			ReadDatabaseDialog dialog;
-			ActionEvent event2;
-			String filename;
-
-			dialog = ReadDatabaseDialog.createDialog((JComponent)this);
-			filename = dialog.getFilename();
-
-			event2 = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, READ_DATABASE_EVENT);
-			listener.actionPerformed(event2);
+			openReadDatabaseDialog();
 		} else {
 			System.out.println("setting button: unknown event (" +
 			                   event.getActionCommand() + ")");
