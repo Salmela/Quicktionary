@@ -16,13 +16,17 @@
  */
 package org.quicktionary.gui;
 
+import java.io.File;
+
 import javax.swing.JOptionPane;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,12 +47,13 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 	}
 
 	public static ReadDatabaseDialog createDialog(JComponent parent) {
-		JTextField filenameField;
-		JPanel fileSelectorBox;
-		JButton fileSelectorButton;
 		ReadDatabaseDialog pane;
 		JDialog dialog;
-		String descString;
+		JPanel  fileSelectorBox;
+		JButton fileSelectorButton;
+		JTextField filenameField;
+		String  descString;
+		JLabel  output;
 
 		descString = "Select the wikimedia database dump that you want to use.";
 
@@ -61,7 +66,9 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 		fileSelectorBox.add(filenameField);
 		fileSelectorBox.add(fileSelectorButton);
 
-		Object[] components = {descString, fileSelectorBox};
+		output = JLabel();
+
+		Object[] components = {descString, fileSelectorBox, ouput};
 		Object[] buttons = {"Parse", "Cancel"};
 
 		pane = new ReadDatabaseDialog(components, JOptionPane.PLAIN_MESSAGE,
@@ -80,13 +87,33 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		FileDialog dialog;
+		String titleStr = "Select the database file";
+		boolean nativeFileDialog = false;
 
-		dialog = new FileDialog(this.dialog, "Select the database file", FileDialog.LOAD);
+		if(nativeFileDialog) {
+			FileDialog dialog;
 
-		/* the following call will wait until the filedialog is closed */
-		dialog.setVisible(true);
-		filename = dialog.getDirectory() + dialog.getFile();
+			dialog = new FileDialog(this.dialog, titleStr, FileDialog.LOAD);
+
+			/* the following call will wait until the filedialog is closed */
+			dialog.setVisible(true);
+			if(dialog.getDirectory() != null && dialog.getFile() != null) {
+				filename = dialog.getDirectory() + dialog.getFile();
+			}
+
+		} else {
+			JFileChooser chooser;
+			int returnValue;
+
+			chooser = new JFileChooser();
+			chooser.setDialogTitle(titleStr);
+
+			/* the following call will wait until the filedialog is closed */
+			returnValue = chooser.showOpenDialog(this.dialog);
+			if(returnValue == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile().getName() != null) {
+				filename = chooser.getSelectedFile().getPath();
+			}
+		}
 		filenameField.setText(filename);
 	}
 
