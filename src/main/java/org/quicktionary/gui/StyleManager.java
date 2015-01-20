@@ -53,7 +53,7 @@ public class StyleManager {
 		buttonActive = new GradientPaint(0, 0, new Color(0xd6d6d6),
 		                                 0, 1, new Color(0xe0e0e0), true);
 
-		styles.put("header-bg",            new Color(0xf3f3f3));
+		styles.put("header-bg",            new Color(0xededed));
 		styles.put("header-button-bg",     button);
 		styles.put("header-button-active-bg", buttonActive);
 		styles.put("header-button-border", new Color(0xb2b6b2));
