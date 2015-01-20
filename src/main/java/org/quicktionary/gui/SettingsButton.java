@@ -112,7 +112,11 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 			/* simulate toggle button by making the button look pressed after the press */
 			this.getModel().setPressed(true);
 
-		} else if(event.getActionCommand().equals(READ_DATABASE_ITEM_EVENT)) {
+			return;
+		}
+		menu.setVisible(false);
+
+		if(event.getActionCommand().equals(READ_DATABASE_ITEM_EVENT)) {
 			ReadDatabaseDialog dialog;
 			ActionEvent event2;
 			String filename;
