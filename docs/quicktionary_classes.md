@@ -3,8 +3,12 @@
 ## 1.0. Main
 The main class that processes the command line arguments and starts up the MainWindow.
 
+## 1.1/2. Application
+Move all the communication of the gui to this class and leave only gui specific stuff to the MainWindow.
+
 ## 1.1. MainWindow
 The main window that communicates with backend and passes the results from backend to it’s components.
+Rename the class to just Window.
 
 ## 1.2. SearchBox
 The text field at the header of the window.
@@ -31,14 +35,14 @@ This class glues all backend’s internal comments to single api. The main task 
 
 ### Methods
 * void **search**(String query):
- * *[Called by gui.MainWindow::actionPerformed()]*
+ * *[Called by gui.MainWindow.actionPerformed()]*
  * Sends search query to Searcher object.
 * void **setSearchResultListener**(SearchResultListener listener):
- * *[Called by gui.MainWindow::makeComponents()]*
+ * *[Called by gui.MainWindow.makeComponents()]*
  * Register a search result listener.
  * This call can be done only once.
 * int **getResultCount**(): *[will be removed?]*
-* Returns the number of found search items.
+ * Returns the number of found search items.
  * This information maybe send through the SearchResultListener.
 * void **getPageContent**(SearchItem item, String searchTerm):
  * Tell the history object that gui requested a page.
@@ -96,7 +100,7 @@ https://www.mediawiki.org/wiki/Help:Formatting
 
 * TextElement[] **parseMarkup**(String Text)
 
-## 2.6.1. WikiParser::TextElement
+## 2.6.1. WikiParser.TextElement
 Public child class of the wikiparser that contains all informatin about one wiki markup element.
 
 ## Methods
