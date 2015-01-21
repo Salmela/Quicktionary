@@ -34,6 +34,19 @@ public class XMLParser {
 		currentChar = 0;
 	}
 
+	/**
+	 * The method for starting the parser.
+	 *
+	 * Should we catch exceptions here and return boolean if the parsing was
+	 * successful.
+	 */
+	public void parse() {
+		/* initialize the currentChar */
+		getNext();
+		/* read the declaration */
+		parseXMLDeclaration();
+	}
+
 	private boolean isAlphabet(byte letter) {
 		if(letter >= 'a' && letter <= 'z') {
 			return true;
@@ -163,5 +176,33 @@ public class XMLParser {
 		}
 
 		readChar('>', "Element must end with more-than sign.");
+	}
+
+	private void parseXMLDeclaration() {
+		skipWhitespaces(false);
+
+		readChar('<', "File must start with xml declaration");
+		readChar('?', "File must start with xml declaration.");
+		readChar('x', "File must start with xml declaration.");
+		readChar('m', "File must start with xml declaration.");
+		readChar('l', "File must start with xml declaration.");
+
+		skipWhitespaces(true);
+
+		/* read the version attribute */
+		parseAttribute();
+		skipWhitespaces(true);
+
+		/* read the encoding attribute */
+		parseAttribute();
+		skipWhitespaces(true);
+
+		/* read the attributes */
+		while(parseAttribute()) {
+			skipWhitespaces(true);
+		}
+
+		readChar('?', "The xml declaration is expected to end with ?>");
+		readChar('>', "The xml declaration is expected to end with ?>");
 	}
 }
