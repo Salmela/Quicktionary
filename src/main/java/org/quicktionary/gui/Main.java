@@ -22,12 +22,45 @@ import org.quicktionary.backend.Quicktionary;
  * The Main class parses the command line arguments and starts the main window.
  */
 public class Main {
+	static boolean useNativeFileDialog;
+	static String databasePath;
+
+	public static void init() {
+		useNativeFileDialog = false;
+		databasePath = null;
+	}
+
 	/**
+	 * Read command line arguments. If the word isn't proper flag it is
+	 * considered to be path to database. If there is multiple paths in
+	 * the arguments, then only the last one is used.
+	 * @param args the command line arguments
+	 */
+	public static void parseCommandlineArgs(String[] args) {
+		int i;
+		for(i = 0; i < args.length; i++) {
+			String command = args[i];
+			if(command.equals("--native-file-chooser") ||
+			   command.equals("-n")) {
+				useNativeFileDialog = true;
+
+			} else if(command.charAt(0) != '-') {
+				i++;
+				databasePath = args[i];
+			}
+		}
+	}
+
+	/**
+	 * Start the backend and open the main window.
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 		Quicktionary quicktionary;
 		MainWindow window;
+
+		Main.init();
+		Main.parseCommandlineArgs(args);
 
 		quicktionary = new Quicktionary();
 		window = new MainWindow(quicktionary);
