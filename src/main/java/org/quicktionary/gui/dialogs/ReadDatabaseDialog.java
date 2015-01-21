@@ -88,9 +88,8 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 
 	public void actionPerformed(ActionEvent event) {
 		String titleStr = "Select the database file";
-		boolean nativeFileDialog = false;
 
-		if(nativeFileDialog) {
+		if(Main.useNativeFileDialog) {
 			FileDialog dialog;
 
 			dialog = new FileDialog(this.dialog, titleStr, FileDialog.LOAD);
