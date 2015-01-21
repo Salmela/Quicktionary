@@ -66,9 +66,9 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 		fileSelectorBox.add(filenameField);
 		fileSelectorBox.add(fileSelectorButton);
 
-		output = JLabel();
+		output = new JLabel("");
 
-		Object[] components = {descString, fileSelectorBox, ouput};
+		Object[] components = {descString, fileSelectorBox, output};
 		Object[] buttons = {"Parse", "Cancel"};
 
 		pane = new ReadDatabaseDialog(components, JOptionPane.PLAIN_MESSAGE,
