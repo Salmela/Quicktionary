@@ -18,12 +18,16 @@ package org.quicktionary.backend;
 
 import java.lang.Runnable;
 
+import org.quicktionary.backend.parsers.XMLParser;
+
 /**
  * WikiDBReader goes through a wikimedia database dump.
  * TODO: Remove Parser from name.
  */
 public class WikiDBReader implements Runnable {
+	private XMLParser parser;
 	public WikiDBReader() {
+		//parser = new XMLParser(File file);
 	}
 
 	public void run() {
