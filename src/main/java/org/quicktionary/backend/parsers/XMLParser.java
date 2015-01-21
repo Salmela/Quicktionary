@@ -44,7 +44,7 @@ public class XMLParser {
 		return false;
 	}
 	private boolean isWhitespace(byte letter) {
-		if(letter == ' ' && letter == '\t' && letter == '\n' &&
+		if(letter == ' ' || letter == '\t' || letter == '\n' ||
 		   letter == '\r') {
 			return true;
 		}
@@ -59,15 +59,15 @@ public class XMLParser {
 		return currentChar;
 	}
 
-	private boolean skipWhitespaces(boolean atLeastOne) {
-		if(atLeastOne) {
-			if(isWhitespace(currentChar)) {
-				return false;
+	private void skipWhitespaces(boolean atLeastOne) {
+		/* check that there is whitespace */
+		if(!isWhitespace(currentChar)) {
+			if(atLeastOne) {
+				throw new Error("We expected whitespace, but there was " + currentChar);
 			}
+			return;
 		}
 		while(isWhitespace(currentChar = getNext()));
-
-		return true;
 	}
 
 	private void readChar(char wanted, String errorString) {
