@@ -80,13 +80,13 @@ public class XMLParser {
 
 	/**
 	 * Parse a attribute of the element. We must be at the start of attribute.
-	 * some xml like languages allows attribute values to be unquoted
+	 * some XML like languages allows attribute values to be unquoted
 	 */
 	private boolean parseAttribute() {
 		char quoteChar;
 
 		/* check that the name starts with letter */
-		if(isAlphabet(currentChar)) {
+		if(!isAlphabet(currentChar)) {
 			return false;
 		}
 
