@@ -46,7 +46,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		styleManager = new StyleManager();
-		styleManager.changeStyle("light");
+		styleManager.changeStyle(Main.themeName);
 		makeComponents();
 	}
 

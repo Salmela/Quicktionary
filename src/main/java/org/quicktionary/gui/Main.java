@@ -24,10 +24,12 @@ import org.quicktionary.backend.Quicktionary;
 public class Main {
 	static boolean useNativeFileDialog;
 	static String databasePath;
+	static String themeName;
 
 	public static void init() {
 		useNativeFileDialog = false;
 		databasePath = null;
+		themeName = null;
 	}
 
 	/**
@@ -44,9 +46,12 @@ public class Main {
 			   command.equals("-n")) {
 				useNativeFileDialog = true;
 
+			} else if(command.equals("--theme") ||
+			   command.equals("-t")) {
+				themeName = args[++i];
+
 			} else if(command.charAt(0) != '-') {
-				i++;
-				databasePath = args[i];
+				databasePath = args[++i];
 			}
 		}
 	}
