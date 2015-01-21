@@ -1,0 +1,91 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.8/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.8/ http://www.mediawiki.org/xml/export-0.8.xsd" version="0.8" xml:lang="en">
+  <siteinfo>
+    <sitename>Wiktionary</sitename>
+    <base>http://en.wiktionary.org/wiki/Wiktionary:Main_Page</base>
+    <generator>MediaWiki 1.24wmf7 [Text is available under Creative Commons Attribution-ShareAlike License]</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="-2" case="case-sensitive">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="case-sensitive">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="case-sensitive">Wiktionary</namespace>
+      <namespace key="5" case="case-sensitive">Wiktionary talk</namespace>
+      <namespace key="6" case="case-sensitive">File</namespace>
+      <namespace key="7" case="case-sensitive">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="case-sensitive">Template</namespace>
+      <namespace key="11" case="case-sensitive">Template talk</namespace>
+      <namespace key="12" case="case-sensitive">Help</namespace>
+      <namespace key="13" case="case-sensitive">Help talk</namespace>
+      <namespace key="14" case="case-sensitive">Category</namespace>
+      <namespace key="15" case="case-sensitive">Category talk</namespace>
+      <namespace key="90" case="case-sensitive">Thread</namespace>
+      <namespace key="91" case="case-sensitive">Thread talk</namespace>
+      <namespace key="92" case="case-sensitive">Summary</namespace>
+      <namespace key="93" case="case-sensitive">Summary talk</namespace>
+      <namespace key="100" case="case-sensitive">Appendix</namespace>
+      <namespace key="101" case="case-sensitive">Appendix talk</namespace>
+      <namespace key="102" case="case-sensitive">Concordance</namespace>
+      <namespace key="103" case="case-sensitive">Concordance talk</namespace>
+      <namespace key="104" case="case-sensitive">Index</namespace>
+      <namespace key="105" case="case-sensitive">Index talk</namespace>
+      <namespace key="106" case="case-sensitive">Rhymes</namespace>
+      <namespace key="107" case="case-sensitive">Rhymes talk</namespace>
+      <namespace key="108" case="case-sensitive">Transwiki</namespace>
+      <namespace key="109" case="case-sensitive">Transwiki talk</namespace>
+      <namespace key="110" case="case-sensitive">Wikisaurus</namespace>
+      <namespace key="111" case="case-sensitive">Wikisaurus talk</namespace>
+      <namespace key="114" case="case-sensitive">Citations</namespace>
+      <namespace key="115" case="case-sensitive">Citations talk</namespace>
+      <namespace key="116" case="case-sensitive">Sign gloss</namespace>
+      <namespace key="117" case="case-sensitive">Sign gloss talk</namespace>
+      <namespace key="828" case="case-sensitive">Module</namespace>
+      <namespace key="829" case="case-sensitive">Module talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Wiktionary:Welcome, newcomers</title>
+    <ns>4</ns>
+    <id>6</id>
+    <restrictions>edit=autoconfirmed:move=sysop</restrictions>
+    <revision>
+      <id>24557508</id>
+      <parentid>19020708</parentid>
+      <timestamp>2013-12-30T13:50:49Z</timestamp>
+      <contributor>
+        <username>XXXXXXXX</username>
+        <id>19999</id>
+      </contributor>
+      <text xml:space="preserve">Test page 1</text>
+      <sha1>pdgvb0p8s6p28xkxyz0holcmfurq77p</sha1>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+    </revision>
+  </page>
+  <page>
+    <title>Wiktionary:GNU Free Documentation License</title>
+    <ns>4</ns>
+    <id>7</id>
+    <revision>
+      <id>18348012</id>
+      <parentid>5308421</parentid>
+      <timestamp>2012-10-03T14:41:21Z</timestamp>
+      <contributor>
+        <username>XXXXXXXX</username>
+        <id>19998</id>
+      </contributor>
+      <comment>/* For more information */ added [[Wiktionary:News for editors]] to the list per [https://en.wiktionary.org/w/index.php?title=Wiktionary:News_for_editors&amp;curid=1215703&amp;diff=24551057&amp;oldid=24501656]</comment>
+      <text xml:space="preserve">
+      <minor />
+      <comment>Protected &quot;[[Wiktionary:GNU Free Documentation License]]&quot; (‎[edit=autoconfirmed] (indefinite) ‎[move=sysop] (indefinite))</comment>
+      <text xml:space="preserve">Test page 2</text>
+      <sha1>j79mc0clknvsdqxe47ezud6vsazjon3</sha1>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+    </revision>
+  </page>
+</mediawiki>
