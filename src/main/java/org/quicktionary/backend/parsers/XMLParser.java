@@ -14,17 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.backend;
+package org.quicktionary.backend.parsers;
 
 import java.io.File;
 import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
+/**
+ * spec: http://www.w3.org/TR/REC-xml/
+ * @author alesalme
+ */
 public class XMLParser {
 	private BufferedReader reader;
 	private byte currentChar;
 
-	public XMLParser(File file) {
-		//reader = new BufferedReader(file);
+	public XMLParser(File file) throws IOException {
+		reader = new BufferedReader(new FileReader(file));
 		currentChar = 0;
 	}
 
