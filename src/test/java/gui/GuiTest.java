@@ -1,3 +1,5 @@
+package gui;
+
 /* Quicktionary test
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *

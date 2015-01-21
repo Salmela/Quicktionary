@@ -1,3 +1,5 @@
+package backend;
+
 /* Quicktionary test
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *
@@ -29,7 +31,7 @@ public class HttpFetcherTest implements FetchListener {
 	private String title, text;
 	final String DEFAULT_URL = "www.example.com";
 	final String DEFAULT_RESPONSE = "{\"warnings\":{\"query\":{\"*\":\"Are you sure what you are doing?\"}},\"query\":{\"pages\":{\"117985\":{\"pageid\":117985,\"ns\":0,\"title\":\"Car\",\"revisions\":[{\"contentformat\":\"text/x-wiki\",\"contentmodel\":\"wikitext\",\"*\":\"Hello\"}]}}}}";
-    
+
 	public HttpFetcherTest() {
 		fetcher = new HttpFetcher();
 		setFetchListener(this);
