@@ -56,9 +56,16 @@ public class HeaderButton extends JButton implements ChangeListener {
 		height = getHeight();
 
 		if(pressed) {
-				style = (Paint)StyleManager.getStyle("header-button-active-bg");
+			style = (Paint)StyleManager.getStyle("header-button-active-bg");
 		} else {
-				style = (Paint)StyleManager.getStyle("header-button-bg");
+			style = (Paint)StyleManager.getStyle("header-button-bg");
+		}
+
+		/* use default rendering if theme isn't selected */
+		if(style == null) {
+			setContentAreaFilled(true);
+			super.paintComponent(graphics);
+			return;
 		}
 
 		graphics2d = (Graphics2D) graphics;

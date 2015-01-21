@@ -70,10 +70,16 @@ public class StyleManager {
 	}
 
 	public void changeStyle(String name) {
-		if(name.equals("dark")) {
+		/* use default theme if name is null */
+		if(name == null) {
+			styles.clear();
+
+		} else if(name.equals("dark")) {
 			useDarkStyle();
+
 		} else if(name.equals("light")) {
 			useLightStyle();
+
 		} else {
 			styles.clear();
 		}
@@ -84,6 +90,10 @@ public class StyleManager {
 	public static void setSource(Graphics2D graphics2d,
 	                             Paint source,
 	                             int width, int height) {
+		/* use default paint if a paint is not selected */
+		if(source == null) {
+			return;
+		}
 		if(source instanceof GradientPaint) {
 			Point2D.Float p1, p2;
 			GradientPaint gradient = (GradientPaint)source;
@@ -108,6 +118,10 @@ public class StyleManager {
 	static Color getColor(String colorId) {
 		Object color;
 		color = getStyle(colorId);
+		/* use default color if a color is not selected */
+		if(color == null) {
+			return null;
+		}
 		if(!(color instanceof Color)) {
 			throw new IllegalStateException("Style must have Color type.");
 		}
