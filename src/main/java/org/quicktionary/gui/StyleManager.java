@@ -43,6 +43,8 @@ public class StyleManager {
 		styles.put("header-button-bg",     button);
 		styles.put("header-button-active-bg", new Color(0x363632));
 		styles.put("header-button-border", new Color(0x313330));
+		styles.put("header-button-inline", true);
+		styles.put("header-button-inline-color", new Color(0x4b4a46));
 		styles.put("header-color",         new Color(0xe1d8c9));
 	}
 
@@ -57,6 +59,7 @@ public class StyleManager {
 		styles.put("header-button-bg",     button);
 		styles.put("header-button-active-bg", buttonActive);
 		styles.put("header-button-border", new Color(0xb2b6b2));
+		styles.put("header-button-inline", false);
 		styles.put("header-color",         new Color(0x303638));
 	}
 

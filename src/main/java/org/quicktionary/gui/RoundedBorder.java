@@ -91,6 +91,13 @@ public class RoundedBorder extends AbstractBorder {
 		radii[CORNER_BOTTOM_LEFT]  = bottomLeft;
 		checkRadii();
 	}
+	public void setRadii(int[] radii) {
+		this.radii = radii;
+		checkRadii();
+	}
+	public int[] getRadii() {
+		return radii;
+	}
 	public void setThickness(boolean top, boolean right, boolean bottom, boolean left) {
 		thickness[BORDER_TOP]    = top;
 		thickness[BORDER_RIGHT]  = right;
