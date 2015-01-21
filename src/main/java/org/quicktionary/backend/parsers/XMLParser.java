@@ -17,14 +17,14 @@
 package org.quicktionary.backend;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.BufferedReader;
 
 public class XMLParser {
 	private BufferedReader reader;
 	private byte currentChar;
 
 	public XMLParser(File file) {
-		reader = new BufferedReader(file);
+		//reader = new BufferedReader(file);
 		currentChar = 0;
 	}
 
@@ -46,38 +46,39 @@ public class XMLParser {
 	}
 
 	private byte getNext() {
-		currentChar = reader.read();
+		try {
+			currentChar = (byte)reader.read();
+		} catch(Exception e) {
+		}
 		return currentChar;
 	}
 
-	private byte skipWhitespace(boolean atLeastOne) {
+	private boolean skipWhitespaces(boolean atLeastOne) {
 		if(atLeastOne) {
 			if(isWhitespace(currentChar)) {
 				return false;
 			}
 		}
-		while(isWhitespace(currentChar = reader.read()));
+		while(isWhitespace(currentChar = getNext()));
 
 		return true;
 	}
 
-	private void readChar(byte wanted, boolean ignoreWhitespaces, String errorString) {
-		if(currentChar != wanted) {
+	private void readChar(char wanted, String errorString) {
+		if(currentChar != (byte)wanted) {
 			throw new Error(errorString);
 		} else {
-			getNext(ignoreWhitespaces);
+			getNext();
 		}
-	}
-
-	private void readChar(byte wanted, String errorString) {
-		readChar(wanted, false, errorString);
 	}
 
 	/**
 	 * Parse a attribute of the element. We must be at the start of attribute.
 	 * some xml like languages allows attribute values to be unquoted
 	 */
-	private boolean parseAttributes() {
+	private boolean parseAttribute() {
+		char quoteChar;
+
 		/* check that the name starts with letter */
 		if(isAlphabet(currentChar)) {
 			return false;
@@ -89,17 +90,17 @@ public class XMLParser {
 			getNext();
 		}
 
-		skipWhitespace();
+		skipWhitespaces(false);
 
 		/* get equal sign */
 		readChar('=', "Attribute must have equal sign.");
 
-		skipWhitespace();
+		skipWhitespaces(false);
 
 		if(currentChar != '\"' && currentChar != '\'') {
 			throw new Error("Attribute's value must be enclosed inside quotes.");
 		} else {
-			quoteChar = currentChar;
+			quoteChar = (char)currentChar;
 			getNext();
 		}
 
@@ -140,11 +141,11 @@ public class XMLParser {
 			getNext();
 		}
 
-		skipWhitespace();
+		skipWhitespaces(true);
 
 		/* read the attributes */
 		while(parseAttribute()) {
-			skipWhitespace(true);
+			skipWhitespaces(true);
 		}
 
 		/* check if this is inline element */
