@@ -40,17 +40,22 @@ public class Main {
 	 */
 	public static void parseCommandlineArgs(String[] args) {
 		int i;
+
 		for(i = 0; i < args.length; i++) {
-			String command = args[i];
-			if(command.equals("--native-file-chooser") ||
-			   command.equals("-n")) {
+			String option = args[i];
+			if(option.equals("--native-file-chooser") ||
+			   option.equals("-n")) {
 				useNativeFileDialog = true;
 
-			} else if(command.equals("--theme") ||
-			   command.equals("-t")) {
+			} else if(option.equals("--theme") ||
+			          option.equals("-t")) {
 				themeName = args[++i];
 
-			} else if(command.charAt(0) != '-') {
+			} else if(option.equals("--help") ||
+			          option.equals("-h")) {
+				System.out.println("TODO!");
+
+			} else if(option.charAt(0) != '-') {
 				databasePath = args[++i];
 			}
 		}
