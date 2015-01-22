@@ -30,7 +30,7 @@ public class XMLParserTest {
 	@Before
 	public void setup() throws IOException {
 		xmlFile = folder.newFile("test.xml");
-		parser = new XMLParser(xmlFile);
+		parser = new XMLParser();
 	}
 
 	public void testFile(String file) throws IOException {
@@ -39,34 +39,103 @@ public class XMLParserTest {
 		writer.close();
 	}
 
+	String xmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
+
 	@Test
 	public void emptyDocument() throws IOException {
-		testFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-		parser.parse();
+		testFile(xmlDecl);
+		Assert.assertTrue(parser.parseFile(file));
 	}
 
 	@Test
-	public void emptyWithRootDocument() throws IOException {
-		testFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test></test>");
-		parser.parse();
+	public void emptyDocument() throws IOException {
+		testFile(xmlDecl);
+		parser.parseFile(file)
+		Assert.assertFalse(parser.getRoot());
+	}
+
+
+	@Test
+	public void emptyWithRoot() throws IOException {
+		testFile(xmlDecl + "<test></test>");
+		Assert.assertTrue(parser.parseFile(file));
 	}
 
 	@Test
-	public void notEndingNodeDocument() throws IOException {
-		testFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><hello></test>");
-		parser.parse();
-		/* should fail */
+	public void getEmptyRootNode() throws IOException {
+		testFile(xmlDecl + "<test></test>");
+		parser.parseFile(file);
+		Assert.assertTrue(parser.getRoot());
 	}
 
 	@Test
-	public void emptyNodeDocument() throws IOException {
-		testFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><hello/></test>");
-		parser.parse();
+	public void InvalidRootNode() throws IOException {
+		testFile(xmlDecl + "<test></hello>");
+		parser.parseFile(file);
+		Assert.assertFalse(parser.getRoot());
+	}
+
+
+	@Test
+	public void notEndingElement() throws IOException {
+		testFile(xmlDecl + "<test><hello></test>");
+		Assert.assertFalse(parser.parseFile(file));
 	}
 
 	@Test
-	public void nodeWithTextDocument() throws IOException {
-		testFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><hello>hei</hello></test>");
-		parser.parse();
+	public void emptyNode() throws IOException {
+		testFile(xmlDecl + "<test><hello/></test>");
+		Assert.assertTrue(parser.parseFile(file));
+	}
+
+	@Test
+	public void getEmptyNode() throws IOException {
+		testFile(xmlDecl + "<test><hello/></test>");
+		parser.parseFile(file);
+		Assert.assertTrue(parser.getElement("hello"));
+	}
+
+
+	@Test
+	public void nodeWithText() throws IOException {
+		testFile(xmlDecl + "<test><hello>hei</hello></test>");
+		Assert.assertTrue(parser.parseFile(file));
+	}
+
+	@Test
+	public void getNodeWithText() throws IOException {
+		testFile(xmlDecl + "<test><hello>hei</hello></test>");
+		parser.parseFile(file);
+		parser.getFirstChild();
+		Assert.assertTrue(parser.getElement("hello"));
+	}
+
+	@Test
+	public void getNodeWithText() throws IOException {
+		testFile(xmlDecl + "<test><hello>hei</hello></test>");
+		parser.parseFile(file);
+		parser.getElement("hello");
+		parser.getFirstChild();
+		Assert.assertEquals("hei", parser.getTextContent());
+	}
+
+
+	@Test
+	public void getChildOfNode() throws IOException {
+		testFile(xmlDecl + "<test><hello>hei</hello></test>");
+		parser.parseFile(file);
+		parser.getElement("hello");
+		parser.getFirstChild();
+		Assert.assertEquals("hei", parser.getTextContent());
+	}
+
+	@Test
+	public void getChildOfNode() throws IOException {
+		testFile(xmlDecl + "<test><cool/><hello>hei</hello></test>");
+		parser.parseFile(file);
+		parser.getElement("hello");
+		parser.getFirstChild();
+		parser.getNextSibling();
+		Assert.assertEquals("hello", parser.getElementName());
 	}
 }
