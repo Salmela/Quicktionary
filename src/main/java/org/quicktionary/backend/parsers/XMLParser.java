@@ -153,32 +153,31 @@ public class XMLParser {
 		return findElement(getTagNameId(tagName));
 	}
 
+	private boolean goToLevel(int level) {
+		while(parseNode()) {
+			int levelCurrent = parentNodes.size();
+			if(levelCurrent == level) {
+				return true;
+			} else if(levelCurrent < level) {
+				return false;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Go to the end of the parent node.
 	 */
 	public boolean getParent() {
-		int parentIndex = parentNodes.size();
-
-		while(parseNode()) {
-			if(parentNodes.size() == parentIndex - 1) {
-				return true;
-			}
-		}
-		return false;
+		return goToLevel(parentNodes.size() - 1);
 	}
 
 	public boolean getFirstChild() {
-		return false;
+		return goToLevel(parentNodes.size() + 1);
 	}
 
 	public boolean getNextSibling() {
-		int parentIndex = parentNodes.size();
-		while(parseNode()) {
-			if(parentNodes.size() == parentIndex) {
-				return true;
-			}
-		}
-		return false;
+		return goToLevel(parentNodes.size());
 	}
 
 	/**
