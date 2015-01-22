@@ -75,7 +75,7 @@ public class XMLParserTest {
 	public void InvalidRootNode() throws IOException {
 		testFile(xmlDecl + "<test></hello>");
 		parser.parseFile(xmlFile);
-		Assert.assertFalse(parser.getRoot());
+		Assert.assertFalse(parser.findElement(""));
 	}
 
 
@@ -103,7 +103,7 @@ public class XMLParserTest {
 	public void findChild() throws IOException {
 		testFile(xmlDecl + "<test><t><hello>hei</hello></t></test>");
 		parser.parseFile(xmlFile);
-		parser.getFirstChild();
+		parser.getRoot();
 		Assert.assertTrue(parser.findElement("hello"));
 	}
 
@@ -124,27 +124,19 @@ public class XMLParserTest {
 	}
 
 	@Test
-	public void getSiblingOfChildOfNode() throws IOException {
-		testFile(xmlDecl + "<test><cool/><hello>hei</hello></test>");
-		parser.parseFile(xmlFile);
-		parser.findElement("hello");
-	}
-
-	@Test
 	public void getSiblingOfNode() throws IOException {
 		testFile(xmlDecl + "<test><cool/><hello>hi!</hello></test>");
 		parser.parseFile(xmlFile);
-		parser.findElement("hello");
-		Assert.assertTrue(parser.getFirstChild());
+		parser.findElement("cool");
+		Assert.assertTrue(parser.getNextSibling());
 	}
 
 	@Test
 	public void dontGetSiblingOfNode() throws IOException {
 		testFile(xmlDecl + "<test><cool/></test>");
 		parser.parseFile(xmlFile);
-		parser.findElement("hello");
-		parser.getFirstChild();
-		Assert.assertFalse(parser.getFirstChild());
+		parser.findElement("cool");
+		Assert.assertFalse(parser.getNextSibling());
 	}
 
 
@@ -152,8 +144,7 @@ public class XMLParserTest {
 	public void getAttribute() throws IOException {
 		testFile(xmlDecl + "<test><cool level=\"awesome\"/></test>");
 		parser.parseFile(xmlFile);
-		parser.findElement("hello");
-		parser.getFirstChild();
+		parser.findElement("cool");
 		Assert.assertEquals("awesome", parser.getAttribute("level"));
 	}
 
