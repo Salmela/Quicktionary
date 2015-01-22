@@ -255,15 +255,21 @@ public class XMLParser {
 	}
 
 	/**
-	 * Check if letter is in ascii alphabet.
+	 * Check if letter is valid xml name character.
 	 * @param letter The character that we want to check
-	 * @return True, if the letter was in ascii alphabet
+	 * @return True, if the letter was in alphabet
 	 */
-	private boolean isAlphabet(byte letter) {
+	private boolean isAlphabet(byte letter, boolean first) {
 		if(letter >= 'a' && letter <= 'z') {
 			return true;
 		}
 		if(letter >= 'A' && letter <= 'Z') {
+			return true;
+		}
+		if(letter == ':' || letter == '_') {
+			return true;
+		}
+		if(first && letter >= '0' && letter <= '9') {
 			return true;
 		}
 		return false;
@@ -330,15 +336,16 @@ public class XMLParser {
 		attribute = new XMLAttribute();
 
 		/* check that the name starts with letter */
-		if(!isAlphabet(currentChar)) {
+		if(!isAlphabet(currentChar, true)) {
 			return false;
 		}
 
 		/* get attribute name */
 		attributeBuilder.setLength(0);
-		while(isAlphabet(currentChar)) {
+		while(isAlphabet(currentChar, false)) {
 			/* push this char to element name */
-			attributeBuilder.append(getNext());
+			attributeBuilder.append(currentChar);
+			getNext();
 		}
 		attribute.name = new String(attributeBuilder);
 
@@ -359,9 +366,10 @@ public class XMLParser {
 
 		/* get the value */
 		attributeBuilder.setLength(0);
-		while(currentChar != quoteChar && currentChar != '<') {
+		while(currentChar != quoteChar && currentChar != '<' && currentChar != -1) {
 			/* push this char to element name */
-			attributeBuilder.append(getNext());
+			attributeBuilder.append((char)currentChar);
+			getNext();
 		}
 		attribute.value = new String(attributeBuilder);
 
@@ -408,10 +416,12 @@ public class XMLParser {
 
 		/* read the name of element */
 		tagName.setLength(0);
-		while(isAlphabet(currentChar)) {
-			/* push this char to element name */
-			tagName.append((char)currentChar);
-			getNext();
+		if(isAlphabet(currentChar, true)) {
+			while(isAlphabet(currentChar, false)) {
+				/* push this char to element name */
+				tagName.append((char)currentChar);
+				getNext();
+			}
 		}
 		tagNameId = getTagNameId(tagName);
 
