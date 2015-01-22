@@ -429,6 +429,9 @@ public class XMLParser {
 
 		/* read the attributes */
 		while(parseAttribute()) {
+			if(!isWhitespace(currentChar)) {
+				break;
+			}
 			skipWhitespaces(true);
 		}
 
