@@ -188,11 +188,16 @@ public class XMLParser {
 		return goToLevel(parentNodes.size());
 	}
 
-	public boolean getTextContent() {
+	public String getTextContent() {
 		if(!parseNode()) {
-			return false;
+			return null;
 		}
-		return nodeType == NodeType.TEXT;
+		throw new Error("Not implemented yet");
+
+		if (nodeType != NodeType.TEXT) {
+			return null;
+		}
+		return null;//textContent;
 	}
 
 	/**
