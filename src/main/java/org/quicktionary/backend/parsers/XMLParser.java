@@ -22,6 +22,15 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
+ * This class implements offline xml parser. It doesn't
+ * allow custom markup defined inside file. The code
+ * only does markup expansion only for html characters.
+ *
+ * The implementation tries to not allocate memory. That
+ * is why it is a state machine. The parser has also
+ * limitation that it can go only forward and you can
+ * only ask tag names of the parent nodes.
+ *
  * spec: http://www.w3.org/TR/REC-xml/
  * @author alesalme
  */
@@ -29,9 +38,13 @@ public class XMLParser {
 	private BufferedReader reader;
 	private byte currentChar;
 
-	public XMLParser(File file) throws IOException {
-		reader = new BufferedReader(new FileReader(file));
-		currentChar = 0;
+	public XMLParser() {
+	}
+
+	public enum NodeType {
+		ELEMENT_NODE,
+		COMMENT_NODE,
+		TEXT_NODE
 	}
 
 	/**
@@ -40,11 +53,39 @@ public class XMLParser {
 	 * Should we catch exceptions here and return boolean if the parsing was
 	 * successful.
 	 */
-	public void parse() {
+	public void parseFile(File file) throws IOException {
+		reader = new BufferedReader(new FileReader(file));
+		currentChar = 0;
 		/* initialize the currentChar */
 		getNext();
 		/* read the declaration */
 		parseXMLDeclaration();
+	}
+
+	/* parsing interface */
+	public boolean getRoot() {
+	}
+	public boolean getElement(String tagName) {
+	}
+	public boolean getAttribute(String attributeName) {
+	}
+	public enum NodeType getNodeType() {
+	}
+	/**
+	 * Get the element's tag name. If current node isn't element, then
+	 * return null.
+	 */
+	public String getElementName() {
+	}
+	/**
+	 * Get next attribute. If any attributes haven't been
+	 * parsed then the first one is given.
+	 */
+	public String getNextAttribute() {
+	}
+	public boolean getFirstChild() {
+	}
+	public boolean getNextSibling() {
 	}
 
 	private boolean isAlphabet(byte letter) {
