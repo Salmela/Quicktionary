@@ -36,6 +36,9 @@ import java.lang.StringBuilder;
  * limitation that it can go only forward and you can
  * only ask tag names of the parent nodes.
  *
+ * This parser isn't designed for attribute heavy xml
+ * documents.
+ *
  * spec: http://www.w3.org/TR/REC-xml/
  */
 public class XMLParser {
@@ -51,27 +54,39 @@ public class XMLParser {
 	private boolean parsingError;
 	private boolean preserveWhitespaces;
 
+	/* variables for current node */
 	private NodeType      nodeType;
 	private TagType       tagType;
 	private StringBuilder tagName;
 	private int tagNameId;
+	private ArrayList<XMLAttribute> attributes;
+	private StringBuilder attributeBuilder;
 
 	public enum NodeType {
 		ELEMENT,
 		COMMENT,
-		TEXT
+		TEXT,
+		NONE
 	}
 
 	private enum TagType {
+		EMPTY,
 		START,
 		END,
-		EMPTY
+		NONE
+	}
+
+	private class XMLAttribute {
+		public String name;
+		public String value;
 	}
 
 	public XMLParser() {
 		parentNodes = new ArrayList<Integer>(32);
+		attributes = new ArrayList<XMLAttribute>(16);
 		tagNames = new HashMap<CharSequence, Integer>();
 		tagName  = new StringBuilder(256);
+		attributeBuilder = new StringBuilder(64);
 		reader   = null;
 	}
 
@@ -146,32 +161,31 @@ public class XMLParser {
 		return findElement(getTagNameId(tagName));
 	}
 
+	private boolean goToLevel(int level) {
+		while(parseNode()) {
+			int levelCurrent = parentNodes.size();
+			if(levelCurrent == level) {
+				return true;
+			} else if(levelCurrent < level) {
+				return false;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Go to the end of the parent node.
 	 */
 	public boolean getParent() {
-		int parentIndex = parentNodes.size();
-
-		while(parseNode()) {
-			if(parentNodes.size() == parentIndex - 1) {
-				return true;
-			}
-		}
-		return false;
+		return goToLevel(parentNodes.size() - 1);
 	}
 
 	public boolean getFirstChild() {
-		return false;
+		return goToLevel(parentNodes.size() + 1);
 	}
 
 	public boolean getNextSibling() {
-		int parentIndex = parentNodes.size();
-		while(parseNode()) {
-			if(parentNodes.size() == parentIndex) {
-				return true;
-			}
-		}
-		return false;
+		return goToLevel(parentNodes.size());
 	}
 
 	public boolean getTextContent() {
@@ -185,6 +199,11 @@ public class XMLParser {
 	 * Get the value of specific attribute at current element.
 	 */
 	public String getAttribute(String attributeName) {
+		for(XMLAttribute attribute : attributes) {
+			if(attribute.name == attributeName) {
+				return attribute.value;
+			}
+		}
 		return null;
 	}
 
@@ -204,7 +223,7 @@ public class XMLParser {
 	 * parsed then the first one is given.
 	 */
 	public String getNextAttribute() {
-		return null;
+		throw new Error("Not implemented");
 	}
 
 	/**
@@ -300,7 +319,10 @@ public class XMLParser {
 	 * Note: Some XML-like languages allows attribute values to be unquoted.
 	 */
 	private boolean parseAttribute() {
+		XMLAttribute attribute;
 		char quoteChar;
+
+		attribute = new XMLAttribute();
 
 		/* check that the name starts with letter */
 		if(!isAlphabet(currentChar)) {
@@ -308,10 +330,12 @@ public class XMLParser {
 		}
 
 		/* get attribute name */
+		attributeBuilder.setLength(0);
 		while(isAlphabet(currentChar)) {
 			/* push this char to element name */
-			getNext();
+			attributeBuilder.append(getNext());
 		}
+		attribute.name = new String(attributeBuilder);
 
 		skipWhitespaces(false);
 
@@ -329,10 +353,12 @@ public class XMLParser {
 		}
 
 		/* get the value */
+		attributeBuilder.setLength(0);
 		while(currentChar != quoteChar && currentChar != '<') {
 			/* push this char to element name */
-			getNext();
+			attributeBuilder.append(getNext());
 		}
+		attribute.value = new String(attributeBuilder);
 
 		if(currentChar != quoteChar) {
 			/* some xml like languages allows attribute values to be unquoted */
@@ -342,6 +368,8 @@ public class XMLParser {
 			/* consume the quote */
 			getNext();
 		}
+
+		attributes.add(attribute);
 		return true;
 	}
 
@@ -351,9 +379,6 @@ public class XMLParser {
 	 */
 	private void parseTag() {
 		tagType = TagType.START;
-
-		/* reset the length */
-		tagName.setLength(0);
 
 		/* read the first byte of the tag */
 		if(currentChar != '<') {
@@ -377,6 +402,7 @@ public class XMLParser {
 		nodeType = NodeType.ELEMENT;
 
 		/* read the name of element */
+		tagName.setLength(0);
 		while(isAlphabet(currentChar)) {
 			/* push this char to element name */
 			tagName.append((char)currentChar);
@@ -428,7 +454,12 @@ public class XMLParser {
 	}
 
 	private boolean parseNode() {
+		/* initialize variables for current node */
 		parsingError = false;
+		attributes.clear();
+		nodeType = NodeType.NONE;
+		tagType = TagType.NONE;
+		tagNameId = 0;
 
 		if(!preserveWhitespaces) {
 			skipWhitespaces(false);

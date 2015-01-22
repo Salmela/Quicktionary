@@ -123,23 +123,45 @@ public class XMLParserTest {
 		Assert.assertEquals("hei", parser.getTextContent());
 	}
 
-
-	@Test
-	public void getChildOfNode() throws IOException {
-		testFile(xmlDecl + "<test><hello>hei</hello></test>");
-		parser.parseFile(xmlFile);
-		parser.findElement("hello");
-		parser.getFirstChild();
-		Assert.assertEquals("hei", parser.getTextContent());
-	}
-
 	@Test
 	public void getSiblingOfChildOfNode() throws IOException {
 		testFile(xmlDecl + "<test><cool/><hello>hei</hello></test>");
 		parser.parseFile(xmlFile);
 		parser.findElement("hello");
+	}
+
+	@Test
+	public void getSiblingOfNode() throws IOException {
+		testFile(xmlDecl + "<test><cool/><hello>hi!</hello></test>");
+		parser.parseFile(xmlFile);
+		parser.findElement("hello");
+		Assert.assertTrue(parser.getFirstChild());
+	}
+
+	@Test
+	public void dontGetSiblingOfNode() throws IOException {
+		testFile(xmlDecl + "<test><cool/></test>");
+		parser.parseFile(xmlFile);
+		parser.findElement("hello");
 		parser.getFirstChild();
-		parser.getNextSibling();
-		Assert.assertEquals("hello", parser.getElementName());
+		Assert.assertFalse(parser.getFirstChild());
+	}
+
+
+	@Test
+	public void getAttribute() throws IOException {
+		testFile(xmlDecl + "<test><cool level=\"awesome\"/></test>");
+		parser.parseFile(xmlFile);
+		parser.findElement("hello");
+		parser.getFirstChild();
+		Assert.assertEquals("awesome", parser.getAttribute("level"));
+	}
+
+	@Test
+	public void getAttributeWithNamespace() throws IOException {
+		testFile(xmlDecl + "<test><cool xml:space=\"preserve\"> foo </cool></test>");
+		parser.parseFile(xmlFile);
+		parser.findElement("cool");
+		Assert.assertEquals("preserve", parser.getAttribute("xml:space"));
 	}
 }
