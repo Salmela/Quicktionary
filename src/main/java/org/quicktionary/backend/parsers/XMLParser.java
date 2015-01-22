@@ -82,25 +82,33 @@ public class XMLParser {
 	 * Should we catch exceptions here and return boolean if the parsing was
 	 * successful.
 	 */
-	public void parseFile(File file) throws IOException {
+	public boolean parseFile(File file) throws IOException {
+		boolean result;
 		reader = new BufferedReader(new FileReader(file));
 		currentChar = 0;
 		preserveWhitespaces = true;
+
 		/* initialize the currentChar */
 		getNext();
+
 		/* read the declaration */
-		parseXMLDeclaration();
+		try {
+			result = parseXMLDeclaration();
+		} catch(Exception exception) {
+			return false;
+		}
+		return result;
 	}
 
 	/* parsing interface */
 	public int getTagNameId(String tagName) {
-		return getTagNameId(tagName);
+		return getTagNameId((CharSequence)tagName);
 	}
 
 	public int getTagNameId(CharSequence tagName) {
 		int id;
 
-		if(tagNames.containsKey(tagName)) {
+		if(!tagNames.containsKey(tagName)) {
 			id = tagNames.size();
 			tagNames.put(tagName, id);
 		} else {
@@ -164,6 +172,13 @@ public class XMLParser {
 			}
 		}
 		return false;
+	}
+
+	public boolean getTextContent() {
+		if(!parseNode()) {
+			return false;
+		}
+		return nodeType == NodeType.TEXT;
 	}
 
 	/**
@@ -345,6 +360,7 @@ public class XMLParser {
 			appendLog("Element must start with less-than sign.");
 			return;
 		}
+		getNext();
 
 		/* check if the element is end tag */
 		if(currentChar == '/') {
@@ -418,7 +434,7 @@ public class XMLParser {
 		}
 
 		try {
-			if(parentNodes.size() != 0) {
+			if(parentNodes.size() == 0) {
 				parseRootNode();
 			} else if(currentChar == '<') {
 				parseTag();
@@ -427,6 +443,9 @@ public class XMLParser {
 			}
 		} catch(Exception exception) {
 			appendLog(exception);
+		}
+
+		if(parsingError) {
 			return false;
 		}
 
@@ -446,10 +465,10 @@ public class XMLParser {
 			}
 		}
 
-		return !parsingError;
+		return true;
 	}
 
-	private void parseXMLDeclaration() {
+	private boolean parseXMLDeclaration() {
 		skipWhitespaces(false);
 
 		readChar('<', "File must start with xml declaration.");
@@ -475,5 +494,7 @@ public class XMLParser {
 
 		readChar('?', "The xml declaration is expected to end with ?>");
 		readChar('>', "The xml declaration is expected to end with ?>");
+
+		return !parsingError;
 	}
 }
