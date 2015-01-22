@@ -37,7 +37,6 @@ import java.lang.StringBuilder;
  * only ask tag names of the parent nodes.
  *
  * spec: http://www.w3.org/TR/REC-xml/
- * @author alesalme
  */
 public class XMLParser {
 	private BufferedReader          reader;
@@ -86,7 +85,7 @@ public class XMLParser {
 		boolean result;
 		reader = new BufferedReader(new FileReader(file));
 		currentChar = 0;
-		preserveWhitespaces = true;
+		preserveWhitespaces = false;
 
 		/* initialize the currentChar */
 		getNext();
@@ -429,7 +428,7 @@ public class XMLParser {
 	private boolean parseNode() {
 		parsingError = false;
 
-		if(preserveWhitespaces) {
+		if(!preserveWhitespaces) {
 			skipWhitespaces(false);
 		}
 
