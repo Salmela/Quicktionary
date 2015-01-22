@@ -16,6 +16,7 @@
  */
 package org.quicktionary.gui;
 
+import java.io.IOException;
 import org.quicktionary.backend.Quicktionary;
 
 /**
@@ -68,6 +69,8 @@ public class Main {
 	public static void main(String[] args) {
 		Quicktionary quicktionary;
 		MainWindow window;
+
+		//Test test = new Test();
 
 		Main.init();
 		Main.parseCommandlineArgs(args);
