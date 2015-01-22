@@ -297,7 +297,7 @@ public class XMLParser {
 		try {
 			currentChar = (byte)reader.read();
 		} catch(Exception e) {
-			currentChar = 0;
+			currentChar = -1;
 		}
 		return currentChar;
 	}
@@ -446,7 +446,7 @@ public class XMLParser {
 
 	private void parseTextContent() {
 		nodeType = NodeType.TEXT;
-		while(currentChar != '<') {
+		while(currentChar != -1 && currentChar != '<') {
 			getNext();
 		}
 		return;
@@ -481,7 +481,9 @@ public class XMLParser {
 		}
 
 		try {
-			if(parentNodes.size() == 0) {
+			if(currentChar == -1) {
+				return false;
+			} else if(parentNodes.size() == 0) {
 				parseRootNode();
 			} else if(currentChar == '<') {
 				parseTag();
