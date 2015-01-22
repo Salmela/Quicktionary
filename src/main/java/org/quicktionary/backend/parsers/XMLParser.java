@@ -44,7 +44,7 @@ import java.lang.StringBuilder;
 public class XMLParser {
 	private BufferedReader          reader;
 	private ArrayList<Integer>      parentNodes;
-	private HashMap<CharSequence, Integer> tagNames;
+	private HashMap<String, Integer> tagNames;
 
 	/**
 	 * The current char must be at the start of next node
@@ -84,7 +84,7 @@ public class XMLParser {
 	public XMLParser() {
 		parentNodes = new ArrayList<Integer>(32);
 		attributes = new ArrayList<XMLAttribute>(16);
-		tagNames = new HashMap<CharSequence, Integer>();
+		tagNames = new HashMap<String, Integer>();
 		tagName  = new StringBuilder(256);
 		attributeBuilder = new StringBuilder(64);
 		reader   = null;
@@ -116,10 +116,6 @@ public class XMLParser {
 
 	/* parsing interface */
 	public int getTagNameId(String tagName) {
-		return getTagNameId((CharSequence)tagName);
-	}
-
-	public int getTagNameId(CharSequence tagName) {
 		int id;
 
 		if(!tagNames.containsKey(tagName)) {
@@ -129,6 +125,10 @@ public class XMLParser {
 			id = tagNames.get(tagName);
 		}
 		return id;
+	}
+
+	public int getTagNameId(CharSequence tagName) {
+		return getTagNameId(tagName.toString());
 	}
 
 	public boolean getRoot() {
