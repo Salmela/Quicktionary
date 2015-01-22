@@ -401,28 +401,28 @@ public class XMLParser {
 		readChar('>', "Element must end with more-than sign.");
 	}
 
-	private boolean parseTextContent() {
+	private void parseTextContent() {
 		nodeType = NodeType.TEXT;
 		while(currentChar != '<') {
 			getNext();
 		}
-		return true;
+		return;
 	}
 
-	private boolean parseRootNode() {
+	private void parseRootNode() {
 		while(true) {
-			if(!parseNode()) {
-				return false;
+			parseTag();
+			if(parsingError) {
+				return;
 			}
 
 			if(nodeType == NodeType.TEXT) {
 				appendLog("Text content is not allowed outside of root node.");
-				return false;
+				return;
 			} else if(nodeType == NodeType.ELEMENT) {
 				break;
 			}
 		}
-		return true;
 	}
 
 	private boolean parseNode() {
