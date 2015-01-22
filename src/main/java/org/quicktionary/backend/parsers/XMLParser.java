@@ -131,7 +131,8 @@ public class XMLParser {
 	 */
 	public boolean findElement(int tagNameId) {
 		while(parseNode()) {
-			if(this.tagNameId == tagNameId) {
+			if(this.nodeType == NodeType.ELEMENT &&
+			   this.tagNameId == tagNameId) {
 				break;
 			}
 		}
@@ -378,11 +379,12 @@ public class XMLParser {
 		/* read the name of element */
 		while(isAlphabet(currentChar)) {
 			/* push this char to element name */
-			tagName.append(getNext());
+			tagName.append((char)currentChar);
+			getNext();
 		}
 		tagNameId = getTagNameId(tagName);
 
-		skipWhitespaces(true);
+		skipWhitespaces(false);
 
 		/* read the attributes */
 		while(parseAttribute()) {
