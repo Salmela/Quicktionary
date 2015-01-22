@@ -148,7 +148,7 @@ public class XMLParser {
 		while(parseNode()) {
 			if(this.nodeType == NodeType.ELEMENT &&
 			   this.tagNameId == tagNameId) {
-				break;
+				return true;
 			}
 		}
 		return false;
