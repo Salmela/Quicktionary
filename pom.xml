@@ -41,8 +41,8 @@
             <configuration>
                 <instrumentation>
                     <includes>
-                        <include>ristinolla.logiikka/*.class</include>
-                        <include>ristinolla.tekoaly/*.class</include>
+                        <include>org.quicktionary.backend/*.class</include>
+                        <include>org.quicktionary.gui/*.class</include>
                     </includes>
                 </instrumentation>
             </configuration>
@@ -54,12 +54,12 @@
             <version>0.30</version>
             <configuration>
                 <targetClasses>
-                    <param>ristinolla.logiikka.*</param>
-                    <param>ristinolla.tekoaly.*</param>
+                    <param>org.quicktionary.backend.*</param>
+                    <param>org.quicktionary.gui.*</param>
                 </targetClasses>
                 <targetTests>
-                    <param>ristinolla.logiikka.*</param>
-                    <param>ristinolla.tekoaly.*</param>
+                    <param>org.quicktionary.backend.*</param>
+                    <param>org.quicktionary.gui.*</param>
                 </targetTests>
             </configuration>
         </plugin>
