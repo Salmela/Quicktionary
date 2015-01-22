@@ -1,4 +1,4 @@
-package backend;
+package org.quicktionary.backend.parsers;
 
 import org.junit.Test;
 import org.junit.Before;
