@@ -28,6 +28,14 @@ public class WordDatabase {
 		this.dictionary = dictionary;
 	}
 
+	protected void newWord(String word) {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+	protected void removeWord(String word) {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
 	protected void fetchPage(SearchItem item) {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
