@@ -145,12 +145,15 @@ public class XMLParser {
 
 		return parseNode();
 	}
+	public boolean getNextNode() {
+		return parseNode();
+	}
 
 	/**
 	 * Go to the first element with the tagNameId.
 	 */
 	public boolean findElement(int tagNameId) {
-		while(parseNode()) {
+		while(getNextNode()) {
 			if(this.nodeType == NodeType.ELEMENT &&
 			   this.tagNameId == tagNameId) {
 				return true;
@@ -167,7 +170,7 @@ public class XMLParser {
 	}
 
 	private boolean goToLevel(int level) {
-		while(parseNode()) {
+		while(getNextNode()) {
 			int levelCurrent = parentNodes.size();
 			if(levelCurrent == level) {
 				return true;
@@ -194,7 +197,7 @@ public class XMLParser {
 	}
 
 	public String getTextContent() {
-		if(!parseNode()) {
+		if(!getNextNode()) {
 			return null;
 		}
 		throw new Error("Not implemented yet");
