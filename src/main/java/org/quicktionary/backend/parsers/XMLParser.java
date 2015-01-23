@@ -51,6 +51,7 @@ public class XMLParser {
 	 * after any method.
 	 */
 	private byte currentChar;
+	private byte previousChar;
 	private boolean parsingError;
 	private boolean preserveWhitespaces;
 
@@ -83,11 +84,13 @@ public class XMLParser {
 
 	public XMLParser() {
 		parentNodes = new ArrayList<Integer>(32);
-		attributes = new ArrayList<XMLAttribute>(16);
-		tagNames = new HashMap<String, Integer>();
-		tagName  = new StringBuilder(256);
+		attributes  = new ArrayList<XMLAttribute>(16);
+		tagNames    = new HashMap<String, Integer>();
+		tagName     = new StringBuilder(256);
 		attributeBuilder = new StringBuilder(64);
-		reader   = null;
+		reader       = null;
+		currentChar  = -1;
+		previousChar = -1;
 	}
 
 	/**
@@ -302,11 +305,16 @@ public class XMLParser {
 	 */
 	private byte getNext() {
 		try {
+			previousChar = currentChar;
 			currentChar = (byte)reader.read();
 		} catch(Exception e) {
 			currentChar = -1;
 		}
 		return currentChar;
+	}
+
+	private byte getPrevious() {
+		return previousChar;
 	}
 
 	/**
