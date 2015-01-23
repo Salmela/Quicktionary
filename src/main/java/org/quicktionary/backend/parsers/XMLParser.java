@@ -473,18 +473,45 @@ public class XMLParser {
 		return;
 	}
 
-	private void parseRootNode() {
-		while(true) {
-			parseTag();
-			if(parsingError) {
-				return;
-			}
 
-			if(nodeType == NodeType.TEXT) {
-				appendLog("Text content is not allowed outside of root node.");
-				return;
-			} else if(nodeType == NodeType.ELEMENT) {
-				break;
+	/**
+	 * Check if the current node is valid outside of the root.
+	 * This method should be only used in parseNode.
+	 */
+	private boolean isValidRootNode() {
+		if(nodeType == NodeType.TEXT) {
+			appendLog("Text content is not allowed outside of root node.");
+			return false;
+		}
+		if(nodeType == NodeType.ELEMENT &&
+		   tagType == TagType.EMPTY) {
+			appendLog("The root node cannot be empty node.");
+			return false;
+		}
+		/*TODO: disallow two root element */
+		return true;
+	}
+
+	/**
+	 * Update the parent array.
+	 * This method should be only used in parseNode.
+	 */
+	private void updateParentArray() {
+		if(nodeType != NodeType.ELEMENT) {
+			return;
+		}
+
+		if(tagType == TagType.START) {
+			parentNodes.add(tagNameId);
+
+		} else if(tagType == TagType.END) {
+			int index;
+
+			index = parentNodes.size() - 1;
+			if(parentNodes.get(index) == tagNameId) {
+				appendLog("Mismatching tags.");
+			} else {
+				parentNodes.remove(index);
 			}
 		}
 	}
@@ -504,8 +531,6 @@ public class XMLParser {
 		try {
 			if(currentChar == -1) {
 				return false;
-			} else if(parentNodes.size() == 0) {
-				parseRootNode();
 			} else if(currentChar == '<') {
 				parseTag();
 			} else {
@@ -519,21 +544,14 @@ public class XMLParser {
 			return false;
 		}
 
-		/* update the parent node array */
-		if(nodeType == NodeType.ELEMENT) {
-			if(tagType == TagType.START) {
-				parentNodes.add(tagNameId);
-
-			} else if(tagType == TagType.END) {
-				int index;
-				index = parentNodes.size() - 1;
-				if(parentNodes.get(index) == tagNameId) {
-					appendLog("Mismatching tags.");
-				} else {
-					parentNodes.remove(index);
-				}
+		/* check if the nodes are before or after the root node */
+		if(parentNodes.size() == 0) {
+			if(!isValidRootNode()) {
+				return false;
 			}
 		}
+
+		updateParentArray();
 
 		return true;
 	}
