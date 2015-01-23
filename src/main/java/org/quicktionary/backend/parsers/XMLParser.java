@@ -108,16 +108,11 @@ public class XMLParser {
 		/* initialize the currentChar */
 		if(getNext() == -1) {
 			appendLog("File is empty");
-		}
-
-		/* read the declaration */
-		try {
-			result = parseXMLDeclaration();
-		} catch(Exception exception) {
-			currentChar = -1;
 			return false;
 		}
-		return result;
+
+		/* read the first node */
+		return parseNode();
 	}
 
 	public boolean isInitialized() {
@@ -425,10 +420,14 @@ public class XMLParser {
 			getNext();
 
 		/* check if the element is comment */
-		} else if(currentChar == '-') {
+		} else if(currentChar == '!') {
 			/*TODO implement this */
 			parsingError = true;
 			nodeType = NodeType.COMMENT;
+			parseComment();
+			return;
+		} else if(currentChar == '?') {
+			parseXMLDeclaration();
 			return;
 		}
 		nodeType = NodeType.ELEMENT;
@@ -539,10 +538,28 @@ public class XMLParser {
 		return true;
 	}
 
-	private boolean parseXMLDeclaration() {
-		skipWhitespaces(false);
+	private void parseComment() {
+		if(previousChar != '<') {
+			throw new Error("This method should be only used by parseTag.");
+		}
+		readChar('!');
+		readChar('-');
+		readChar('-');
 
-		readChar('<');
+		do {
+			if(currentChar != '-') continue;
+			getNext();
+			if(currentChar != '-') continue;
+			getNext();
+			if(currentChar != '>') continue;
+
+		} while(getNext() == -1);
+	}
+
+	private void parseXMLDeclaration() {
+		if(previousChar != '<') {
+			throw new Error("This method should be only used by parseTag.");
+		}
 		readChar('?');
 		readChar('x');
 		readChar('m');
