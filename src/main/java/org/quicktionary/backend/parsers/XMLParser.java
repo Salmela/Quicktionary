@@ -332,6 +332,10 @@ public class XMLParser {
 		}
 	}
 
+	private void readChar(char wanted) {
+		readChar(wanted, "Expected '" + wanted +"' character, but was '" + currentChar + "'.");
+	}
+
 	/**
 	 * Parse a attribute of the element. We must be at the start of attribute.
 	 * Note: Some XML-like languages allows attribute values to be unquoted.
@@ -359,7 +363,7 @@ public class XMLParser {
 		skipWhitespaces(false);
 
 		/* get equal sign */
-		readChar('=', "Attribute must have equal sign.");
+		readChar('=');
 
 		skipWhitespaces(false);
 
@@ -451,7 +455,7 @@ public class XMLParser {
 			getNext();
 		}
 
-		readChar('>', "Element must end with more-than sign.");
+		readChar('>');
 	}
 
 	private void parseTextContent() {
@@ -530,11 +534,15 @@ public class XMLParser {
 	private boolean parseXMLDeclaration() {
 		skipWhitespaces(false);
 
-		readChar('<', "File must start with xml declaration.");
-		readChar('?', "File must start with xml declaration.");
-		readChar('x', "File must start with xml declaration.");
-		readChar('m', "File must start with xml declaration.");
-		readChar('l', "File must start with xml declaration.");
+		readChar('<');
+		readChar('?');
+		readChar('x');
+		readChar('m');
+		readChar('l');
+
+		if(parentNodes.size() != 0) {
+			appendLog("The xml declaration must be at the start of file.");
+		}
 
 		skipWhitespaces(true);
 
@@ -551,9 +559,7 @@ public class XMLParser {
 			skipWhitespaces(true);
 		}
 
-		readChar('?', "The xml declaration is expected to end with ?>");
-		readChar('>', "The xml declaration is expected to end with ?>");
-
-		return !parsingError;
+		readChar('?');
+		readChar('>');
 	}
 }
