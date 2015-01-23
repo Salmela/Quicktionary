@@ -99,19 +99,26 @@ public class XMLParser {
 	public boolean parseFile(File file) throws IOException {
 		boolean result;
 		reader = new BufferedReader(new FileReader(file));
-		currentChar = 0;
+		currentChar = -1;
 		preserveWhitespaces = false;
 
 		/* initialize the currentChar */
-		getNext();
+		if(getNext() == -1) {
+			appendLog("File is empty");
+		}
 
 		/* read the declaration */
 		try {
 			result = parseXMLDeclaration();
 		} catch(Exception exception) {
+			currentChar = -1;
 			return false;
 		}
 		return result;
+	}
+
+	public boolean isInitialized() {
+		return currentChar != -1;
 	}
 
 	/* parsing interface */

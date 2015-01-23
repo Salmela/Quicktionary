@@ -17,6 +17,8 @@
 package org.quicktionary.backend;
 
 import java.lang.Runnable;
+import java.io.File;
+import java.io.IOException;
 
 import org.quicktionary.backend.parsers.XMLParser;
 
@@ -26,11 +28,27 @@ import org.quicktionary.backend.parsers.XMLParser;
  */
 public class WikiDBReader implements Runnable {
 	private XMLParser parser;
+	private File file;
+
 	public WikiDBReader() {
-		//parser = new XMLParser(File file);
+		parser = new XMLParser();
+	}
+
+	public boolean check(String filename) {
+		file = new File(filename);
+		try {
+			parser.parseFile(file);
+
+		} catch(IOException exception) {
+			return false;
+		}
+		return true;
 	}
 
 	public void run() {
+		if(!parser.isInitialized()) {
+			throw new Error("You have to run first the check method.");
+		}
 		while(true);
 	}
 }
