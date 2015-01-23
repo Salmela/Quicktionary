@@ -327,16 +327,14 @@ public class XMLParser {
 		while(isWhitespace(currentChar = getNext()));
 	}
 
-	private void readChar(char wanted, String errorString) {
+	private void expectChar(char wanted) {
+		String errorString = "Expected '" + wanted +"' character, but was '" + currentChar + "'.";
+
 		if(currentChar != (byte)wanted) {
 			throw new Error(errorString);
 		} else {
 			getNext();
 		}
-	}
-
-	private void readChar(char wanted) {
-		readChar(wanted, "Expected '" + wanted +"' character, but was '" + currentChar + "'.");
 	}
 
 	/**
@@ -366,7 +364,7 @@ public class XMLParser {
 		skipWhitespaces(false);
 
 		/* get equal sign */
-		readChar('=');
+		expectChar('=');
 
 		skipWhitespaces(false);
 
@@ -462,7 +460,7 @@ public class XMLParser {
 			getNext();
 		}
 
-		readChar('>');
+		expectChar('>');
 	}
 
 	private void parseTextContent() {
@@ -542,9 +540,9 @@ public class XMLParser {
 		if(previousChar != '<') {
 			throw new Error("This method should be only used by parseTag.");
 		}
-		readChar('!');
-		readChar('-');
-		readChar('-');
+		expectChar('!');
+		expectChar('-');
+		expectChar('-');
 
 		do {
 			if(currentChar != '-') continue;
@@ -560,10 +558,10 @@ public class XMLParser {
 		if(previousChar != '<') {
 			throw new Error("This method should be only used by parseTag.");
 		}
-		readChar('?');
-		readChar('x');
-		readChar('m');
-		readChar('l');
+		expectChar('?');
+		expectChar('x');
+		expectChar('m');
+		expectChar('l');
 
 		if(parentNodes.size() != 0) {
 			appendLog("The xml declaration must be at the start of file.");
@@ -584,7 +582,7 @@ public class XMLParser {
 			skipWhitespaces(true);
 		}
 
-		readChar('?');
-		readChar('>');
+		expectChar('?');
+		expectChar('>');
 	}
 }
