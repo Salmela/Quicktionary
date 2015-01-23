@@ -399,36 +399,38 @@ public class XMLParser {
 	}
 
 	/**
-	 * Parse one tag from reader.
+	 * Parse a tag from reader.
 	 * Reader is expected to be start of the tag.
 	 */
 	private void parseTag() {
 		tagType = TagType.START;
 
 		/* read the first byte of the tag */
-		if(currentChar != '<') {
-			appendLog("Element must start with less-than sign.");
-			return;
-		}
+		expectChar('<');
 		getNext();
+
+		/* check if the element is comment */
+		if(currentChar == '!') {
+			parseComment();
+		} else if(currentChar == '?') {
+			parseXMLDeclaration();
+		} else {
+			parseElement();
+		}
+	}
+
+	private void parseElement() {
+		if(previousChar != '<') {
+			throw new Error("This method should be only used by parseTag.");
+		}
+
+		nodeType = NodeType.ELEMENT;
 
 		/* check if the element is end tag */
 		if(currentChar == '/') {
 			tagType = TagType.END;
 			getNext();
-
-		/* check if the element is comment */
-		} else if(currentChar == '!') {
-			/*TODO implement this */
-			parsingError = true;
-			nodeType = NodeType.COMMENT;
-			parseComment();
-			return;
-		} else if(currentChar == '?') {
-			parseXMLDeclaration();
-			return;
 		}
-		nodeType = NodeType.ELEMENT;
 
 		/* read the name of element */
 		tagName.setLength(0);
