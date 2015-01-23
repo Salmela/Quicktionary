@@ -139,12 +139,18 @@ public class XMLParser {
 	public boolean getRoot() {
 		/* check that we are at the start of the file */
 		if(parentNodes.size() != 0) {
-				appendLog("The reader has already readed the root node.");
-				return false;
+			appendLog("The reader has already passed the root node.");
+			return false;
 		}
 
-		return parseNode();
+		while(getNextNode()) {
+			if(this.nodeType == NodeType.ELEMENT) {
+				return true;
+			}
+		}
+		return false;
 	}
+
 	public boolean getNextNode() {
 		return parseNode();
 	}
