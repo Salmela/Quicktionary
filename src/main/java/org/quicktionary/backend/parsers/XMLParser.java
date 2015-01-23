@@ -380,10 +380,11 @@ public class XMLParser {
 		if(currentChar != '\"' && currentChar != '\'') {
 			appendLog("Attribute's value must be enclosed inside quotes.");
 			return false;
-		} else {
-			quoteChar = (char)currentChar;
-			getNext();
 		}
+
+		/* save the quote character, because the attribute value must end to it */
+		quoteChar = (char)currentChar;
+		getNext();
 
 		/* get the value */
 		attributeBuilder.setLength(0);
@@ -394,14 +395,7 @@ public class XMLParser {
 		}
 		attribute.value = new String(attributeBuilder);
 
-		if(currentChar != quoteChar) {
-			/* some xml like languages allows attribute values to be unquoted */
-			appendLog("Expected " + quoteChar +" quote, but was " + currentChar + ".");
-			return false;
-		} else {
-			/* consume the quote */
-			getNext();
-		}
+		expectChar(quoteChar);
 
 		attributes.add(attribute);
 		return true;
