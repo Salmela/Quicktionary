@@ -32,6 +32,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 	static final String SEARCH_ENTER_EVENT = "search-enter-event";
 
 	private boolean hasPlaceHolder;
+	private boolean blockDocumentEvent;
 	private final Color placeHolderColor;
 	private final ActionListener searchListener;
 
@@ -45,6 +46,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 		addFocusListener(this);
 		addActionListener(this);
 
+		blockDocumentEvent = false;
 		hasPlaceHolder = true;
 		setText("Search");
 
@@ -60,10 +62,20 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 			this.listener  = listener;
 			this.searchBox = searchBox;
 		}
+		/**
+		 * Sends the search signal when user changes the text
+		 */
 		private void emitEvent() {
 			ActionEvent event;
 
-			if(searchBox.getText().length() == 0) {
+			/* ignore the first event, which is caused by removing of the place holder
+			 */
+			if(blockDocumentEvent) {
+				blockDocumentEvent = false;
+				return;
+			}
+
+			if(hasPlaceHolder) {
 				return;
 			}
 			event = new ActionEvent(searchBox, ActionEvent.ACTION_PERFORMED, SEARCH_EVENT);
@@ -84,6 +96,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 		if(hasPlaceHolder) {
 			setForeground(Color.BLACK);
 			hasPlaceHolder = false;
+			blockDocumentEvent = true;
 			setText("");
 		}
 	}
