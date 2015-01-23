@@ -537,6 +537,8 @@ public class XMLParser {
 	}
 
 	private void parseComment() {
+		int dashCount;
+
 		if(previousChar != '<') {
 			throw new Error("This method should be only used by parseTag.");
 		}
@@ -544,12 +546,18 @@ public class XMLParser {
 		expectChar('-');
 		expectChar('-');
 
+		nodeType = NodeType.COMMENT;
+
+		/* try to match the comment ending pattern for each character */
 		do {
-			if(currentChar != '-') continue;
-			getNext();
-			if(currentChar != '-') continue;
-			getNext();
-			if(currentChar != '>') continue;
+			dashCount = 0;
+
+			while(currentChar == '-') {
+				dashCount++;
+				getNext();
+				/* exit after two dashes followed by greater than sign '-->' */
+				if(dashCount == 2 && currentChar == '>') break;
+			}
 
 		} while(getNext() == -1);
 	}
