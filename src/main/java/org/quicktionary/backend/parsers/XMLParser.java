@@ -55,6 +55,7 @@ public class XMLParser {
 	private boolean parsingError;
 	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
+	private boolean verbose;
 	private StringBuilder textContent;
 
 	/* variables for current node */
@@ -94,6 +95,7 @@ public class XMLParser {
 		reader       = null;
 		currentChar  = -1;
 		previousChar = -1;
+		verbose = false;
 	}
 
 	/**
@@ -367,9 +369,12 @@ public class XMLParser {
 	 * @param wanted The character we expect current character to be
 	 */
 	private void expectChar(char wanted) {
-		String errorString = "Expected '" + wanted + "' character, but was '" + currentChar + "'.";
+		String errorString = "Expected '" + wanted + "' character, but was '" + (char)currentChar + "'.";
 
 		if(currentChar != (byte)wanted) {
+			System.out.print("Error in: ");
+			printCurrentNode();
+
 			throw new Error(errorString);
 		} else {
 			getNext();
@@ -570,12 +575,73 @@ public class XMLParser {
 			int index;
 
 			index = parentNodes.size() - 1;
-			if(parentNodes.get(index) == tagNameId) {
-				appendLog("Mismatching tags.");
+			if(parentNodes.get(index) != tagNameId) {
+				appendLog("Mismatching tags expected: " + parentNodes.get(index) +
+				          ", was: " + tagName + "(" + tagNameId + ").");
 			} else {
 				parentNodes.remove(index);
 			}
 		}
+	}
+
+	/**
+	 * Print the current node to the stdout. This method
+	 * is used in parseNode, when verbose is set to true.
+	 */
+	public void printCurrentNode() {
+		int i, level;
+		System.out.print("VERBOSE");
+
+		level = parentNodes.size();
+
+		/* use same level for the start tag and end tag */
+		if(nodeType == NodeType.ELEMENT && tagType == TagType.END) {
+			level -= 1;
+		}
+
+		/* print the depth of the node */
+		System.out.print(" " + level + " ");
+
+		/* add some indentation to make scanning the lines easier */
+		for(i = 0; i < level; i++) {
+			System.out.print(" ");
+		}
+
+		/* print the node type*/
+		switch(nodeType) {
+		case ELEMENT:
+			System.out.print("element");
+			switch(tagType) {
+			case START:
+				System.out.print("/start");
+				break;
+			case END:
+				System.out.print("/end");
+				break;
+			case EMPTY:
+				System.out.print("/empty");
+				break;
+			case NONE:
+				System.out.print("/none");
+				break;
+			}
+			System.out.print(" " + tagName);
+			break;
+		case TEXT:
+			System.out.print("text");
+			break;
+		case COMMENT:
+			System.out.print("comment");
+			break;
+		case NONE:
+			System.out.print("none");
+			break;
+		default:
+			System.out.print("unknown");
+			break;
+		}
+
+		System.out.println("");
 	}
 
 	/**
@@ -606,7 +672,14 @@ public class XMLParser {
 			appendLog(exception);
 		}
 
+		if(verbose) {
+			printCurrentNode();
+		}
+
 		if(parsingError) {
+			if(verbose) {
+				System.out.println("Parsing error encountered.");
+			}
 			return false;
 		}
 
