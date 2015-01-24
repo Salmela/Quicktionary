@@ -300,7 +300,7 @@ public class XMLParser {
 		if(letter == ':' || letter == '_') {
 			return true;
 		}
-		if(first && letter >= '0' && letter <= '9') {
+		if(!first && letter >= '0' && letter <= '9') {
 			return true;
 		}
 		return false;
