@@ -266,7 +266,7 @@ public class XMLParser {
 	}
 
 	/**
-	 * This method prints parsing errors to log.
+	 * This method prints parsing errors to log and the current stack trace.
 	 */
 	private void appendLog(String message) {
 		System.out.println("Parsing error occured: " + message);
@@ -283,6 +283,7 @@ public class XMLParser {
 
 	/**
 	 * Check if letter is valid xml name character.
+	 *
 	 * @param letter The character that we want to check
 	 * @return True, if the letter was in alphabet
 	 */
@@ -305,6 +306,7 @@ public class XMLParser {
 	/**
 	 * Check if letter is whitespace. The method consideres
 	 * space, newline, tab, and carriage return as whitespaces.
+	 *
 	 * @param letter The character that we want to check
 	 * @return True, if the letter was ascii whitespace
 	 */
@@ -318,6 +320,7 @@ public class XMLParser {
 
 	/**
 	 * Read next character from file.
+	 *
 	 * @return The readed character
 	 */
 	private byte getNext() {
@@ -330,6 +333,12 @@ public class XMLParser {
 		return currentChar;
 	}
 
+	/**
+	 * Get the previously readed character. This is only used for some
+	 * runtime checks.
+	 *
+	 * @return The readed character
+	 */
 	private byte getPrevious() {
 		return previousChar;
 	}
@@ -350,8 +359,14 @@ public class XMLParser {
 		while(getNext() != -1 && isWhitespace(currentChar));
 	}
 
+	/**
+	 * Helper method for verifying the current character. The method also
+	 * gives helpful error message if the character wasn't what we expected.
+	 *
+	 * @param wanted The character we expect current character to be
+	 */
 	private void expectChar(char wanted) {
-		String errorString = "Expected '" + wanted +"' character, but was '" + currentChar + "'.";
+		String errorString = "Expected '" + wanted + "' character, but was '" + currentChar + "'.";
 
 		if(currentChar != (byte)wanted) {
 			throw new Error(errorString);
@@ -435,6 +450,10 @@ public class XMLParser {
 		}
 	}
 
+	/**
+	 * Parse a element from reader.
+	 * This method should be only used in from parseTag.
+	 */
 	private void parseElement() {
 		if(previousChar != '<') {
 			throw new Error("This method should be only used by parseTag.");
@@ -481,6 +500,10 @@ public class XMLParser {
 		expectChar('>');
 	}
 
+	/**
+	 * Parse following text from reader.
+	 * This method should be only used in parseNode.
+	 */
 	private void parseTextContent() {
 		nodeType = NodeType.TEXT;
 		while(currentChar != -1 && currentChar != '<') {
@@ -549,6 +572,10 @@ public class XMLParser {
 		}
 	}
 
+	/**
+	 * Parse single node from xml document.
+	 * You propably should use alias method called getNextNode.
+	 */
 	private boolean parseNode() {
 		/* initialize variables for current node */
 		parsingError = false;
@@ -589,6 +616,10 @@ public class XMLParser {
 		return true;
 	}
 
+	/**
+	 * Parse a comment tag from reader.
+	 * This method should be only used in from parseTag.
+	 */
 	private void parseComment() {
 		int dashCount;
 
@@ -615,6 +646,10 @@ public class XMLParser {
 		} while(getNext() == -1);
 	}
 
+	/**
+	 * Parse the xml declaration from reader.
+	 * This method should be only used in from parseTag.
+	 */
 	private void parseXMLDeclaration() {
 		if(previousChar != '<') {
 			throw new Error("This method should be only used by parseTag.");
