@@ -16,9 +16,7 @@
  */
 package org.quicktionary.backend.parsers;
 
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ import java.lang.StringBuilder;
  * spec: http://www.w3.org/TR/REC-xml/
  */
 public class XMLParser {
-	private BufferedReader          reader;
+	private InputStream             reader;
 	private ArrayList<Integer>      parentNodes;
 	private HashMap<String, Integer> tagNames;
 
@@ -104,9 +102,9 @@ public class XMLParser {
 	 * Should we catch exceptions here and return boolean if the parsing was
 	 * successful.
 	 */
-	public boolean parseFile(File file) throws IOException {
-		boolean result;
-		reader = new BufferedReader(new FileReader(file));
+	public boolean parseFile(InputStream stream) throws IOException {
+
+		reader      = stream;
 		currentChar = -1;
 		preserveWhitespaces = false;
 		saveTextContent     = false;
@@ -323,13 +321,17 @@ public class XMLParser {
 
 	/**
 	 * Read next character from file.
+	 * TODO: return boolean
 	 *
 	 * @return The readed character
 	 */
 	private byte getNext() {
 		try {
+			int result;
 			previousChar = currentChar;
-			currentChar = (byte)reader.read();
+			result = reader.read();
+			if(result == -1) return -1;
+			currentChar = (byte)result;
 		} catch(Exception e) {
 			currentChar = -1;
 		}

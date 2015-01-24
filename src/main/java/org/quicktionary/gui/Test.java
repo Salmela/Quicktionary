@@ -1,8 +1,6 @@
 package org.quicktionary.gui;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ByteArrayInputStream;
 import org.quicktionary.backend.parsers.XMLParser;
 
 /*
@@ -10,24 +8,19 @@ import org.quicktionary.backend.parsers.XMLParser;
  */
 public class Test {
 	private XMLParser parser;
-	private File xmlFile;
 	
-	public Test() throws IOException {
-		xmlFile = new File("test.xml");
-		xmlFile.createNewFile();
+	public Test() {
 		parser = new XMLParser();
-		
+
 		emptyDocumentIsValid();
 	}
 	
-	public void testFile(String file) throws IOException {
-		PrintWriter writer = new PrintWriter(xmlFile, "UTF-8");
-		writer.print(file);
-		writer.close();
-	}
-	public void emptyDocumentIsValid() throws IOException {
-		testFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><hello/></test>");
-		parser.parseFile(xmlFile);
+	public void emptyDocumentIsValid() {
+		String file = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><hello/></test>";
+		try {
+			parser.parseFile(new ByteArrayInputStream(file.getBytes("UTF-8")));
+		} catch(Exception e) {
+		}
 		parser.findElement("hello");
 		parser.getNextSibling();
 	}

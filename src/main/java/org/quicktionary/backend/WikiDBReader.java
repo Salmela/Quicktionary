@@ -18,6 +18,7 @@ package org.quicktionary.backend;
 
 import java.lang.Runnable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.quicktionary.backend.parsers.XMLParser;
@@ -37,7 +38,7 @@ public class WikiDBReader implements Runnable {
 	public boolean check(String filename) {
 		file = new File(filename);
 		try {
-			parser.parseFile(file);
+			parser.parseFile(new FileInputStream(file));
 
 		} catch(IOException exception) {
 			return false;
