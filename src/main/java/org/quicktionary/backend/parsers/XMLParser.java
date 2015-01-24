@@ -53,7 +53,9 @@ public class XMLParser {
 	private byte currentChar;
 	private byte previousChar;
 	private boolean parsingError;
+	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
+	private StringBuilder textContent;
 
 	/* variables for current node */
 	private NodeType      nodeType;
@@ -104,6 +106,7 @@ public class XMLParser {
 		reader = new BufferedReader(new FileReader(file));
 		currentChar = -1;
 		preserveWhitespaces = false;
+		saveTextContent     = false;
 
 		/* initialize the currentChar */
 		if(getNext() == -1) {
@@ -203,15 +206,21 @@ public class XMLParser {
 	}
 
 	public String getTextContent() {
+		boolean saveTextContentOld;
+
+		/* temporarily enable saveTextContent */
+		saveTextContentOld = saveTextContent;
+		saveTextContent    = true;
+
 		if(!getNextNode()) {
 			return null;
 		}
-		throw new Error("Not implemented yet");
+		saveTextContent = saveTextContentOld;
 
 		if (nodeType != NodeType.TEXT) {
 			return null;
 		}
-		return null;//textContent;
+		return textContent;
 	}
 
 	/**
@@ -250,6 +259,10 @@ public class XMLParser {
 	 */
 	public void setWhitespacePreserving(boolean preserveWhitespaces) {
 		this.preserveWhitespaces = preserveWhitespaces;
+	}
+
+	public void setTextContentStoring(boolean storeTextContent) {
+		this.saveTextContent = saveTextContent;
 	}
 
 	/**
@@ -470,11 +483,28 @@ public class XMLParser {
 	private void parseTextContent() {
 		nodeType = NodeType.TEXT;
 		while(currentChar != -1 && currentChar != '<') {
+			/* check if we want to just ignore all text content */
+			if(!saveTextContent) {
+				getNext();
+			}
+
+			/* handle whitespaces */
+			if(!preserveWhitespaces && isWhitespace(currentChar)) {
+				/* get next non whitespace */
+				skipWhitespaces(true);
+
+				if(currentChar == -1 || currentChar == '<') {
+					return;
+				}
+				textContent.append(' ');
+				continue;
+			}
+
+			textContent.append((char)currentChar);
 			getNext();
 		}
 		return;
 	}
-
 
 	/**
 	 * Check if the current node is valid outside of the root.
