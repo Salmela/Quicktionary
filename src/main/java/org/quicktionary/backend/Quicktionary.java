@@ -54,7 +54,7 @@ public class Quicktionary {
 		 */
 		WikiDBReader parser;
 		Thread thread;
-		parser = new WikiDBReader();
+		parser = new WikiDBReader(database);
 		thread = new Thread(parser);
 
 		parser.check(filename);

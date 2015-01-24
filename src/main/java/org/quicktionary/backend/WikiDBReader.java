@@ -29,10 +29,18 @@ import org.quicktionary.backend.parsers.XMLParser;
  */
 public class WikiDBReader implements Runnable {
 	private XMLParser parser;
+	private WordDatabase database;
 	private File file;
 
-	public WikiDBReader() {
-		parser = new XMLParser();
+	private static final int NAMESPACE_TAG = 0;
+	private static final int TITLE_TAG = 1;
+
+	public WikiDBReader(WordDatabase database) {
+		this.parser = new XMLParser();
+		this.database = database;
+
+		parser.setTagNameId("ns", NAMESPACE_TAG);
+		parser.setTagNameId("title", TITLE_TAG);
 	}
 
 	public boolean check(String filename) {
@@ -43,13 +51,58 @@ public class WikiDBReader implements Runnable {
 		} catch(IOException exception) {
 			return false;
 		}
+
+		/* get the root node */
+		if(!parser.getRoot()) {
+			return false;
+		}
+		if(!("mediawiki".equals(parser.getElementName()))) {
+			return false;
+		}
+
 		return true;
+	}
+
+	public void readPage() {
+		String title, ns;
+		ns = null;
+		title = null;
+
+		System.out.println("read page");
+
+		/* get the first child node of the page*/
+		if(!parser.getFirstChild()) {
+			System.out.println("getting first child failed");
+			return;
+		}
+
+		/* go through all child elements of the page */
+		do {
+			switch(parser.getElementNameId()) {
+			case TITLE_TAG:
+				title = parser.getTextContent();
+				break;
+
+			case NAMESPACE_TAG:
+				ns = parser.getTextContent();
+				break;
+			default:
+				break;
+			}
+		} while(parser.getNextSibling());
+
+		if("0".equals(ns)) {
+			database.newWord(title);
+		}
 	}
 
 	public void run() {
 		if(!parser.isInitialized()) {
 			throw new Error("You have to run first the check method.");
 		}
-		while(true);
+
+		while(parser.findElement("page")) {
+			readPage();
+		}
 	}
 }
