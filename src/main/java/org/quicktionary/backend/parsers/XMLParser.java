@@ -118,8 +118,7 @@ public class XMLParser {
 			return false;
 		}
 
-		/* read the first node */
-		return parseNode();
+		return true;
 	}
 
 	public boolean isInitialized() {
