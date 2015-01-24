@@ -17,23 +17,28 @@
 package org.quicktionary.backend;
 
 import java.lang.UnsupportedOperationException;
+import java.util.TreeMap;
 
 /**
  * The database class for the quicktionary.
  */
 public class WordDatabase {
 	private Quicktionary dictionary;
+	private TreeMap<String, Integer> map;
 
 	public WordDatabase(Quicktionary dictionary) {
 		this.dictionary = dictionary;
+		this.map = new TreeMap<String, Integer>();
 	}
 
 	protected void newWord(String word) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		map.put(word, 1);
+		//throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	protected void removeWord(String word) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		map.remove(word);
+		//throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	protected void fetchPage(SearchItem item) {
