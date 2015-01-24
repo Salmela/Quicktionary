@@ -183,12 +183,26 @@ public class XMLParser {
 		return findElement(getTagNameId(tagName));
 	}
 
-	private boolean goToLevel(int level) {
+	private boolean goToDepth(int depth) {
+		if(verbose) {
+			System.out.println("goToDepth(" + depth + ")");
+		}
+
+		/* if the wanted depth is deeper that current node,
+		   then check if current node can have childs */
+		if(currentDepth < depth) {
+			if(nodeType != NodeType.ELEMENT) {
+				return false;
+			}
+			if(tagType != TagType.START) {
+				return false;
+			}
+		}
+
 		while(getNextNode()) {
-			int levelCurrent = parentNodes.size();
-			if(levelCurrent == level) {
+			if(currentDepth == depth) {
 				return true;
-			} else if(levelCurrent < level) {
+			} else if(currentDepth < depth) {
 				return false;
 			}
 		}
@@ -199,15 +213,15 @@ public class XMLParser {
 	 * Go to the end of the parent node.
 	 */
 	public boolean getParent() {
-		return goToLevel(parentNodes.size() - 1);
+		return goToDepth(currentDepth - 1);
 	}
 
 	public boolean getFirstChild() {
-		return goToLevel(parentNodes.size() + 1);
+		return goToDepth(currentDepth + 1);
 	}
 
 	public boolean getNextSibling() {
-		return goToLevel(parentNodes.size());
+		return goToDepth(currentDepth);
 	}
 
 	public String getTextContent() {
