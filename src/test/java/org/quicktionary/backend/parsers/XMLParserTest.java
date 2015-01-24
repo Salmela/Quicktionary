@@ -5,11 +5,9 @@ import org.junit.Before;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.rules.Timeout;
-import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ByteArrayInputStream;
 
 import org.quicktionary.backend.parsers.XMLParser;
 
@@ -18,10 +16,6 @@ import org.quicktionary.backend.parsers.XMLParser;
  */
 public class XMLParserTest {
 	private XMLParser parser;
-	private File xmlFile;
-
-	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
 
 	@Rule
 	public Timeout globalTimeout = new Timeout(100);
@@ -32,77 +26,94 @@ public class XMLParserTest {
 
 	@Before
 	public void setup() throws IOException {
-		xmlFile = folder.newFile("test.xml");
 		parser = new XMLParser();
 	}
 
-	public void testFile(String fileText) throws IOException {
-		PrintWriter writer = new PrintWriter(xmlFile, "UTF-8");
-		writer.print(fileText);
-		writer.close();
+	public boolean parseString(String fileText) throws IOException {
+		return parser.parseFile(new ByteArrayInputStream(fileText.getBytes("UTF-8")));
 	}
 
 	String xmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 
 	@Test
 	public void emptyDocument() throws IOException {
-		testFile(xmlDecl);
-		Assert.assertTrue(parser.parseFile(xmlFile));
+		Assert.assertTrue(parseString(xmlDecl));
 	}
 
 	@Test
 	public void dontGetRootOfEmptyDocument() throws IOException {
-		testFile(xmlDecl);
-		parser.parseFile(xmlFile);
+		String s = xmlDecl;
+		parseString(s);
 		Assert.assertFalse(parser.getRoot());
 	}
 
 
 	@Test
 	public void emptyWithRoot() throws IOException {
-		testFile(xmlDecl + "<test></test>");
-		Assert.assertTrue(parser.parseFile(xmlFile));
+		String s = xmlDecl + "<test></test>";
+		Assert.assertTrue(parseString(s));
 	}
 
 	@Test
 	public void getEmptyRootNode() throws IOException {
-		testFile(xmlDecl + "<test></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test></test>";
+		parseString(s);
 		Assert.assertTrue(parser.getRoot());
 	}
 
 	@Test
 	public void InvalidRootNode() throws IOException {
-		testFile(xmlDecl + "<test></hello>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test></hello>";
+		parseString(s);
+		Assert.assertFalse(parser.findElement(""));
+	}
+
+	@Test
+	public void TextOustideOfRootNode() throws IOException {
+		String s = xmlDecl + "lolol<test></test>";
+		parseString(s);
 		Assert.assertFalse(parser.findElement(""));
 	}
 
 
 	@Test
 	public void notEndingElement() throws IOException {
-		testFile(xmlDecl + "<test><hello></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><hello></test>";
+		parseString(s);
+		Assert.assertFalse(parser.findElement(""));
+	}
+
+	@Test
+	public void invalidElement() throws IOException {
+		String s = xmlDecl + "<test><hello</test>";
+		parseString(s);
 		Assert.assertFalse(parser.findElement(""));
 	}
 
 	@Test
 	public void emptyNode() throws IOException {
-		testFile(xmlDecl + "<test><hello/></test>");
-		Assert.assertTrue(parser.parseFile(xmlFile));
+		String s = xmlDecl + "<test><hello/></test>";
+		Assert.assertTrue(parseString(s));
 	}
 
 	@Test
 	public void getEmptyNode() throws IOException {
-		testFile(xmlDecl + "<test><hello/></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><hello/></test>";
+		parseString(s);
 		Assert.assertTrue(parser.findElement("hello"));
 	}
 
 	@Test
+	public void getEngingAndEmptyNode() throws IOException {
+		String s = xmlDecl + "<test></hello/></test>";
+		parseString(s);
+		Assert.assertFalse(parser.findElement("hello"));
+	}
+
+	@Test
 	public void findChild() throws IOException {
-		testFile(xmlDecl + "<test><t><hello>hei</hello></t></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><t><hello>hei</hello></t></test>";
+		parseString(s);
 		parser.getRoot();
 		Assert.assertTrue(parser.findElement("hello"));
 	}
@@ -110,14 +121,14 @@ public class XMLParserTest {
 
 	@Test
 	public void nodeWithText() throws IOException {
-		testFile(xmlDecl + "<test><hello>hei</hello></test>");
-		Assert.assertTrue(parser.parseFile(xmlFile));
+		String s = xmlDecl + "<test><hello>hei</hello></test>";
+		Assert.assertTrue(parseString(s));
 	}
 
 	@Test
 	public void getNodeWithText() throws IOException {
-		testFile(xmlDecl + "<test><hello>hei</hello></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><hello>hei</hello></test>";
+		parseString(s);
 		parser.findElement("hello");
 		parser.getFirstChild();
 		Assert.assertEquals("hei", parser.getTextContent());
@@ -125,16 +136,16 @@ public class XMLParserTest {
 
 	@Test
 	public void getSiblingOfNode() throws IOException {
-		testFile(xmlDecl + "<test><cool/><hello>hi!</hello></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><cool/><hello>hi!</hello></test>";
+		parseString(s);
 		parser.findElement("cool");
 		Assert.assertTrue(parser.getNextSibling());
 	}
 
 	@Test
 	public void dontGetSiblingOfNode() throws IOException {
-		testFile(xmlDecl + "<test><cool/></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><cool/></test>";
+		parseString(s);
 		parser.findElement("cool");
 		Assert.assertFalse(parser.getNextSibling());
 	}
@@ -142,17 +153,31 @@ public class XMLParserTest {
 
 	@Test
 	public void getAttribute() throws IOException {
-		testFile(xmlDecl + "<test><cool level=\"awesome\"/></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><cool level=\"awesome\"/></test>";
+		parseString(s);
 		parser.findElement("cool");
 		Assert.assertEquals("awesome", parser.getAttribute("level"));
 	}
 
 	@Test
 	public void getAttributeWithNamespace() throws IOException {
-		testFile(xmlDecl + "<test><cool xml:space=\"preserve\"> foo </cool></test>");
-		parser.parseFile(xmlFile);
+		String s = xmlDecl + "<test><cool xml:space=\"preserve\"> foo </cool></test>";
+		parseString(s);
 		parser.findElement("cool");
 		Assert.assertEquals("preserve", parser.getAttribute("xml:space"));
+	}
+
+	@Test
+	public void nonEndingAttribute() throws IOException {
+		String s = xmlDecl + "<test><cool space=\"preserve> foo </cool></test>";
+		parseString(s);
+		Assert.assertFalse(parser.findElement(""));
+	}
+
+	@Test
+	public void attributeWithSpaces() throws IOException {
+		String s = xmlDecl + "<test><cool space = \"preserve\"> foo </cool></test>";
+		parseString(s);
+		Assert.assertTrue(parser.findElement(""));
 	}
 }
