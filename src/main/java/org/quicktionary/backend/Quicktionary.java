@@ -36,14 +36,28 @@ public class Quicktionary {
 		searcher.search(query);
 	}
 
+	public void newWord(String word) {
+		database.newWord(word);
+	}
+
+	public void removeWord(String word) {
+		database.newWord(word);
+	}
+
 	public void readDatabase(String filename) {
 		/* should we create file description here,
 		 * so that testing would be easier?
+		 */
+		/* TODO: Implement some way to gui check if
+		 * the file is valid database file, before
+		 * parsing the whole file.
 		 */
 		WikiDBReader parser;
 		Thread thread;
 		parser = new WikiDBReader();
 		thread = new Thread(parser);
+
+		parser.check(filename);
 		thread.start();
 	}
 
