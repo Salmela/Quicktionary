@@ -95,19 +95,18 @@ public class XMLParser {
 		textContent  = new StringBuilder(4096);
 		reader       = null;
 		currentChar  = -1;
-		previousChar = -1;
 		verbose = false;
 	}
 
 	/**
 	 * The method for starting the parser.
 	 *
-	 * Should we catch exceptions here and return boolean if the parsing was
-	 * successful.
+	 * @param stream The input stream which will be readed
 	 */
 	public boolean parseFile(InputStream stream) throws IOException {
 
 		reader       = stream;
+		previousChar = -1;
 		currentChar  = -1;
 		currentDepth = 0;
 		preserveWhitespaces = false;
@@ -184,7 +183,13 @@ public class XMLParser {
 		return getTagNameId(tagName.toString());
 	}
 
+	/**
+	 * Go to the root element.
+	 */
 	public boolean getRoot() {
+		if(verbose) {
+			System.out.println("getRoot()");
+		}
 		/* check that we are at the start of the file */
 		if(parentNodes.size() != 0) {
 			appendLog("The reader has already passed the root node.");
@@ -271,7 +276,8 @@ public class XMLParser {
 		saveTextContentOld = saveTextContent;
 		saveTextContent    = true;
 
-		if(!getNextNode()) {
+		/* read the text node */
+		if(!getFirstChild()) {
 			return null;
 		}
 		saveTextContent = saveTextContentOld;
