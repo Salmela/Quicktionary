@@ -346,7 +346,8 @@ public class XMLParser {
 			}
 			return;
 		}
-		while(isWhitespace(currentChar = getNext()));
+
+		while(getNext() != -1 && isWhitespace(currentChar));
 	}
 
 	private void expectChar(char wanted) {
@@ -639,6 +640,7 @@ public class XMLParser {
 
 		/* read the attributes */
 		while(parseAttribute()) {
+			if(!isWhitespace(currentChar)) break;
 			skipWhitespaces(true);
 		}
 
