@@ -90,6 +90,7 @@ public class XMLParser {
 		tagNames    = new HashMap<String, Integer>();
 		tagName     = new StringBuilder(256);
 		attributeBuilder = new StringBuilder(64);
+		textContent  = new StringBuilder(4096);
 		reader       = null;
 		currentChar  = -1;
 		previousChar = -1;
@@ -220,7 +221,7 @@ public class XMLParser {
 		if (nodeType != NodeType.TEXT) {
 			return null;
 		}
-		return textContent;
+		return textContent.toString();
 	}
 
 	/**
@@ -506,10 +507,15 @@ public class XMLParser {
 	 */
 	private void parseTextContent() {
 		nodeType = NodeType.TEXT;
+
+		/* reset the buffer */
+		textContent.setLength(0);
+
 		while(currentChar != -1 && currentChar != '<') {
 			/* check if we want to just ignore all text content */
 			if(!saveTextContent) {
 				getNext();
+				continue;
 			}
 
 			/* handle whitespaces */
