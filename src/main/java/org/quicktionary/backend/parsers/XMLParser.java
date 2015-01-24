@@ -265,6 +265,15 @@ public class XMLParser {
 	public String getElementName() {
 		return tagName.toString();
 	}
+
+	/**
+	 * Get the tag name id of current element. If current node isn't element, then
+	 * return -1.
+	 */
+	public int getElementNameId() {
+		return tagNameId;
+	}
+
 	/**
 	 * Get next attribute at the current element. If any attributes haven't been
 	 * parsed then the first one is given.
@@ -676,7 +685,7 @@ public class XMLParser {
 		attributes.clear();
 		nodeType = NodeType.NONE;
 		tagType = TagType.NONE;
-		tagNameId = 0;
+		tagNameId = -1;
 
 		if(!preserveWhitespaces) {
 			skipWhitespaces(false);
