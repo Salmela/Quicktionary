@@ -127,7 +127,13 @@ public class XMLParser {
 		return currentChar != -1;
 	}
 
-	/* parsing interface */
+	/**
+	 * Get a id for tagName. The method creates new id
+	 * if the tagName doesn't have a id yet.
+	 *
+	 * @param tagName The name of the element
+	 * @return Unique id for the element
+	 */
 	public int getTagNameId(String tagName) {
 		int id;
 
@@ -138,6 +144,40 @@ public class XMLParser {
 			id = tagNames.get(tagName);
 		}
 		return id;
+	}
+
+	/**
+	 * Give specific id for the tagName. The method allows client
+	 * class to use constant values inside switch statement. If
+	 * you try to give bad id or use it the method too late, then
+	 * method will throw exception.
+	 *
+	 * You could use the method following way.
+	 *
+	 *   final static int ELEM_TAG = 0;
+	 *
+	 *   setTagNameId("elem", ELEM_TAG);
+	 *
+	 *   getNextNode();
+	 *   switch(getElementNameId()) {
+	 *       case ELEM_TAG:
+	 *           // do something
+	 *           break;
+	 *       default:
+	 *           break;
+	 *   }
+	 *
+	 * @param tagName The name of the element
+	 * @param id The id you want use
+	 */
+	public void setTagNameId(String tagName, int id) {
+		if(tagNames.containsKey(tagName)) {
+			throw new Error("The tag name has already id.");
+		} else if(id != tagNames.size()) {
+			throw new Error("The id is already used.");
+		} else {
+			tagNames.put(tagName, id);
+		}
 	}
 
 	public int getTagNameId(CharSequence tagName) {
