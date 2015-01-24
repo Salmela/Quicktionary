@@ -284,6 +284,10 @@ public class XMLParser {
 		if (nodeType != NodeType.TEXT) {
 			return null;
 		}
+
+		/* consume the end tag */
+		getNextNode();
+
 		return textContent.toString();
 	}
 
