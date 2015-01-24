@@ -410,7 +410,6 @@ public class XMLParser {
 
 		/* read the first byte of the tag */
 		expectChar('<');
-		getNext();
 
 		/* check if the element is comment */
 		if(currentChar == '!') {
