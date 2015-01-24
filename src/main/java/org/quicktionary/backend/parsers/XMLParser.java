@@ -48,6 +48,7 @@ public class XMLParser {
 	 * The current char must be at the start of next node
 	 * after any method.
 	 */
+	private int  currentDepth;
 	private byte currentChar;
 	private byte previousChar;
 	private boolean parsingError;
@@ -63,6 +64,8 @@ public class XMLParser {
 	private int tagNameId;
 	private ArrayList<XMLAttribute> attributes;
 	private StringBuilder attributeBuilder;
+
+	private boolean wasStartTag;
 
 	public enum NodeType {
 		ELEMENT,
@@ -104,8 +107,9 @@ public class XMLParser {
 	 */
 	public boolean parseFile(InputStream stream) throws IOException {
 
-		reader      = stream;
-		currentChar = -1;
+		reader       = stream;
+		currentChar  = -1;
+		currentDepth = 0;
 		preserveWhitespaces = false;
 		saveTextContent     = false;
 
@@ -566,12 +570,20 @@ public class XMLParser {
 	 * This method should be only used in parseNode.
 	 */
 	private void updateParentArray() {
+		/* update the current depth so that child nodes
+		   have their depth one greater than the parent */
+		if(wasStartTag) {
+			currentDepth++;
+			wasStartTag = false;
+		}
+
 		if(nodeType != NodeType.ELEMENT) {
 			return;
 		}
 
 		if(tagType == TagType.START) {
 			parentNodes.add(tagNameId);
+			wasStartTag = true;
 
 		} else if(tagType == TagType.END) {
 			int index;
@@ -583,6 +595,7 @@ public class XMLParser {
 			} else {
 				parentNodes.remove(index);
 			}
+			currentDepth--;
 		}
 	}
 
@@ -591,21 +604,14 @@ public class XMLParser {
 	 * is used in parseNode, when verbose is set to true.
 	 */
 	public void printCurrentNode() {
-		int i, level;
+		int i;
 		System.out.print("VERBOSE");
 
-		level = parentNodes.size();
-
-		/* use same level for the start tag and end tag */
-		if(nodeType == NodeType.ELEMENT && tagType == TagType.END) {
-			level -= 1;
-		}
-
 		/* print the depth of the node */
-		System.out.print(" " + level + " ");
+		System.out.print(" " + currentDepth + " ");
 
 		/* add some indentation to make scanning the lines easier */
-		for(i = 0; i < level; i++) {
+		for(i = 0; i < currentDepth; i++) {
 			System.out.print(" ");
 		}
 
@@ -674,10 +680,6 @@ public class XMLParser {
 			appendLog(exception);
 		}
 
-		if(verbose) {
-			printCurrentNode();
-		}
-
 		if(parsingError) {
 			if(verbose) {
 				System.out.println("Parsing error encountered.");
@@ -693,6 +695,10 @@ public class XMLParser {
 		}
 
 		updateParentArray();
+
+		if(verbose) {
+			printCurrentNode();
+		}
 
 		return true;
 	}
