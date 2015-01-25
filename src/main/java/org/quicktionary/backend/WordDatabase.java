@@ -68,7 +68,7 @@ public class WordDatabase {
 	public int fetchResults(Map.Entry<String, Integer>[] entries, int count) {
 		int i;
 
-		for(i = 0; currentEntry != null; i++) {
+		for(i = 0; i < count && currentEntry != null; i++) {
 			if(!currentEntry.getKey().startsWith(searchWord)) break;
 
 			entries[i] = currentEntry;
