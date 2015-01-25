@@ -17,8 +17,18 @@
 package org.quicktionary.backend;
 
 /**
- * The interface for getting search results.
+ * The interface for getting search results from Searcher object
+ * to the gui.
  */
 public interface SearchResultListener {
-	void setSearchResults(SearchItem items[], int totalCount);
+	/**
+	 * Appends a search result to the gui's search result list.
+	 */
+	void appendSearchResult(SearchItem item);
+	/**
+	 * Removes all items from gui's list. The method is used
+	 * when new search is done.
+	 */
+	void resetSearchResults();
+	void setStatistics(int totalCount, int time);
 }
