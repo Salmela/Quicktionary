@@ -20,7 +20,8 @@ import java.lang.IllegalStateException;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import org.quicktionary.backend.Quicktionary;
 
 /**
@@ -150,7 +151,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		/* create components for the main view */
 		mainPane = new JScrollPane();
-		searchResults = new SearchResults();
+		searchResults = new SearchResults(this);
 		pageArea = new JTextArea();
 		mainPane.setViewportView(searchResults);
 		//mainPane.setViewportView(pageArea);
@@ -176,6 +177,12 @@ public class MainWindow extends JFrame implements ActionListener {
 
 			//dictionary.search(searchBox.getText());
 			//show the first item's page
+
+		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
+			SearchResults.RequestSearchResultEvent requestEvent;
+
+			requestEvent = (SearchResults.RequestSearchResultEvent)event;
+			dictionary.requestSearchResults(requestEvent.getStart(), requestEvent.getEnd());
 
 		} else if(event.getActionCommand() == SettingsButton.READ_DATABASE_EVENT) {
 			SettingsButton.ReadDatabaseEvent dataEvent;

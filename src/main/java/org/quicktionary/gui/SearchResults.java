@@ -27,6 +27,8 @@ import javax.swing.AbstractListModel;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
@@ -37,13 +39,16 @@ import org.quicktionary.backend.SearchItem;
  */
 public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
+	static final String REQUEST_SEARCH_RESULTS_EVENT = "request-search-results-event";
 
 	private SearchResultRenderer renderer;
-	private SearchResultModel model;
+	private SearchResultModel    model;
+	private ActionListener       listener;
 
-	public SearchResults() {
-		renderer = new SearchResultRenderer();
-		model = new SearchResultModel();
+	public SearchResults(ActionListener listener) {
+		this.listener = listener;
+		this.renderer = new SearchResultRenderer();
+		this.model = new SearchResultModel();
 
 		setCellRenderer(renderer);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -51,7 +56,6 @@ public class SearchResults extends JList {
 
 	public void inLayout() {
 		computeFixedCellSize();
-
 		setModel(model);
 	}
 
@@ -85,6 +89,22 @@ public class SearchResults extends JList {
 		return model;
 	}
 
+	public class RequestSearchResultEvent extends ActionEvent {
+		private int startIndex, endIndex;
+
+		public RequestSearchResultEvent(Object source, int startIndex, int endIndex) {
+			super(source, ActionEvent.ACTION_PERFORMED, REQUEST_SEARCH_RESULTS_EVENT);
+			this.startIndex = startIndex;
+			this.endIndex = endIndex;
+		}
+		public int getStart() {
+			return startIndex;
+		}
+		public int getEnd() {
+			return endIndex;
+		}
+	}
+
 	/**
 	 * List model for the search results.
 	 */
@@ -97,6 +117,12 @@ public class SearchResults extends JList {
 		}
 
 		public Object getElementAt(int index) {
+			/* request more search results if we are at last item */
+			if(index == results.size() - 1) {
+				RequestSearchResultEvent event;
+				event = new RequestSearchResultEvent(this, 0, results.size() + getVisibleRowCount());
+				listener.actionPerformed(event);
+			}
 			return results.get(index);
 		}
 
