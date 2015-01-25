@@ -16,19 +16,23 @@
  */
 package org.quicktionary.gui;
 
-import javax.swing.*;
-import javax.swing.border.*;
+import java.util.ArrayList;
+
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
 import javax.swing.ListCellRenderer;
-import java.awt.*;
+import java.awt.Component;
 
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
 
-public class SearchResults extends JList implements SearchResultListener {
+public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
 
-	/*TODO implement custom AbstractListModel with getSize method overwriten */
-	private long itemCount;
+	private SearchResultRenderer renderer;
 
 	public SearchResults() {
 		SearchItem[] data = {
@@ -36,27 +40,21 @@ public class SearchResults extends JList implements SearchResultListener {
 			new SearchItem("hi", "ehguje seusg"),
 			new SearchItem("bye", "ouoq ewfrhw")
 		};
+		renderer = new SearchResultRenderer();
 
+		setCellRenderer(renderer);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setListData(data);
-		setCellRenderer(new ResultRenderer());
 	}
 
-	/**
-	 * Main window passes list of backend objects to this object.
-	 */
-	public void setSearchResults(SearchItem[] items, int totalCount) {
-		itemCount = totalCount;
-		setListData(items);
-	}
 
 	/**
 	 * Custom cell renderer that transforms the backend objects to JLabels.
 	 */
-	private class ResultRenderer extends JLabel implements ListCellRenderer {
+	private class SearchResultRenderer extends JLabel implements ListCellRenderer {
 		static final long serialVersionUID = 1L;
 
-		public ResultRenderer() {
+		public SearchResultRenderer() {
 			Border paddingBorder;
 			paddingBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
 			this.setBorder(paddingBorder);
