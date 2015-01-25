@@ -153,8 +153,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults(this);
 		pageArea = new JTextArea();
-		mainPane.setViewportView(searchResults);
-		//mainPane.setViewportView(pageArea);
+		pageArea.setText("Read database and write something to the search box.");
+		mainPane.setViewportView(pageArea);
 
 		this.add(headerBar);
 		this.add(mainPane);
@@ -163,11 +163,22 @@ public class MainWindow extends JFrame implements ActionListener {
 		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
+	private void changeView(boolean changeToSearchResults) {
+		showSearchResults = changeToSearchResults;
+
+		if(changeToSearchResults) {
+			mainPane.setViewportView(searchResults);
+		} else {
+			mainPane.setViewportView(pageArea);
+		}
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
 			SearchBox searchBox = (SearchBox)event.getSource();
 			System.out.println("main window: search event " + searchBox.getText());
 
+			changeView(true);
 			dictionary.search(searchBox.getText());
 			dictionary.requestSearchResults(0, searchResults.getVisibleRowCount());
 
