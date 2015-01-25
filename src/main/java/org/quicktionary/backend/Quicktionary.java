@@ -16,8 +16,6 @@
  */
 package org.quicktionary.backend;
 
-import java.lang.UnsupportedOperationException;
-
 /**
  * The backend class for the quicktionary.
  */
@@ -28,12 +26,19 @@ public class Quicktionary {
 
 	public Quicktionary() {
 		database = new WordDatabase(this);
-		searcher = new Searcher(this);
+		searcher = new Searcher(this, database);
 		//history = new History(this);
+
+		//searchThread = new Thread(searcher);
+		//searchThread.start();
 	}
 
 	public void search(String query) {
 		searcher.search(query);
+	}
+
+	public void requestSearchResults(int offset, int count) {
+		searcher.requestSearchResults(offset, count);
 	}
 
 	public void newWord(String word) {
@@ -62,20 +67,12 @@ public class Quicktionary {
 	}
 
 	public void setSearchResultListener(SearchResultListener listener) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		searcher.setResultListener(listener);
 	}
 
 	public void getPageContent(SearchItem item, String searchQuery) {
 		//history.saveEvent("search", searchQuery);
 		//history.saveEvent("page", "" + item.getID());
 		database.fetchPage(item);
-	}
-
-	/**
-	 * Get the database object.
-	 * Used by the Searcher:search
-	 */
-	protected WordDatabase getDatabase() {
-		return database;
 	}
 }

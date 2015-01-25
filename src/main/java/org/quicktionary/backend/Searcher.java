@@ -16,23 +16,50 @@
  */
 package org.quicktionary.backend;
 
+import java.util.Map;
+
 /**
  * The search queries send by the interface are parsed and processed in this class.
  */
 public class Searcher {
 	private Quicktionary dictionary;
+	private WordDatabase database;
+	private int processedEntries;
 
-	public Searcher(Quicktionary dictionary) {
+	private SearchResultListener resultListener;
+
+	public Searcher(Quicktionary dictionary, WordDatabase database) {
 		this.dictionary = dictionary;
+		this.database = database;
+		this.processedEntries = 0;
 	}
 
 	public void search(String query) {
-		WordDatabase db;
-
 		parseSearchQuery(query);
 
-		db = dictionary.getDatabase();
-		db.requestResults(query);
+		processedEntries = 0;
+		database.requestResults(query);
+		resultListener.resetSearchResults();
+	}
+
+	public void setResultListener(SearchResultListener listener) {
+		resultListener = listener;
+	}
+
+	public void requestSearchResults(int offset, int count) {
+		Map.Entry<String, Integer>[] entries;
+		int i;
+
+		if(resultListener == null) return;
+
+		entries = new Map.Entry[offset + count - processedEntries];
+		count = database.fetchResults(entries, count);
+
+		for(i = 0; i < count; i++) {
+			System.out.println("serach " + i + " " + entries[i].getKey());
+			resultListener.appendSearchResult(new SearchItem(entries[i].getKey(), "Test"));
+		}
+		processedEntries += count;
 	}
 
 	private String parseSearchQuery(String query) {
