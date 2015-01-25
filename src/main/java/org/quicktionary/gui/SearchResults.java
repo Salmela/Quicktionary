@@ -26,10 +26,15 @@ import javax.swing.border.Border;
 import javax.swing.AbstractListModel;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
 
+/**
+ * It seems that the JList UI doesn't update the setVisibileRowCount in Classpath runtime.
+ * setVisibleRowCount(getPreferredSize().height / size.height);
+ */
 public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
 
@@ -42,8 +47,38 @@ public class SearchResults extends JList {
 
 		setCellRenderer(renderer);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+
+	public void inLayout() {
+		computeFixedCellSize();
 
 		setModel(model);
+	}
+
+	/**
+	 * The method sets the item size for the list items. It inserts
+	 * dummy item into list and measures it's size. The measured
+	 * size is then set as item size for all list items.
+	 */
+	private void computeFixedCellSize() {
+		JLabel label;
+		Dimension size;
+		Object dummyItem[];
+
+		label = renderer;
+
+		dummyItem = new Object[1];
+		dummyItem[0] = new SearchItem("A", "A");
+		setListData(dummyItem);
+
+		/* fill the label */
+		renderer.getListCellRendererComponent(this, dummyItem[0],
+		                             0, false, false);
+
+		/* set the same dummy item size for all list items */
+		size = label.getPreferredSize();
+		setFixedCellWidth(size.width);
+		setFixedCellHeight(size.height);
 	}
 
 	public SearchResultListener getSearchResultListener() {

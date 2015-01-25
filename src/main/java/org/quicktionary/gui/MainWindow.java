@@ -158,6 +158,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		this.add(headerBar);
 		this.add(mainPane);
 
+		searchResults.inLayout();
 		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
