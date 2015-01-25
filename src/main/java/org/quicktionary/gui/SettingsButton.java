@@ -110,7 +110,7 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		dialog = ReadDatabaseDialog.createDialog((JComponent)this);
 		filename = dialog.getFilename();
 
-		event = new ReadDatabaseEvent(this, ActionEvent.ACTION_PERFORMED, READ_DATABASE_EVENT, filename);
+		event = new ReadDatabaseEvent(this, filename);
 		listener.actionPerformed((ActionEvent)event);
 	}
 
@@ -118,8 +118,8 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		final static long serialVersionUID = 1L;
 		final private String filename;
 
-		public ReadDatabaseEvent(Object source, int id, String command, String filename) {
-			super(source, id, command);
+		public ReadDatabaseEvent(Object source, String filename) {
+			super(source, ActionEvent.ACTION_PERFORMED, READ_DATABASE_EVENT);
 			this.filename = filename;
 		}
 
