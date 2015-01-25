@@ -166,7 +166,8 @@ public class MainWindow extends JFrame implements ActionListener {
 			SearchBox searchBox = (SearchBox)event.getSource();
 			System.out.println("main window: search event " + searchBox.getText());
 
-			//dictionary.search(searchBox.getText());
+			dictionary.search(searchBox.getText());
+			dictionary.requestSearchResults(0, searchResults.getVisibleRowCount());
 
 		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
 			SearchBox searchBox = (SearchBox)event.getSource();
