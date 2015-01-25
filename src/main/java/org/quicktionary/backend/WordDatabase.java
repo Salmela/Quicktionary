@@ -18,6 +18,7 @@ package org.quicktionary.backend;
 
 import java.lang.UnsupportedOperationException;
 import java.util.TreeMap;
+import java.util.Map;
 
 /**
  * The database class for the quicktionary.
@@ -26,26 +27,54 @@ public class WordDatabase {
 	private Quicktionary dictionary;
 	private TreeMap<String, Integer> map;
 
+	private String searchWord;
+	private Map.Entry<String,Integer> currentEntry;
+
 	public WordDatabase(Quicktionary dictionary) {
 		this.dictionary = dictionary;
 		this.map = new TreeMap<String, Integer>();
 	}
 
-	protected void newWord(String word) {
+	public void newWord(String word) {
 		map.put(word, 1);
-		//throw new UnsupportedOperationException("Not implemented yet");
 	}
 
-	protected void removeWord(String word) {
+	public void removeWord(String word) {
 		map.remove(word);
-		//throw new UnsupportedOperationException("Not implemented yet");
 	}
 
-	protected void fetchPage(SearchItem item) {
+	public void fetchPage(SearchItem item) {
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
-	protected void requestResults(String word) {
-		throw new UnsupportedOperationException("Not implemented yet");
+	/**
+	 * Requests items with key that has the word as prefix. This method
+	 * itself doesn't give the items. You have to call the fetchResults
+	 * method to get the items.
+	 *
+	 * @param word The prefix of wanted keys
+	 */
+	public void requestResults(String word) {
+		searchWord = word;
+		currentEntry = map.ceilingEntry(word);
+	}
+
+	/**
+	 * Fetches requested items and inserts them to the entries array.
+	 *
+	 * @param entries The list to be filled
+	 * @param count   The number of items wanted
+	 */
+	public int fetchResults(Map.Entry<String, Integer>[] entries, int count) {
+		int i;
+
+		for(i = 0; currentEntry != null; i++) {
+			if(!currentEntry.getKey().startsWith(searchWord)) break;
+
+			entries[i] = currentEntry;
+			currentEntry = map.higherEntry(currentEntry.getKey());
+		}
+
+		return i;
 	}
 }
