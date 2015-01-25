@@ -46,6 +46,10 @@ public class SearchResults extends JList {
 		setModel(model);
 	}
 
+	public SearchResultListener getSearchResultListener() {
+		return model;
+	}
+
 	/**
 	 * List model for the search results.
 	 */
