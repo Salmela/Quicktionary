@@ -34,7 +34,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private StyleManager styleManager;
 
 	private JScrollPane mainPane;
-	private JList searchResults;
+	private SearchResults searchResults;
 	private JTextArea pageArea;
 
 	public MainWindow(Quicktionary dictionary) {
@@ -44,6 +44,12 @@ public class MainWindow extends JFrame implements ActionListener {
 		setTitle("Quicktionary");
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		dictionary.newWord("hello");
+		dictionary.newWord("hey");
+		dictionary.newWord("he");
+		dictionary.newWord("hi");
+		dictionary.newWord("howdy");
 
 		styleManager = new StyleManager();
 		styleManager.changeStyle(Main.themeName);
@@ -145,13 +151,14 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* create components for the main view */
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults();
-		//dictionary.setSearchResultListener(searchResults);
 		pageArea = new JTextArea();
 		mainPane.setViewportView(searchResults);
 		//mainPane.setViewportView(pageArea);
 
 		this.add(headerBar);
 		this.add(mainPane);
+
+		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
 	public void actionPerformed(ActionEvent event) {
