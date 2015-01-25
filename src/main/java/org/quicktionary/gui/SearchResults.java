@@ -23,6 +23,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
+import javax.swing.AbstractListModel;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
 
@@ -33,20 +34,55 @@ public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
 
 	private SearchResultRenderer renderer;
+	private SearchResultModel model;
 
 	public SearchResults() {
-		SearchItem[] data = {
-			new SearchItem("hello", "ghsfgrkshrg"),
-			new SearchItem("hi", "ehguje seusg"),
-			new SearchItem("bye", "ouoq ewfrhw")
-		};
 		renderer = new SearchResultRenderer();
+		model = new SearchResultModel();
 
 		setCellRenderer(renderer);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		setListData(data);
+
+		setModel(model);
 	}
 
+	/**
+	 * List model for the search results.
+	 */
+	private class SearchResultModel extends AbstractListModel implements SearchResultListener {
+		static final long serialVersionUID = 1L;
+		private ArrayList<SearchItem> results;
+
+		public SearchResultModel() {
+			results = new ArrayList<SearchItem>();
+		}
+
+		public Object getElementAt(int index) {
+			return results.get(index);
+		}
+
+		public int getSize() {
+			return results.size();
+		}
+
+		/**
+		 * The Searcher object inserts the search results with this method.
+		 */
+		public void appendSearchResult(SearchItem item) {
+			int index;
+			results.add(item);
+			index = results.size() - 1;
+			fireIntervalAdded(this, index, index);
+		}
+
+		public void resetSearchResults() {
+			results.clear();
+			fireIntervalRemoved(this, 0, results.size());
+		}
+
+		public void setStatistics(int itemCount, int time) {
+		}
+	}
 
 	/**
 	 * Custom cell renderer that transforms the backend objects to JLabels.
