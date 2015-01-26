@@ -105,6 +105,7 @@ public class WikiDBReader implements Runnable {
 
 		if("0".equals(ns)) {
 			database.newWord(title);
+			database.newPage(title, text);
 		}
 	}
 
