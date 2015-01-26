@@ -52,7 +52,8 @@ public class Searcher {
 
 		if(resultListener == null) return;
 
-		entries = new Map.Entry[offset + count - processedEntries];
+		count = offset + count - processedEntries;
+		entries = new Map.Entry[count];
 		count = database.fetchResults(entries, count);
 
 		for(i = 0; i < count; i++) {
