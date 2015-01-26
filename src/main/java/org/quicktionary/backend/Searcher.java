@@ -47,7 +47,7 @@ public class Searcher {
 	}
 
 	public void requestSearchResults(int offset, int count) {
-		Map.Entry<String, Integer>[] entries;
+		Map.Entry<String, String>[] entries;
 		int i;
 
 		if(resultListener == null) return;
@@ -57,8 +57,7 @@ public class Searcher {
 		count = database.fetchResults(entries, count);
 
 		for(i = 0; i < count; i++) {
-			System.out.println("serach " + i + " " + entries[i].getKey());
-			resultListener.appendSearchResult(new SearchItem(entries[i].getKey(), "Test"));
+			resultListener.appendSearchResult(new SearchItem(entries[i].getKey(), "Test", entries[i]));
 		}
 		processedEntries += count;
 	}

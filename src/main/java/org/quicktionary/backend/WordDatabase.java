@@ -25,26 +25,31 @@ import java.util.Map;
  */
 public class WordDatabase {
 	private Quicktionary dictionary;
-	private TreeMap<String, Integer> map;
+	private TreeMap<String, String> map;
 
 	private String searchWord;
-	private Map.Entry<String,Integer> currentEntry;
+	private Map.Entry<String,String> currentEntry;
 
 	public WordDatabase(Quicktionary dictionary) {
 		this.dictionary = dictionary;
-		this.map = new TreeMap<String, Integer>();
+		this.map = new TreeMap<String, String>();
 	}
 
 	public void newWord(String word) {
-		map.put(word, 1);
+		map.put(word, null);
+	}
+
+	/* temporary */
+	public void newPage(String word, String page) {
+		map.put(word, page);
 	}
 
 	public void removeWord(String word) {
 		map.remove(word);
 	}
 
-	public void fetchPage(SearchItem item) {
-		throw new UnsupportedOperationException("Not implemented yet");
+	public String fetchPage(SearchItem item) {
+		return map.get(item.getInternal());
 	}
 
 	/**
@@ -65,7 +70,7 @@ public class WordDatabase {
 	 * @param entries The list to be filled
 	 * @param count   The number of items wanted
 	 */
-	public int fetchResults(Map.Entry<String, Integer>[] entries, int count) {
+	public int fetchResults(Map.Entry<String, String>[] entries, int count) {
 		int i;
 
 		for(i = 0; i < count && currentEntry != null; i++) {

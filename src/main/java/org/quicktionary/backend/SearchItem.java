@@ -21,16 +21,23 @@ package org.quicktionary.backend;
  */
 public class SearchItem {
 	private String word, description;
+	private Object internal;
 
-	public SearchItem(String word, String description) {
+	public SearchItem(String word, String description, Object internal) {
 		this.word = word;
 		this.description = description;
+		this.internal = internal;
 	}
 
 	public String getWord() {
 		return word;
 	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public Object getInternal() {
+		return internal;
 	}
 }
