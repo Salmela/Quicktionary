@@ -72,7 +72,7 @@ public class SearchResults extends JList {
 		label = renderer;
 
 		dummyItem = new Object[1];
-		dummyItem[0] = new SearchItem("A", "A");
+		dummyItem[0] = new SearchItem("A", "A", null);
 		setListData(dummyItem);
 
 		/* fill the label */
