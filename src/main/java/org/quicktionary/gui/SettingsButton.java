@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -107,7 +108,7 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		ActionEvent event;
 		String filename;
 
-		dialog = ReadDatabaseDialog.createDialog((JComponent)this);
+		dialog = ReadDatabaseDialog.createDialog(this, listener);
 		filename = dialog.getFilename();
 
 		event = new ReadDatabaseEvent(this, filename);

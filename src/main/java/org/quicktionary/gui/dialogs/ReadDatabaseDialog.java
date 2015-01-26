@@ -18,8 +18,7 @@ package org.quicktionary.gui;
 
 import java.io.File;
 
-import javax.swing.JOptionPane;
-import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,36 +26,55 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import java.awt.FileDialog;
+import java.awt.Frame;
+import java.awt.Container;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
+public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	static final long serialVersionUID = 1L;
+
+	static final String FILE_CHOOSER_EVENT = "file-chooser-button";
+	static final String PARSE_EVENT  = "parse-button";
+	static final String CANCEL_EVENT = "cancel-button";
 
 	private String filename;
 	private JDialog dialog;
 	private JTextField filenameField;
 
-	public ReadDatabaseDialog(Object message,
-	                          int messageType, int optionType,
-	                          Object[] options, Object initialValue) {
-		super(message, messageType, optionType, null, options, initialValue);
-
+	public ReadDatabaseDialog(Frame frame, ActionListener listener) {
+		super(frame, "Read a database", true);
 		this.filename = new String();
+
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		makeComponents();
 	}
 
-	public static ReadDatabaseDialog createDialog(JComponent parent) {
-		ReadDatabaseDialog pane;
-		JDialog dialog;
+	public static ReadDatabaseDialog createDialog(Component owner, ActionListener listener) {
+		ReadDatabaseDialog dialog;
+		JFrame frame;
+
+		frame = (JFrame)SwingUtilities.windowForComponent(owner);
+		dialog = new ReadDatabaseDialog(frame, listener);
+
+		System.out.println("RETURNED");
+		return dialog;
+	}
+
+	public void makeComponents() {
 		JPanel  fileSelectorBox;
+		JPanel  buttonBox;
 		JButton fileSelectorButton;
-		JTextField filenameField;
+		JButton button;
 		String  descString;
 		JLabel  output;
 
 		descString = "Select the wikimedia database dump that you want to use.";
 
+		/* create file chooser box */
 		fileSelectorBox = new JPanel();
 		fileSelectorBox.setLayout(new BoxLayout(fileSelectorBox, BoxLayout.X_AXIS));
 
@@ -68,31 +86,46 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 
 		output = new JLabel("");
 
-		Object[] components = {descString, fileSelectorBox, output};
-		Object[] buttons = {"Parse", "Cancel"};
+		/* create footer buttons */
+		buttonBox = new JPanel();
 
-		pane = new ReadDatabaseDialog(components, JOptionPane.PLAIN_MESSAGE,
-		                              JOptionPane.OK_CANCEL_OPTION,
-		                              buttons, buttons[0]);
-		dialog = pane.createDialog(parent, "Read a database");
+		button = new JButton("Parse");
+		button.addActionListener(this);
+		button.setActionCommand(PARSE_EVENT);
+		buttonBox.add(button);
 
-		pane.dialog = dialog;
-		pane.filenameField = filenameField;
-		fileSelectorButton.addActionListener(pane);
+		button = new JButton("Cancel");
+		button.addActionListener(this);
+		button.setActionCommand(CANCEL_EVENT);
+		buttonBox.add(button);
+
+		Container pane;
+		pane = getContentPane();
+		//pane = new JPanel();
+		//getContentPane().add(pane);
+		//pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
+		pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
+		pane.add(new JLabel(descString));
+		pane.add(fileSelectorBox);
+		pane.add(output);
+		pane.add(buttonBox);
+
+		fileSelectorButton.addActionListener(this);
+		fileSelectorButton.setActionCommand(FILE_CHOOSER_EVENT);
 
 		/* the following call will wait until the dialog is closed */
-		dialog.setVisible(true);
-
-		return pane;
+		//setSize(pane.getMinimumSize());
+		pack();
+		setVisible(true);
 	}
 
-	public void actionPerformed(ActionEvent event) {
+	public void openFileChooser() {
 		String titleStr = "Select the database file";
 
 		if(Main.useNativeFileDialog) {
 			FileDialog dialog;
 
-			dialog = new FileDialog(this.dialog, titleStr, FileDialog.LOAD);
+			dialog = new FileDialog(this, titleStr, FileDialog.LOAD);
 
 			/* the following call will wait until the filedialog is closed */
 			dialog.setVisible(true);
@@ -108,12 +141,22 @@ public class ReadDatabaseDialog extends JOptionPane implements ActionListener {
 			chooser.setDialogTitle(titleStr);
 
 			/* the following call will wait until the filedialog is closed */
-			returnValue = chooser.showOpenDialog(this.dialog);
+			returnValue = chooser.showOpenDialog(this);
 			if(returnValue == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile().getName() != null) {
 				filename = chooser.getSelectedFile().getPath();
 			}
 		}
 		filenameField.setText(filename);
+	}
+
+	public void actionPerformed(ActionEvent event) {
+		if(event.getActionCommand() == FILE_CHOOSER_EVENT) {
+			openFileChooser();
+		} else if(event.getActionCommand() == PARSE_EVENT) {
+			dispose();
+		} else if(event.getActionCommand() == CANCEL_EVENT) {
+			dispose();
+		}
 	}
 
 	public String getFilename() {
