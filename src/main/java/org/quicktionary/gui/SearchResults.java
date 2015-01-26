@@ -29,6 +29,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
 
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
@@ -40,6 +42,7 @@ import org.quicktionary.backend.SearchItem;
 public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
 	static final String REQUEST_SEARCH_RESULTS_EVENT = "request-search-results-event";
+	static final String PAGE_LOAD_EVENT = "page-load-event";
 
 	private SearchResultRenderer renderer;
 	private SearchResultModel    model;
@@ -50,6 +53,7 @@ public class SearchResults extends JList {
 		this.renderer = new SearchResultRenderer();
 		this.model = new SearchResultModel();
 
+		addMouseListener(new mouseHandler());
 		setCellRenderer(renderer);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
@@ -87,6 +91,35 @@ public class SearchResults extends JList {
 
 	public SearchResultListener getSearchResultListener() {
 		return model;
+	}
+
+	/**
+	 *
+	 */
+	public class mouseHandler extends MouseAdapter {
+		public void mouseClicked(MouseEvent event) {
+			if (event.getClickCount() == 2) {
+				PageLoadEvent emittedEvent;
+				int i = getSelectedIndex();
+
+				System.out.println("double click");
+				emittedEvent = new PageLoadEvent(this, (SearchItem)model.getElementAt(i));
+				listener.actionPerformed(emittedEvent);
+			}
+		}
+	}
+
+	public class PageLoadEvent extends ActionEvent {
+		private SearchItem searchItem;
+
+		public PageLoadEvent(Object source, SearchItem item) {
+			super(source, ActionEvent.ACTION_PERFORMED, PAGE_LOAD_EVENT);
+			this.searchItem = item;
+		}
+
+		public SearchItem getSearchItem() {
+			return searchItem;
+		}
 	}
 
 	public class RequestSearchResultEvent extends ActionEvent {

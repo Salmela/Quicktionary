@@ -188,6 +188,15 @@ public class MainWindow extends JFrame implements ActionListener {
 			//dictionary.search(searchBox.getText());
 			//show the first item's page
 
+		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
+			SearchResults.PageLoadEvent pageEvent;
+			String text;
+
+			pageEvent = (SearchResults.PageLoadEvent)event;
+			text = dictionary.getPageContent(pageEvent.getSearchItem(), searchBox.getText());
+			pageArea.setText(text);
+			changeView(false);
+
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
 			SearchResults.RequestSearchResultEvent requestEvent;
 
