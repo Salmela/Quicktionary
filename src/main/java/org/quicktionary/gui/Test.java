@@ -1,6 +1,7 @@
 package org.quicktionary.gui;
 
 import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import org.quicktionary.backend.parsers.XMLParser;
 
 /*
@@ -16,12 +17,11 @@ public class Test {
 	}
 	
 	public void emptyDocumentIsValid() {
-		String file = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><hello/></test>";
+		String s = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><test><cool xml:space=\"preserve\"> foo </cool></test>";
 		try {
-			parser.parseFile(new ByteArrayInputStream(file.getBytes("UTF-8")));
-		} catch(Exception e) {
-		}
-		parser.findElement("hello");
-		parser.getNextSibling();
+			parser.parseFile(new StringReader(s));
+		} catch(Exception e) {}
+		parser.findElement("cool");
+		parser.getAttribute("xml:space");
 	}
 }
