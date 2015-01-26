@@ -213,6 +213,7 @@ public class XMLParser {
 	public boolean findElement(int tagNameId) {
 		while(getNextNode()) {
 			if(this.nodeType == NodeType.ELEMENT &&
+			   this.tagType  == TagType.START &&
 			   this.tagNameId == tagNameId) {
 				return true;
 			}
