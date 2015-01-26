@@ -113,9 +113,11 @@ public class XMLParser {
 		previousChar = -1;
 		currentChar  = -1;
 		currentDepth = 0;
-		bufferIndex  = 0;
 		preserveWhitespaces = false;
 		saveTextContent     = false;
+
+		/* force the buffer to be filled */
+		bufferIndex  = buffer.length;
 
 		/* initialize the currentChar */
 		if(!getNext()) {
@@ -422,6 +424,7 @@ public class XMLParser {
 			bufferIndex = 0;
 		}
 
+		previousChar = currentChar;
 		currentChar = buffer[bufferIndex++];
 		return true;
 	}
