@@ -802,8 +802,8 @@ public class XMLParser {
 			while(currentChar == '-') {
 				dashCount++;
 				getNext();
-				/* exit after two dashes followed by greater than sign '-->' */
-				if(dashCount == 2 && currentChar == '>') break;
+				/* exit after atleast two dashes followed by greater than sign '-->' */
+				if(dashCount >= 2 && currentChar == '>') break;
 			}
 
 		} while(getNext());
