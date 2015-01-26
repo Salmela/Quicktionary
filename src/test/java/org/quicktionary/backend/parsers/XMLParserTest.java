@@ -126,7 +126,6 @@ public class XMLParserTest {
 		String s = xmlDecl + "<test><hello>hei</hello></test>";
 		parseString(s);
 		parser.findElement("hello");
-		parser.getFirstChild();
 		Assert.assertEquals("hei", parser.getTextContent());
 	}
 
