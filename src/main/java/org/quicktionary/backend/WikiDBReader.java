@@ -36,7 +36,7 @@ public class WikiDBReader implements Runnable {
 	private static final int TITLE_TAG = 1;
 	private static final int REVISION_TAG = 2;
 	private static final int TEXT_TAG = 3;
-	private static final int PAGE_TAG = 3;
+	private static final int PAGE_TAG = 4;
 
 	public WikiDBReader(WordDatabase database) {
 		this.parser = new XMLParser();
