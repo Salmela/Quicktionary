@@ -296,7 +296,7 @@ public class XMLParser {
 	 */
 	public String getAttribute(String attributeName) {
 		for(XMLAttribute attribute : attributes) {
-			if(attribute.name == attributeName) {
+			if(attribute.name.equals(attributeName)) {
 				return attribute.value;
 			}
 		}
