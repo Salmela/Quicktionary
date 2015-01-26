@@ -153,8 +153,10 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 		if(event.getActionCommand() == FILE_CHOOSER_EVENT) {
 			openFileChooser();
 		} else if(event.getActionCommand() == PARSE_EVENT) {
+			filename = filenameField.getText();
 			dispose();
 		} else if(event.getActionCommand() == CANCEL_EVENT) {
+			filename = null;
 			dispose();
 		}
 	}
