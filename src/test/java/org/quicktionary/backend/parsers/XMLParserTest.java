@@ -20,10 +20,6 @@ public class XMLParserTest {
 	@Rule
 	public Timeout globalTimeout = new Timeout(100);
 
-	public XMLParserTest() {
-		xmlFile = null;
-	}
-
 	@Before
 	public void setup() throws IOException {
 		parser = new XMLParser();
