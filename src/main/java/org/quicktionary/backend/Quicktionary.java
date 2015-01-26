@@ -70,9 +70,9 @@ public class Quicktionary {
 		searcher.setResultListener(listener);
 	}
 
-	public void getPageContent(SearchItem item, String searchQuery) {
+	public String getPageContent(SearchItem item, String searchQuery) {
 		//history.saveEvent("search", searchQuery);
 		//history.saveEvent("page", "" + item.getID());
-		database.fetchPage(item);
+		return database.fetchPage(item);
 	}
 }

@@ -49,7 +49,9 @@ public class WordDatabase {
 	}
 
 	public String fetchPage(SearchItem item) {
-		return map.get(item.getInternal());
+		Map.Entry<String, String> entry;
+		entry = (Map.Entry)item.getInternal();
+		return entry.getValue();
 	}
 
 	/**
