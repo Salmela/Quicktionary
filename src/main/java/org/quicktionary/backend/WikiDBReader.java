@@ -96,7 +96,7 @@ public class WikiDBReader implements Runnable {
 
 			case REVISION_TAG:
 				parser.findElement(TEXT_TAG);
-				text = parser.getTextContent();
+				text = parser.getTextContent(true);
 				break;
 			default:
 				break;

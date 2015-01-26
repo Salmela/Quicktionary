@@ -270,21 +270,31 @@ public class XMLParser {
 	}
 
 	public String getTextContent() {
-		boolean saveTextContentOld;
+		return getTextContent(false);
+	}
 
-		/* temporarily enable saveTextContent */
+	public String getTextContent(boolean preserveWhitespaces) {
+		boolean saveTextContentOld;
+		boolean preserveWhitespacesOld;
+
+		/* save the old state */
 		saveTextContentOld = saveTextContent;
+		preserveWhitespacesOld = preserveWhitespaces;
 		saveTextContent    = true;
+		this.preserveWhitespaces = preserveWhitespaces;
 
 		/* read the text node */
 		if(!getFirstChild()) {
 			return null;
 		}
-		saveTextContent = saveTextContentOld;
 
 		if (nodeType != NodeType.TEXT) {
 			return null;
 		}
+
+		/* restore the old state */
+		saveTextContent = saveTextContentOld;
+		preserveWhitespaces = preserveWhitespacesOld;
 
 		/* consume the end tag */
 		getNextNode();
