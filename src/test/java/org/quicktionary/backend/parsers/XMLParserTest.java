@@ -7,7 +7,7 @@ import org.junit.Rule;
 import org.junit.rules.Timeout;
 
 import java.io.IOException;
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 
 import org.quicktionary.backend.parsers.XMLParser;
 
@@ -26,7 +26,7 @@ public class XMLParserTest {
 	}
 
 	public boolean parseString(String fileText) throws IOException {
-		return parser.parseFile(new ByteArrayInputStream(fileText.getBytes("UTF-8")));
+		return parser.parseFile(new StringReader(fileText));
 	}
 
 	String xmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";

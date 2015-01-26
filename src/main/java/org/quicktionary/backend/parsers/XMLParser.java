@@ -16,7 +16,8 @@
  */
 package org.quicktionary.backend.parsers;
 
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.Reader;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -40,20 +41,17 @@ import java.lang.StringBuilder;
  * spec: http://www.w3.org/TR/REC-xml/
  */
 public class XMLParser {
-	private InputStream             reader;
+	private BufferedReader          reader;
 	private ArrayList<Integer>      parentNodes;
 	private HashMap<String, Integer> tagNames;
-
-	private int bufferIndex;
-	private byte[] buffer;
 
 	/**
 	 * The current char must be at the start of next node
 	 * after any method.
 	 */
 	private int  currentDepth;
-	private byte currentChar;
-	private byte previousChar;
+	private char currentChar;
+	private char previousChar;
 	private boolean parsingError;
 	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
@@ -97,9 +95,8 @@ public class XMLParser {
 		attributeBuilder = new StringBuilder(64);
 		textContent  = new StringBuilder(4096);
 		reader       = null;
-		currentChar  = -1;
+		currentChar  = '\0';
 		verbose = false;
-		buffer = new byte[4096];
 	}
 
 	/**
@@ -107,17 +104,13 @@ public class XMLParser {
 	 *
 	 * @param stream The input stream which will be readed
 	 */
-	public boolean parseFile(InputStream stream) throws IOException {
-
-		reader       = stream;
-		previousChar = -1;
-		currentChar  = -1;
+	public boolean parseFile(Reader reader) throws IOException {
+		this.reader  = new BufferedReader(reader);
+		previousChar = '\0';
+		currentChar  = '\0';
 		currentDepth = 0;
 		preserveWhitespaces = false;
 		saveTextContent     = false;
-
-		/* force the buffer to be filled */
-		bufferIndex  = buffer.length;
 
 		/* initialize the currentChar */
 		if(!getNext()) {
@@ -129,7 +122,7 @@ public class XMLParser {
 	}
 
 	public boolean isInitialized() {
-		return currentChar != -1;
+		return currentChar != '\0';
 	}
 
 	/**
@@ -371,7 +364,7 @@ public class XMLParser {
 	 * @param letter The character that we want to check
 	 * @return True, if the letter was in alphabet
 	 */
-	private boolean isAlphabet(byte letter, boolean first) {
+	private boolean isAlphabet(char letter, boolean first) {
 		if(letter >= 'a' && letter <= 'z') {
 			return true;
 		}
@@ -394,7 +387,7 @@ public class XMLParser {
 	 * @param letter The character that we want to check
 	 * @return True, if the letter was ascii whitespace
 	 */
-	private boolean isWhitespace(byte letter) {
+	private boolean isWhitespace(char letter) {
 		if(letter == ' ' || letter == '\t' || letter == '\n' ||
 		   letter == '\r') {
 			return true;
@@ -409,23 +402,22 @@ public class XMLParser {
 	 * @return True, if the read was successful
 	 */
 	private boolean getNext() {
-		if(buffer.length == bufferIndex) {
-			try {
-				int result;
-				result = reader.read(buffer, 0, buffer.length);
-				if(result != buffer.length) {
-					currentChar = -1;
-					return false;
-				}
-			} catch(IOException exception) {
-				currentChar = -1;
-				return false;
-			}
-			bufferIndex = 0;
+		int result;
+		previousChar = currentChar;
+
+		try {
+			result = reader.read();
+		} catch(IOException e) {
+			currentChar = '\0';
+			return false;
 		}
 
-		previousChar = currentChar;
-		currentChar = buffer[bufferIndex++];
+		if(result != -1) {
+			currentChar = (char)result;
+		} else {
+			currentChar = '\0';
+			return false;
+		}
 		return true;
 	}
 
@@ -435,13 +427,13 @@ public class XMLParser {
 	 *
 	 * @return The readed character
 	 */
-	private byte getPrevious() {
+	private char getPrevious() {
 		return previousChar;
 	}
 
 	/**
 	 * Skip over all following whitespaces. The method throws exception if
-	 * the current byte isn't whitespace and the atLeastOne parameter is set.
+	 * the current char isn't whitespace and the atLeastOne parameter is set.
 	 */
 	private void skipWhitespaces(boolean atLeastOne) {
 		/* check that there is whitespace */
@@ -464,7 +456,7 @@ public class XMLParser {
 	private void expectChar(char wanted) {
 		String errorString = "Expected '" + wanted + "' character, but was '" + (char)currentChar + "'.";
 
-		if(currentChar != (byte)wanted) {
+		if(currentChar != wanted) {
 			System.out.print("Error in: ");
 			printCurrentNode();
 
@@ -536,7 +528,7 @@ public class XMLParser {
 	private void parseTag() {
 		tagType = TagType.START;
 
-		/* read the first byte of the tag */
+		/* read the first char of the tag */
 		expectChar('<');
 
 		/* check if the element is comment */
@@ -628,7 +620,7 @@ public class XMLParser {
 				continue;
 			}
 
-			textContent.append((char)currentChar);
+			textContent.append(currentChar);
 			getNext();
 		}
 		return;

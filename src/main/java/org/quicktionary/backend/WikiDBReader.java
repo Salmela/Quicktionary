@@ -18,7 +18,7 @@ package org.quicktionary.backend;
 
 import java.lang.Runnable;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.quicktionary.backend.parsers.XMLParser;
@@ -46,7 +46,7 @@ public class WikiDBReader implements Runnable {
 	public boolean check(String filename) {
 		file = new File(filename);
 		try {
-			parser.parseFile(new FileInputStream(file));
+			parser.parseFile(new FileReader(file));
 
 		} catch(IOException exception) {
 			return false;
@@ -68,7 +68,7 @@ public class WikiDBReader implements Runnable {
 		ns = null;
 		title = null;
 
-		System.out.println("read page");
+		//System.out.println("read page");
 
 		/* get the first child node of the page*/
 		if(!parser.getFirstChild()) {
