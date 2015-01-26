@@ -44,6 +44,9 @@ public class XMLParser {
 	private ArrayList<Integer>      parentNodes;
 	private HashMap<String, Integer> tagNames;
 
+	private int bufferIndex;
+	private byte[] buffer;
+
 	/**
 	 * The current char must be at the start of next node
 	 * after any method.
@@ -96,6 +99,7 @@ public class XMLParser {
 		reader       = null;
 		currentChar  = -1;
 		verbose = false;
+		buffer = new byte[4096];
 	}
 
 	/**
@@ -109,11 +113,12 @@ public class XMLParser {
 		previousChar = -1;
 		currentChar  = -1;
 		currentDepth = 0;
+		bufferIndex  = 0;
 		preserveWhitespaces = false;
 		saveTextContent     = false;
 
 		/* initialize the currentChar */
-		if(getNext()) {
+		if(!getNext()) {
 			appendLog("File is empty");
 			return false;
 		}
@@ -402,19 +407,22 @@ public class XMLParser {
 	 * @return True, if the read was successful
 	 */
 	private boolean getNext() {
-		try {
-			int result;
-			previousChar = currentChar;
-			result = reader.read();
-			if(result == -1) {
+		if(buffer.length == bufferIndex) {
+			try {
+				int result;
+				result = reader.read(buffer, 0, buffer.length);
+				if(result != buffer.length) {
+					currentChar = -1;
+					return false;
+				}
+			} catch(IOException exception) {
 				currentChar = -1;
 				return false;
 			}
-			currentChar = (byte)result;
-		} catch(Exception e) {
-			currentChar = -1;
-			return false;
+			bufferIndex = 0;
 		}
+
+		currentChar = buffer[bufferIndex++];
 		return true;
 	}
 
