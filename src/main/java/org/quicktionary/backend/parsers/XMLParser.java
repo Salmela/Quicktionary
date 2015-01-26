@@ -113,7 +113,7 @@ public class XMLParser {
 		saveTextContent     = false;
 
 		/* initialize the currentChar */
-		if(getNext() == -1) {
+		if(getNext()) {
 			appendLog("File is empty");
 			return false;
 		}
@@ -399,19 +399,23 @@ public class XMLParser {
 	 * Read next character from file.
 	 * TODO: return boolean
 	 *
-	 * @return The readed character
+	 * @return True, if the read was successful
 	 */
-	private byte getNext() {
+	private boolean getNext() {
 		try {
 			int result;
 			previousChar = currentChar;
 			result = reader.read();
-			if(result == -1) return -1;
+			if(result == -1) {
+				currentChar = -1;
+				return false;
+			}
 			currentChar = (byte)result;
 		} catch(Exception e) {
 			currentChar = -1;
+			return false;
 		}
-		return currentChar;
+		return true;
 	}
 
 	/**
@@ -437,7 +441,7 @@ public class XMLParser {
 			return;
 		}
 
-		while(getNext() != -1 && isWhitespace(currentChar));
+		while(getNext() && isWhitespace(currentChar));
 	}
 
 	/**
@@ -802,7 +806,7 @@ public class XMLParser {
 				if(dashCount == 2 && currentChar == '>') break;
 			}
 
-		} while(getNext() == -1);
+		} while(getNext());
 	}
 
 	/**
