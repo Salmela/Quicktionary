@@ -34,6 +34,9 @@ public class WikiDBReader implements Runnable {
 
 	private static final int NAMESPACE_TAG = 0;
 	private static final int TITLE_TAG = 1;
+	private static final int REVISION_TAG = 2;
+	private static final int TEXT_TAG = 3;
+	private static final int PAGE_TAG = 3;
 
 	public WikiDBReader(WordDatabase database) {
 		this.parser = new XMLParser();
@@ -41,6 +44,9 @@ public class WikiDBReader implements Runnable {
 
 		parser.setTagNameId("ns", NAMESPACE_TAG);
 		parser.setTagNameId("title", TITLE_TAG);
+		parser.setTagNameId("revision", REVISION_TAG);
+		parser.setTagNameId("text", TEXT_TAG);
+		parser.setTagNameId("page", PAGE_TAG);
 	}
 
 	public boolean check(String filename) {
@@ -64,9 +70,10 @@ public class WikiDBReader implements Runnable {
 	}
 
 	public void readPage() {
-		String title, ns;
+		String text, title, ns;
 		ns = null;
 		title = null;
+		text = null;
 
 		//System.out.println("read page");
 
@@ -86,6 +93,11 @@ public class WikiDBReader implements Runnable {
 			case NAMESPACE_TAG:
 				ns = parser.getTextContent();
 				break;
+
+			case REVISION_TAG:
+				parser.findElement(TEXT_TAG);
+				text = parser.getTextContent();
+				break;
 			default:
 				break;
 			}
@@ -101,7 +113,7 @@ public class WikiDBReader implements Runnable {
 			throw new Error("You have to run first the check method.");
 		}
 
-		while(parser.findElement("page")) {
+		while(parser.findElement(PAGE_TAG)) {
 			readPage();
 		}
 	}
