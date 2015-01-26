@@ -37,6 +37,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JScrollPane mainPane;
 	private SearchResults searchResults;
 	private JTextArea pageArea;
+	private JTextField searchBox;
 
 	public MainWindow(Quicktionary dictionary) {
 		this.dictionary = dictionary;
@@ -130,7 +131,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	private void makeComponents() {
 		JPanel     headerBar;
 		JButton    backButton, nextButton, settingsButton;
-		JTextField searchBox;
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -183,7 +183,6 @@ public class MainWindow extends JFrame implements ActionListener {
 			dictionary.requestSearchResults(0, searchResults.getVisibleRowCount());
 
 		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
-			SearchBox searchBox = (SearchBox)event.getSource();
 			System.out.println("main window: search event " + searchBox.getText());
 
 			//dictionary.search(searchBox.getText());
