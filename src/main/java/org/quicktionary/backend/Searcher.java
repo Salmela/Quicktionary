@@ -47,17 +47,19 @@ public class Searcher {
 	}
 
 	public void requestSearchResults(int offset, int count) {
-		Map.Entry<String, String>[] entries;
+		WordDatabase.WordEntry[] entries;
 		int i;
 
 		if(resultListener == null) return;
 
 		count = offset + count - processedEntries;
-		entries = new Map.Entry[count];
+		if(count <= 0) return;
+
+		entries = new WordDatabase.WordEntry[count];
 		count = database.fetchResults(entries, count);
 
 		for(i = 0; i < count; i++) {
-			resultListener.appendSearchResult(new SearchItem(entries[i].getKey(), "Test", entries[i]));
+			resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
 		}
 		processedEntries += count;
 	}

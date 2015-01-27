@@ -25,23 +25,30 @@ import java.util.Map;
  */
 public class WordDatabase {
 	private Quicktionary dictionary;
-	private TreeMap<String, String> map;
+	private TreeMap<String, WordEntry> map;
 
 	private String searchWord;
-	private Map.Entry<String,String> currentEntry;
+	private Map.Entry<String, WordEntry> currentEntry;
 
 	public WordDatabase(Quicktionary dictionary) {
 		this.dictionary = dictionary;
-		this.map = new TreeMap<String, String>();
+		this.map = new TreeMap<String, WordEntry>();
 	}
 
 	public void newWord(String word) {
-		map.put(word, null);
+		map.put(word, new WordEntry(word, null));
 	}
 
 	/* temporary */
 	public void newPage(String word, String page) {
-		map.put(word, page);
+		WordEntry entry;
+
+		if(map.containsKey(word)) {
+			entry = map.get(word);
+			entry.setPage(page);
+		} else {
+			entry = map.put(word, new WordEntry(word, page));
+		}
 	}
 
 	public void removeWord(String word) {
@@ -49,9 +56,12 @@ public class WordDatabase {
 	}
 
 	public String fetchPage(SearchItem item) {
-		Map.Entry<String, String> entry;
-		entry = (Map.Entry)item.getInternal();
-		return entry.getValue();
+		Map.Entry<String, WordEntry> entry;
+		WordEntry wordEntry;
+
+		wordEntry = (WordEntry)item.getInternal();
+
+		return wordEntry.getPage();
 	}
 
 	/**
@@ -72,16 +82,40 @@ public class WordDatabase {
 	 * @param entries The list to be filled
 	 * @param count   The number of items wanted
 	 */
-	public int fetchResults(Map.Entry<String, String>[] entries, int count) {
+	public int fetchResults(WordEntry[] entries, int count) {
 		int i;
 
 		for(i = 0; i < count && currentEntry != null; i++) {
 			if(!currentEntry.getKey().startsWith(searchWord)) break;
 
-			entries[i] = currentEntry;
+			entries[i] = currentEntry.getValue();
 			currentEntry = map.higherEntry(currentEntry.getKey());
 		}
 
 		return i;
+	}
+
+	/**
+	 * This class contains all information about particular word.
+	 */
+	public class WordEntry {
+		private String word, page;
+
+		public WordEntry(String word, String page) {
+			this.word = word;
+			this.page = page;
+		}
+
+		public void setPage(String page) {
+			this.page = page;
+		}
+
+		public String getWord() {
+			return word;
+		}
+
+		public String getPage() {
+			return page;
+		}
 	}
 }
