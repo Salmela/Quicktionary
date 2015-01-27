@@ -146,7 +146,7 @@ public class RoundedBorder extends AbstractBorder {
 		path = new GeneralPath();
 
 		/* substract the line width*/
-		width -= 1;
+		width  -= 1;
 		height -= 1;
 
 		/* draw the top-right corner */
