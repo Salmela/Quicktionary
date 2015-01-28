@@ -212,6 +212,10 @@ public class XMLParser {
 		return false;
 	}
 
+	/**
+	 * Get the next node. This method is just user friendlier name for
+	 * parseNode.
+	 */
 	public boolean getNextNode() {
 		return parseNode();
 	}
@@ -323,6 +327,9 @@ public class XMLParser {
 		return null;
 	}
 
+	/**
+	 * Get the node type of the current node.
+	 */
 	public NodeType getNodeType() {
 		return nodeType;
 	}
@@ -363,7 +370,7 @@ public class XMLParser {
 	}
 
 	/**
-	 * This method prints parsing errors to log and the current stack trace.
+	 * The method prints parsing errors to log and the current stack trace.
 	 */
 	private void appendLog(String message) {
 		System.out.println("Parsing error occured: " + message);
@@ -477,6 +484,194 @@ public class XMLParser {
 	}
 
 	/**
+	 * Parse single node from xml document.
+	 * You propably should use alias method called getNextNode.
+	 */
+	private boolean parseNode() {
+		/* initialize variables for current node */
+		parsingError = false;
+		attributes.clear();
+		nodeType = NodeType.NONE;
+		tagType = TagType.NONE;
+		tagNameId = -1;
+
+		if(!preserveWhitespaces) {
+			skipWhitespaces(false);
+		}
+
+		try {
+			if(currentChar == -1) {
+				return false;
+			} else if(currentChar == '<') {
+				parseTag();
+			} else {
+				parseTextContent();
+			}
+		} catch(Exception exception) {
+			appendLog(exception);
+		}
+
+		if(parsingError) {
+			if(verbose) {
+				System.out.println("Parsing error encountered.");
+			}
+			return false;
+		}
+
+		/* check if the nodes are before or after the root node */
+		if(parentNodes.size() == 0) {
+			if(!isValidRootNode()) {
+				return false;
+			}
+		}
+
+		updateParentArray();
+
+		if(verbose) {
+			printCurrentNode();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Parse a tag from reader.
+	 * Reader is expected to be start of the tag.
+	 */
+	private void parseTag() {
+		tagType = TagType.START;
+
+		/* read the first char of the tag */
+		expectChar('<');
+
+		/* check if the type of the tag */
+		if(currentChar == '?') {
+			parseXMLDeclaration();
+		} else if(currentChar == '!') {
+			parseComment();
+		} else {
+			parseElement();
+		}
+	}
+
+	/**
+	 * Parse the xml declaration from reader.
+	 * This method should be only used in from parseTag.
+	 */
+	private void parseXMLDeclaration() {
+		if(previousChar != '<') {
+			throw new Error("This method should be only used by parseTag.");
+		}
+		expectChar('?');
+		expectChar('x');
+		expectChar('m');
+		expectChar('l');
+
+		if(parentNodes.size() != 0) {
+			appendLog("The xml declaration must be at the start of file.");
+		}
+
+		skipWhitespaces(true);
+
+		/* read the version attribute */
+		parseAttribute();
+		skipWhitespaces(true);
+
+		/* read the encoding attribute */
+		parseAttribute();
+		skipWhitespaces(true);
+
+		/* read the attributes */
+		while(parseAttribute()) {
+			if(!isWhitespace(currentChar)) break;
+			skipWhitespaces(true);
+		}
+
+		expectChar('?');
+		expectChar('>');
+	}
+
+	/**
+	 * Parse a comment tag from reader.
+	 * This method should be only used in from parseTag.
+	 */
+	private void parseComment() {
+		int dashCount;
+
+		if(previousChar != '<') {
+			throw new Error("This method should be only used by parseTag.");
+		}
+		expectChar('!');
+		expectChar('-');
+		expectChar('-');
+
+		nodeType = NodeType.COMMENT;
+
+		/* try to match the comment ending pattern for each character */
+		do {
+			dashCount = 0;
+
+			while(currentChar == '-') {
+				dashCount++;
+				getNext();
+				/* exit after atleast two dashes followed by greater than sign '-->' */
+				if(dashCount >= 2 && currentChar == '>') break;
+			}
+
+		} while(getNext());
+	}
+
+	/**
+	 * Parse a element from reader.
+	 * This method should be only used in from parseTag.
+	 */
+	private void parseElement() {
+		if(previousChar != '<') {
+			throw new Error("This method should be only used by parseTag.");
+		}
+
+		nodeType = NodeType.ELEMENT;
+
+		/* check if the element is end tag */
+		if(currentChar == '/') {
+			tagType = TagType.END;
+			getNext();
+		}
+
+		/* read the name of element */
+		tagName.setLength(0);
+		if(isAlphabet(currentChar, true)) {
+			while(isAlphabet(currentChar, false)) {
+				/* push this char to element name */
+				tagName.append((char)currentChar);
+				getNext();
+			}
+		}
+		tagNameId = getTagNameId(tagName);
+
+		skipWhitespaces(false);
+
+		/* read the attributes */
+		while(parseAttribute()) {
+			if(!isWhitespace(currentChar)) {
+				break;
+			}
+			skipWhitespaces(true);
+		}
+
+		/* check if this is inline element */
+		if(currentChar == '/') {
+			if(tagType == TagType.END) {
+				appendLog("The tag cannot be empty tag and end tag at the same time.");
+			}
+			tagType = TagType.EMPTY;
+			getNext();
+		}
+
+		expectChar('>');
+	}
+
+	/**
 	 * Parse a attribute of the element. We must be at the start of attribute.
 	 * Note: Some XML-like languages allows attribute values to be unquoted.
 	 */
@@ -529,76 +724,6 @@ public class XMLParser {
 
 		attributes.add(attribute);
 		return true;
-	}
-
-	/**
-	 * Parse a tag from reader.
-	 * Reader is expected to be start of the tag.
-	 */
-	private void parseTag() {
-		tagType = TagType.START;
-
-		/* read the first char of the tag */
-		expectChar('<');
-
-		/* check if the element is comment */
-		if(currentChar == '!') {
-			parseComment();
-		} else if(currentChar == '?') {
-			parseXMLDeclaration();
-		} else {
-			parseElement();
-		}
-	}
-
-	/**
-	 * Parse a element from reader.
-	 * This method should be only used in from parseTag.
-	 */
-	private void parseElement() {
-		if(previousChar != '<') {
-			throw new Error("This method should be only used by parseTag.");
-		}
-
-		nodeType = NodeType.ELEMENT;
-
-		/* check if the element is end tag */
-		if(currentChar == '/') {
-			tagType = TagType.END;
-			getNext();
-		}
-
-		/* read the name of element */
-		tagName.setLength(0);
-		if(isAlphabet(currentChar, true)) {
-			while(isAlphabet(currentChar, false)) {
-				/* push this char to element name */
-				tagName.append((char)currentChar);
-				getNext();
-			}
-		}
-		tagNameId = getTagNameId(tagName);
-
-		skipWhitespaces(false);
-
-		/* read the attributes */
-		while(parseAttribute()) {
-			if(!isWhitespace(currentChar)) {
-				break;
-			}
-			skipWhitespaces(true);
-		}
-
-		/* check if this is inline element */
-		if(currentChar == '/') {
-			if(tagType == TagType.END) {
-				appendLog("The tag cannot be empty tag and end tag at the same time.");
-			}
-			tagType = TagType.EMPTY;
-			getNext();
-		}
-
-		expectChar('>');
 	}
 
 	/**
@@ -739,123 +864,5 @@ public class XMLParser {
 		}
 
 		System.out.println("");
-	}
-
-	/**
-	 * Parse single node from xml document.
-	 * You propably should use alias method called getNextNode.
-	 */
-	private boolean parseNode() {
-		/* initialize variables for current node */
-		parsingError = false;
-		attributes.clear();
-		nodeType = NodeType.NONE;
-		tagType = TagType.NONE;
-		tagNameId = -1;
-
-		if(!preserveWhitespaces) {
-			skipWhitespaces(false);
-		}
-
-		try {
-			if(currentChar == -1) {
-				return false;
-			} else if(currentChar == '<') {
-				parseTag();
-			} else {
-				parseTextContent();
-			}
-		} catch(Exception exception) {
-			appendLog(exception);
-		}
-
-		if(parsingError) {
-			if(verbose) {
-				System.out.println("Parsing error encountered.");
-			}
-			return false;
-		}
-
-		/* check if the nodes are before or after the root node */
-		if(parentNodes.size() == 0) {
-			if(!isValidRootNode()) {
-				return false;
-			}
-		}
-
-		updateParentArray();
-
-		if(verbose) {
-			printCurrentNode();
-		}
-
-		return true;
-	}
-
-	/**
-	 * Parse a comment tag from reader.
-	 * This method should be only used in from parseTag.
-	 */
-	private void parseComment() {
-		int dashCount;
-
-		if(previousChar != '<') {
-			throw new Error("This method should be only used by parseTag.");
-		}
-		expectChar('!');
-		expectChar('-');
-		expectChar('-');
-
-		nodeType = NodeType.COMMENT;
-
-		/* try to match the comment ending pattern for each character */
-		do {
-			dashCount = 0;
-
-			while(currentChar == '-') {
-				dashCount++;
-				getNext();
-				/* exit after atleast two dashes followed by greater than sign '-->' */
-				if(dashCount >= 2 && currentChar == '>') break;
-			}
-
-		} while(getNext());
-	}
-
-	/**
-	 * Parse the xml declaration from reader.
-	 * This method should be only used in from parseTag.
-	 */
-	private void parseXMLDeclaration() {
-		if(previousChar != '<') {
-			throw new Error("This method should be only used by parseTag.");
-		}
-		expectChar('?');
-		expectChar('x');
-		expectChar('m');
-		expectChar('l');
-
-		if(parentNodes.size() != 0) {
-			appendLog("The xml declaration must be at the start of file.");
-		}
-
-		skipWhitespaces(true);
-
-		/* read the version attribute */
-		parseAttribute();
-		skipWhitespaces(true);
-
-		/* read the encoding attribute */
-		parseAttribute();
-		skipWhitespaces(true);
-
-		/* read the attributes */
-		while(parseAttribute()) {
-			if(!isWhitespace(currentChar)) break;
-			skipWhitespaces(true);
-		}
-
-		expectChar('?');
-		expectChar('>');
 	}
 }
