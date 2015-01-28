@@ -191,7 +191,8 @@ public class XMLParser {
 	}
 
 	/**
-	 * Go to the root element.
+	 * Go to the root element. The root element must be first element in
+	 * the document and there should not be textNodes before it.
 	 */
 	public boolean getRoot() {
 		if(verbose) {
