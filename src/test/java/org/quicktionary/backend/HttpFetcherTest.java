@@ -1,5 +1,3 @@
-package org.quicktionary.backend;
-
 /* Quicktionary test
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *
@@ -16,12 +14,16 @@ package org.quicktionary.backend;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.quicktionary.backend;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+/* This test suite will probably be removed */
 
 public class HttpFetcherTest {
 }
