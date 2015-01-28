@@ -204,8 +204,8 @@ public class XMLParser {
 		}
 
 		while(getNextNode()) {
-			if(this.nodeType == NodeType.ELEMENT) {
-				return true;
+			if(nodeType == NodeType.ELEMENT) {
+				return tagType == TagType.START;
 			}
 		}
 		return false;
