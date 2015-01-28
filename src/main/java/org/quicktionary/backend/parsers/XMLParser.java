@@ -27,16 +27,18 @@ import java.lang.StringBuilder;
 
 /**
  * This class implements offline xml parser. It doesn't
- * allow custom markup defined inside file. The code
- * only does markup expansion only for html characters.
+ * allow custom markup defined inside file.
  *
  * The implementation tries to not allocate memory. That
- * is why it is a state machine. The parser has also
- * limitation that it can go only forward and you can
- * only ask tag names of the parent nodes.
+ * is why it is implemented as state machine. The parser has
+ * big limitation that you can only query nodes that are
+ * after current node. Furthermore, you can query data only
+ * from current node.
  *
  * This parser isn't designed for attribute heavy xml
- * documents.
+ * documents. Only ascii characters are allowed inside
+ * element nodes. The parser isn't full implementation
+ * of xml spec.
  *
  * spec: http://www.w3.org/TR/REC-xml/
  */
