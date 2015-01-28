@@ -441,16 +441,6 @@ public class XMLParser {
 	}
 
 	/**
-	 * Get the previously readed character. This is only used for some
-	 * runtime checks.
-	 *
-	 * @return The readed character
-	 */
-	private char getPrevious() {
-		return previousChar;
-	}
-
-	/**
 	 * Skip over all following whitespaces. The method throws exception if
 	 * the current char isn't whitespace and the atLeastOne parameter is set.
 	 */
