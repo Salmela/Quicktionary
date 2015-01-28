@@ -140,10 +140,11 @@ public class MainWindow extends JFrame implements ActionListener {
 		searchBox  = new SearchBox(this);
 		settingsButton = new SettingsButton(this);
 
+		/*TODO: gui is currently not high priority, but this
+		        should be cleaned up */
 		makeRoundedBorders(backButton, true, false, true, true);
 		makeRoundedBorders(nextButton, true, true, true, false);
 		makeRoundedBorders(settingsButton, true, true, true, true);
-		/*TODO: ugly hack remove */
 		/* add a right border to the backButton */
 		((RoundedBorder)((CompoundBorder) backButton.getBorder()).getOutsideBorder()).setThickness(true, true, true, true);
 
