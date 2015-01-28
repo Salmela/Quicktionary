@@ -87,6 +87,14 @@ public class XMLParser {
 		public String value;
 	}
 
+	public class XMLParserError extends Error {
+		static final long serialVersionUID = 1L;
+
+		public XMLParserError(String message) {
+			super(message);
+		}
+	}
+
 	public XMLParser() {
 		parentNodes = new ArrayList<Integer>(32);
 		attributes  = new ArrayList<XMLAttribute>(16);
@@ -170,9 +178,9 @@ public class XMLParser {
 	 */
 	public void setTagNameId(String tagName, int id) {
 		if(tagNames.containsKey(tagName)) {
-			throw new Error("The tag name has already id.");
+			throw new XMLParserError("The tag name has already id.");
 		} else if(id != tagNames.size()) {
-			throw new Error("The id is already used.");
+			throw new XMLParserError("The id is already used.");
 		} else {
 			tagNames.put(tagName, id);
 		}
