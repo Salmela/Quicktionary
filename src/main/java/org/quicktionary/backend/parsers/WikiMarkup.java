@@ -123,18 +123,18 @@ public class WikiMarkup extends Parser {
 		//wasChar('=');
 		for(i = 1; i < 6; i++) {
 			if(currentChar != '=') break;
+			getNext();
 		}
 
-		expectChar(' ');
 		content.setLength(0);
 		while(currentChar == '=') {
 			content.append(currentChar);
 			getNext();
 		}
-		//wasChar(' ');
 
 		for(; i >= 0; i--) {
 			if(currentChar != '=') break;
+			getNext();
 		}
 		if(i == 0) {
 			appendLog("Invalid formatting of header");
