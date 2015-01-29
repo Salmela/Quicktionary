@@ -60,7 +60,6 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 		frame = (JFrame)SwingUtilities.windowForComponent(owner);
 		dialog = new ReadDatabaseDialog(frame, listener);
 
-		System.out.println("RETURNED");
 		return dialog;
 	}
 
@@ -154,10 +153,10 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 			openFileChooser();
 		} else if(event.getActionCommand() == PARSE_EVENT) {
 			filename = filenameField.getText();
-			dispose();
+			setVisible(false);
 		} else if(event.getActionCommand() == CANCEL_EVENT) {
 			filename = null;
-			dispose();
+			setVisible(false);
 		}
 	}
 
