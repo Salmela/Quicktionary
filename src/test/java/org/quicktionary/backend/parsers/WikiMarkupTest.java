@@ -36,22 +36,22 @@ public class WikiMarkupTest {
 		parser = new WikiMarkup();
 	}
 
-	private parse(String markupString) {
-		parser.parse(new StringReader(markupString));
+	private boolean parse(String markupString) {
+		return parser.parse(new StringReader(markupString));
 	}
 
-	@test
-	public emptyDocument() {
-		Asser.assertFalse(parse(""));
+	@Test
+	public void emptyDocument() {
+		Assert.assertFalse(parse(""));
 	}
 
-	@test
-	public justText() {
-		Asser.assertTrue(parse("hello\nhe"));
+	@Test
+	public void justText() {
+		Assert.assertTrue(parse("hello\nhe"));
 	}
 
-	@test
-	public headerAndText() {
-		Asser.assertTrue(parse("==hello==\nhe"));
+	@Test
+	public void headerAndText() {
+		Assert.assertTrue(parse("==hello==\nhe"));
 	}
 }
