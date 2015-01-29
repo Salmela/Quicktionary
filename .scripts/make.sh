@@ -26,3 +26,5 @@ all:
 EOF
 
 echo "$text" > Makefile
+mv .LICENSE LICENSE
+mv .README.md README.md
