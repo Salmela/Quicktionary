@@ -58,15 +58,15 @@ public class XMLParser {
 	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
 	private boolean verbose;
-	private StringBuilder textContent;
+	final private StringBuilder textContent;
 
 	/* variables for current node */
 	private NodeType      nodeType;
 	private TagType       tagType;
-	private StringBuilder tagName;
-	private int tagNameId;
-	private ArrayList<XMLAttribute> attributes;
-	private StringBuilder attributeBuilder;
+	private int           tagNameId;
+	final private StringBuilder tagName;
+	final private ArrayList<XMLAttribute> attributes;
+	final private StringBuilder attributeBuilder;
 
 	private boolean wasStartTag;
 
