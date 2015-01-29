@@ -28,3 +28,4 @@ EOF
 echo "$text" > Makefile
 mv .LICENSE LICENSE
 mv .README.md README.md
+mv .docs docs
