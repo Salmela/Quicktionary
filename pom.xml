@@ -55,11 +55,9 @@
             <configuration>
                 <targetClasses>
                     <param>org.quicktionary.backend.*</param>
-                    <param>org.quicktionary.gui.*</param>
                 </targetClasses>
                 <targetTests>
                     <param>org.quicktionary.backend.*</param>
-                    <param>org.quicktionary.gui.*</param>
                 </targetTests>
             </configuration>
         </plugin>
