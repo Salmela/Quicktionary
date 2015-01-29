@@ -8,22 +8,28 @@ if [[ "x$folder_name" != "xQuicktionary-ohja" ]]; then
 fi
 
 if [[ "x$1" == "xcreate" ]]; then
-	mkdir Quicktionary
-	mkdir javadoc
-	mkdir docs
-	mkdir docs/cobertura
-	mkdir docs/pit
+	mkdir -p javadoc
+	mkdir -p docs
+	mkdir -p docs/cobertura
+	mkdir -p docs/pit
 
-	cp Quicktionary/.README.md ./
+	cp Quicktionary/.README.md ./README.md
 	cp Quicktionary/.LICENSE ./LICENSE.md
 
-	cp Quicktionary/.docs/time_usage.md docs/TimeUsage.md
+	cp Quicktionary/.docs/time_usage docs/TimeUsage.md
 	cp Quicktionary/.docs/topic_definition.md docs/TopicDefinition.md
 	cp Quicktionary/.docs/quicktionary_classes.md docs/QuicktionaryClasses.md
 	#cp Quicktionary/docs/manual docs/Manual.md
 
-	class_diagram=`ls -t Quicktionary/docs/class_diagram_*.png | head -1`
-	mv $class_diagram docs/
+	pit_folder=`ls -t Quicktionary/target/pit-reports/ | head -1`
+	cp -r Quicktionary/target/pit-reports/$pit_folder docs/pit
+
+	class_diagram=`ls -t Quicktionary/.docs/class_diagram_*.png | head -1`
+	class_diagram=`basename $class_diagram`
+	cp Quicktionary/.docs/$class_diagram docs/class_diagram.png
+
+	sequence_diagram=`ls Quicktionary/.docs/*_sequence_diagram.png`
+	cp $sequence_diagram docs/
 fi
 
 if [[ "x$1" == "xremove" ]]; then
