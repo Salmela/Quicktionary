@@ -326,7 +326,7 @@ public class XMLParserTest {
 		String s = xmlDecl + "<test><cool> foo </cool></test>";
 		parseString(s);
 
-		thrown.expect(XMLParser.XMLParserError.class);
+		thrown.expect(XMLParser.ParserError.class);
 		parser.setTagNameId("cool", 9);
 	}
 

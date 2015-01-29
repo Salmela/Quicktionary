@@ -42,8 +42,7 @@ import java.lang.StringBuilder;
  *
  * spec: http://www.w3.org/TR/REC-xml/
  */
-public class XMLParser {
-	private BufferedReader          reader;
+public class XMLParser extends Parser {
 	private ArrayList<Integer>      parentNodes;
 	private HashMap<String, Integer> tagNames;
 
@@ -52,8 +51,6 @@ public class XMLParser {
 	 * after any method.
 	 */
 	private int  currentDepth;
-	private char currentChar;
-	private char previousChar;
 	private boolean parsingError;
 	private boolean parsingErrorHappened;
 	private boolean saveTextContent;
@@ -90,23 +87,14 @@ public class XMLParser {
 		public String value;
 	}
 
-	public class XMLParserError extends Error {
-		static final long serialVersionUID = 1L;
-
-		public XMLParserError(String message) {
-			super(message);
-		}
-	}
-
 	public XMLParser() {
+		super();
 		parentNodes = new ArrayList<Integer>(32);
 		attributes  = new ArrayList<XMLAttribute>(16);
 		tagNames    = new HashMap<String, Integer>();
 		tagName     = new StringBuilder(256);
 		attributeBuilder = new StringBuilder(64);
 		textContent  = new StringBuilder(4096);
-		reader       = null;
-		currentChar  = 0;
 		verbose = false;
 		parsingErrorHappened = false;
 	}
@@ -118,21 +106,12 @@ public class XMLParser {
 	 * @throws IOException
 	 */
 	public boolean parseFile(Reader reader) throws IOException {
-		this.reader  = new BufferedReader(reader);
-		previousChar = 0;
-		currentChar  = 0;
 		currentDepth = 0;
 		preserveWhitespaces  = false;
 		saveTextContent      = false;
 		parsingErrorHappened = false;
 
-		/* initialize the currentChar */
-		if(!getNext()) {
-			appendLog("File is empty");
-			return false;
-		}
-
-		return true;
+		return super.parse(reader);
 	}
 
 	public boolean isInitialized() {
@@ -188,9 +167,9 @@ public class XMLParser {
 	 */
 	public void setTagNameId(String tagName, int id) {
 		if(tagNames.containsKey(tagName)) {
-			throw new XMLParserError("The tag name has already id.");
+			throw new ParserError("The tag name has already id.");
 		} else if(id != tagNames.size()) {
-			throw new XMLParserError("The id is already used.");
+			throw new ParserError("The id is already used.");
 		} else {
 			tagNames.put(tagName, id);
 		}
@@ -381,22 +360,6 @@ public class XMLParser {
 	}
 
 	/**
-	 * The method prints parsing errors to log and the current stack trace.
-	 */
-	private void appendLog(String message) {
-		System.out.println("Parsing error occured: " + message);
-		String trace = Arrays.toString(Thread.currentThread().getStackTrace());
-		System.out.println(trace);
-		parsingError = parsingErrorHappened = true;
-	}
-
-	private void appendLog(XMLParserError exception) {
-		System.out.println("Parsing error occured: " + exception.getMessage());
-		exception.printStackTrace();
-		parsingError = parsingErrorHappened = true;
-	}
-
-	/**
 	 * Check if letter is valid xml name character.
 	 *
 	 * @param letter The character that we want to check
@@ -416,82 +379,6 @@ public class XMLParser {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Check if letter is whitespace. The method considers
-	 * space, newline, tab, and carriage return as whitespace.
-	 *
-	 * @param letter The character that we want to check
-	 * @return True, if the letter was ascii whitespace
-	 */
-	private boolean isWhitespace(char letter) {
-		if(letter == ' ' || letter == '\t' || letter == '\n' ||
-		   letter == '\r') {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Read next character from file.
-	 * TODO: return boolean
-	 *
-	 * @return True, if the read was successful
-	 */
-	private boolean getNext() {
-		int result;
-		previousChar = currentChar;
-
-		try {
-			result = reader.read();
-		} catch(IOException e) {
-			currentChar = 0;
-			return false;
-		}
-
-		if(result != -1) {
-			currentChar = (char)result;
-		} else {
-			currentChar = 0;
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Skip over all following whitespace. The method throws exception if
-	 * the current char isn't whitespace and the atLeastOne parameter is set.
-	 */
-	private void skipWhitespaces(boolean atLeastOne) {
-		/* check that there is whitespace */
-		if(!isWhitespace(currentChar)) {
-			if(atLeastOne) {
-				appendLog("We expected whitespace, but there was " + currentChar);
-			}
-			return;
-		}
-
-		while(getNext() && isWhitespace(currentChar));
-	}
-
-	/**
-	 * Helper method for verifying the current character. The method also
-	 * gives helpful error message if the character wasn't what we expected.
-	 *
-	 * @param wanted The character we expect current character to be
-	 */
-	private void expectChar(char wanted) {
-		String errorString = "Expected '" + wanted + "' character, but was '" + (char)currentChar + "'.";
-
-		if(currentChar != wanted) {
-			System.out.print("Error in: ");
-			printCurrentNode();
-
-			throw new XMLParserError(errorString);
-		} else {
-			getNext();
-		}
 	}
 
 	/**
@@ -518,7 +405,7 @@ public class XMLParser {
 			} else {
 				parseTextContent();
 			}
-		} catch(XMLParserError error) {
+		} catch(ParserError error) {
 			appendLog(error);
 		}
 
@@ -643,7 +530,7 @@ public class XMLParser {
 	 */
 	private void parseElement() {
 		if(previousChar != '<') {
-			throw new XMLParserError("This method should be only used by parseTag.");
+			throw new ParserError("This method should be only used by parseTag.");
 		}
 
 		nodeType = NodeType.ELEMENT;
