@@ -60,7 +60,7 @@ public class SearcherTest implements SearchResultListener {
 		Assume.assumeTrue(searcher.hasCompleted());
 		return ret;
 	}
-	
+
 	private boolean getResults() {
 		return getResults(20);
 	}
