@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.lang.StringBuilder;
 
 /**
- * This class implements offline xml parser. It doesn't
+ * This class implements offline XML parser. It doesn't
  * allow custom markup defined inside file.
  *
  * The implementation tries to not allocate memory. That
@@ -35,10 +35,10 @@ import java.lang.StringBuilder;
  * after current node. Furthermore, you can query data only
  * from current node.
  *
- * This parser isn't designed for attribute heavy xml
- * documents. Only ascii characters are allowed inside
+ * This parser isn't designed for attribute heavy XML
+ * documents. Only ASCII characters are allowed inside
  * element nodes. The parser isn't full implementation
- * of xml spec.
+ * of XML spec.
  *
  * spec: http://www.w3.org/TR/REC-xml/
  */
@@ -113,6 +113,7 @@ public class XMLParser {
 	 * The method for starting the parser.
 	 *
 	 * @param stream The input stream which will be readed
+	 * @throws IOException
 	 */
 	public boolean parseFile(Reader reader) throws IOException {
 		this.reader  = new BufferedReader(reader);
@@ -410,8 +411,8 @@ public class XMLParser {
 	}
 
 	/**
-	 * Check if letter is whitespace. The method consideres
-	 * space, newline, tab, and carriage return as whitespaces.
+	 * Check if letter is whitespace. The method considers
+	 * space, newline, tab, and carriage return as whitespace.
 	 *
 	 * @param letter The character that we want to check
 	 * @return True, if the letter was ascii whitespace
@@ -451,7 +452,7 @@ public class XMLParser {
 	}
 
 	/**
-	 * Skip over all following whitespaces. The method throws exception if
+	 * Skip over all following whitespace. The method throws exception if
 	 * the current char isn't whitespace and the atLeastOne parameter is set.
 	 */
 	private void skipWhitespaces(boolean atLeastOne) {
@@ -486,8 +487,8 @@ public class XMLParser {
 	}
 
 	/**
-	 * Parse single node from xml document.
-	 * You propably should use alias method called getNextNode.
+	 * Parse single node from XML document.
+	 * You probably should use alias method called getNextNode.
 	 */
 	private boolean parseNode() {
 		/* initialize variables for current node */
@@ -557,7 +558,7 @@ public class XMLParser {
 	}
 
 	/**
-	 * Parse the xml declaration from reader.
+	 * Parse the XML declaration from reader.
 	 * This method should be only used in from parseTag.
 	 */
 	private void parseXMLDeclaration() {
@@ -787,13 +788,13 @@ public class XMLParser {
 	 * This method should be only used in parseNode.
 	 */
 	private void updateParentArray() {
-		/* update the current depth so that child nodes
-		   have their depth one greater than the parent */
+		/* update the current depth after a start tag */
 		if(wasStartTag) {
 			currentDepth++;
 			wasStartTag = false;
 		}
 
+		/* only element nodes can affect the node depth */
 		if(nodeType != NodeType.ELEMENT) {
 			return;
 		}
