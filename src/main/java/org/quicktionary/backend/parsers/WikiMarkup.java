@@ -19,20 +19,52 @@ package org.quicktionary.backend.parsers;
 import java.io.Reader;
 import java.io.IOException;
 
+import java.util.ArrayList;
+
 public class WikiMarkup {
 	private Reader reader;
 	private char currentChar;
 
-	public WikiMarkup(Reader reader) {
-		this.reader = reader;
+	public class TextFragment {
+		private int type;
+		private String content;
+		private ArrayList<TextFragment> childs;
+
+		public TextFragment(int type) {
+			this.type = type;
+			this.content = null;
+			this.childs = new ArrayList<TextFragment>();
+		}
+
+		public void setContent(String content) {
+			if(childs.size() != 0) {
+				throw new Error("TextFragment must have only child fragments or text content.");
+			}
+			this.content = content;
+		}
+		public void addFragment(TextFragment fragment) {
+			if(content != null) {
+				throw new Error("TextFragment must have only child fragments or text content.");
+			}
+			this.childs.add(fragment);
+		}
 	}
 
-	public void parse() {
+	public WikiMarkup() {
+		this.reader = null;
+	}
+
+	public boolean parse(Reader reader) {
 		this.currentChar = 0;
-		getNext();
+		this.reader = reader;
+
+		if(!getNext()) {
+			return false;
+		}
 
 		/*TODO: make this into loop */
 		parseLine();
+		return true;
 	}
 
 	private boolean getNext() {
