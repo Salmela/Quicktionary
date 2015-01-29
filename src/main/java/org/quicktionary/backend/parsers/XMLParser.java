@@ -282,7 +282,7 @@ public class XMLParser extends Parser {
 
 		/* save the old state */
 		saveTextContentOld = saveTextContent;
-		preserveWhitespacesOld = preserveWhitespaces;
+		preserveWhitespacesOld = this.preserveWhitespaces;
 		saveTextContent    = true;
 		this.preserveWhitespaces = preserveWhitespaces;
 
@@ -297,7 +297,7 @@ public class XMLParser extends Parser {
 
 		/* restore the old state */
 		saveTextContent = saveTextContentOld;
-		preserveWhitespaces = preserveWhitespacesOld;
+		this.preserveWhitespaces = preserveWhitespacesOld;
 
 		/* consume the end tag */
 		getNextNode();
