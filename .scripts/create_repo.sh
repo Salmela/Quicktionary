@@ -14,8 +14,9 @@ if [[ "x$1" == "xcreate" ]]; then
 	mkdir docs/cobertura
 	mkdir docs/pit
 
-	mv Quicktionary/TIME_USAGE docs/TimeUsage.md
-	mv Quicktionary/docs/manual docs/Manual.md
+	cp Quicktionary/.docs/time_usage.md docs/TimeUsage.md
+	cp Quicktionary/.docs/topic_definition docs/TopicDefinition.md
+	#mv Quicktionary/docs/manual docs/Manual.md
 	class_diagram=`ls -t Quicktionary/docs/class_diagram_*.png | head -1`
 	mv $class_diagram docs/
 fi
