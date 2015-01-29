@@ -24,6 +24,7 @@ import org.quicktionary.backend.Quicktionary;
  */
 public class Main {
 	static boolean useNativeFileDialog;
+	static boolean useHTML;
 	static String databasePath;
 	static String themeName;
 
@@ -31,6 +32,7 @@ public class Main {
 		useNativeFileDialog = false;
 		databasePath = null;
 		themeName = null;
+		useHTML = true;
 	}
 
 	/**
@@ -51,6 +53,10 @@ public class Main {
 			} else if(option.equals("--theme") ||
 			          option.equals("-t")) {
 				themeName = args[++i];
+
+			} else if(option.equals("--nohtml") ||
+			          option.equals("-h")) {
+				useHTML = false;
 
 			} else if(option.equals("--help") ||
 			          option.equals("-h")) {
