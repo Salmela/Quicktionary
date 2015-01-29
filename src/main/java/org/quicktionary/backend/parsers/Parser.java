@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 public abstract class Parser {
 	private BufferedReader reader;
+	private long address;
 
 	/**
 	 * The current char must be at the start of next node
@@ -58,6 +59,7 @@ public abstract class Parser {
 		this.reader  = new BufferedReader(reader);
 		previousChar = 0;
 		currentChar  = 0;
+		address      = 0;
 		parsingErrorHappened = false;
 
 		/* initialize the currentChar */
@@ -73,6 +75,10 @@ public abstract class Parser {
 		return currentChar != 0;
 	}
 
+	public long getAddress() {
+		return address;
+	}
+
 	public boolean parsingErrorHappened() {
 		return parsingErrorHappened;
 	}
@@ -81,14 +87,14 @@ public abstract class Parser {
 	 * The method prints parsing errors to log and the current stack trace.
 	 */
 	protected void appendLog(String message) {
-		System.out.println("Parsing error occured: " + message);
+		System.out.println("Parsing error occured at " + address + ": " + message);
 		String trace = Arrays.toString(Thread.currentThread().getStackTrace());
 		System.out.println(trace);
 		parsingError = parsingErrorHappened = true;
 	}
 
 	protected void appendLog(ParserError exception) {
-		System.out.println("Parsing error occured: " + exception.getMessage());
+		System.out.println("Parsing error occured at " + address + ": " + exception.getMessage());
 		exception.printStackTrace();
 		parsingError = parsingErrorHappened = true;
 	}
@@ -120,6 +126,7 @@ public abstract class Parser {
 
 		try {
 			result = reader.read();
+			address++;
 		} catch(IOException e) {
 			currentChar = 0;
 			return false;
