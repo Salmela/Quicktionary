@@ -24,14 +24,15 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Assume;
 
+import java.util.ArrayList;
+
 public class SearcherTest implements SearchResultListener {
 	private Searcher searcher;
-	private SearchItem results;
+	private WordDatabase database;
+	private ArrayList<SearchItem> results;
 
 	public SearcherTest() {
-		WordDatabase database;
-
-		results = new ArrayList<SearcherItem>();
+		results = new ArrayList<SearchItem>();
 		database = new WordDatabase(null);
 		searcher = new Searcher(null, database);
 		searcher.setResultListener(this);
@@ -41,28 +42,74 @@ public class SearcherTest implements SearchResultListener {
 		results.add(item);
 	}
 
-	private void getResults() {
-		searcher.requestSearchResults(0, 100);
-
-		/* this will fail when the searcher is threaded */
-		Assert.assumeTrue(searcher.hasCompleted());
+	public void resetSearchResults() {
+		results.add(null);
 	}
 
-	@test
-	public basicSearch() {
+	public void setStatistics(int totalCount, int time) {
+	}
+
+	private boolean getResults(int count) {
+		boolean ret;
+		ret = searcher.requestSearchResults(0, count);
+
+		if(!ret) {
+			Assert.assertTrue(searcher.hasCompleted());
+		}
+		/* this will fail when the searcher is threaded */
+		Assume.assumeTrue(searcher.hasCompleted());
+		return ret;
+	}
+	
+	private boolean getResults() {
+		return getResults(20);
+	}
+
+	@Test
+	public void hasCompletedIsTrueAfterInit() {
+		Assert.assertTrue(searcher.hasCompleted());
+	}
+
+	@Test
+	public void emptySearchResults() {
+		searcher.search("hello");
+
+		getResults();
+		Assert.assertEquals(1, results.size());
+	}
+
+	@Test
+	public void checkThatResetHappens() {
+		searcher.search("hello");
+
+		getResults();
+		Assert.assertEquals(null, results.get(0));
+	}
+
+	@Test
+	public void returnFalseAfterNegativeResultCount() {
+		searcher.search("hello");
+
+		Assert.assertFalse(getResults(-50));
+	}
+
+	@Test
+	public void basicSearch() {
 		database.newWord("hello");
 		searcher.search("hello");
 
 		getResults();
-		Assert.assertEqual(1, results.length);
-		Assert.assertEqual("hello", results.get(0).getWord());
+		Assert.assertEquals("hello", results.get(1).getWord());
 	}
 
-	@test
-	public emptySearchResults() {
+	@Test
+	public void givesOnlyWantedAmmounOfResults() {
+		for(int i = 0; i < 30; i++) {
+			database.newWord("hello " + i);
+		}
 		searcher.search("hello");
 
 		getResults();
-		Assert.assertEqual(0, results.length);
+		Assert.assertEquals(20 + 1, results.size());
 	}
 }
