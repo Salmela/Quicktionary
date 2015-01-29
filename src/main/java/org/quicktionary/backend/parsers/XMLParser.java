@@ -55,6 +55,7 @@ public class XMLParser {
 	private char currentChar;
 	private char previousChar;
 	private boolean parsingError;
+	private boolean parsingErrorHappened;
 	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
 	private boolean verbose;
@@ -107,6 +108,7 @@ public class XMLParser {
 		reader       = null;
 		currentChar  = 0;
 		verbose = false;
+		parsingErrorHappened = false;
 	}
 
 	/**
@@ -120,8 +122,9 @@ public class XMLParser {
 		previousChar = 0;
 		currentChar  = 0;
 		currentDepth = 0;
-		preserveWhitespaces = false;
-		saveTextContent     = false;
+		preserveWhitespaces  = false;
+		saveTextContent      = false;
+		parsingErrorHappened = false;
 
 		/* initialize the currentChar */
 		if(!getNext()) {
@@ -134,6 +137,10 @@ public class XMLParser {
 
 	public boolean isInitialized() {
 		return currentChar != 0;
+	}
+
+	public boolean parsingErrorHappened() {
+		return parsingErrorHappened;
 	}
 
 	/**
@@ -379,13 +386,13 @@ public class XMLParser {
 		System.out.println("Parsing error occured: " + message);
 		String trace = Arrays.toString(Thread.currentThread().getStackTrace());
 		System.out.println(trace);
-		parsingError = true;
+		parsingError = parsingErrorHappened = true;
 	}
 
-	private void appendLog(Exception exception) {
+	private void appendLog(XMLParserError exception) {
 		System.out.println("Parsing error occured: " + exception.getMessage());
 		exception.printStackTrace();
-		parsingError = true;
+		parsingError = parsingErrorHappened = true;
 	}
 
 	/**
