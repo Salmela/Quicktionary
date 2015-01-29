@@ -459,7 +459,7 @@ public class XMLParser {
 		/* check that there is whitespace */
 		if(!isWhitespace(currentChar)) {
 			if(atLeastOne) {
-				throw new Error("We expected whitespace, but there was " + currentChar);
+				appendLog("We expected whitespace, but there was " + currentChar);
 			}
 			return;
 		}
@@ -480,7 +480,7 @@ public class XMLParser {
 			System.out.print("Error in: ");
 			printCurrentNode();
 
-			throw new Error(errorString);
+			throw new XMLParserError(errorString);
 		} else {
 			getNext();
 		}
@@ -510,8 +510,8 @@ public class XMLParser {
 			} else {
 				parseTextContent();
 			}
-		} catch(Exception exception) {
-			appendLog(exception);
+		} catch(XMLParserError error) {
+			appendLog(error);
 		}
 
 		if(parsingError) {
@@ -524,6 +524,7 @@ public class XMLParser {
 		/* check if the nodes are before or after the root node */
 		if(parentNodes.size() == 0) {
 			if(!isValidRootNode()) {
+				appendLog("Text node can't be outside of root node");
 				return false;
 			}
 		}
@@ -618,10 +619,14 @@ public class XMLParser {
 				dashCount++;
 				getNext();
 				/* exit after atleast two dashes followed by greater than sign '-->' */
-				if(dashCount >= 2 && currentChar == '>') break;
+				if(dashCount >= 2 && currentChar == '>') return;
 			}
 
 		} while(getNext());
+
+		if(currentChar == 0) {
+			appendLog("The comment doesn't have ending pattern");
+		}
 	}
 
 	/**
@@ -630,7 +635,7 @@ public class XMLParser {
 	 */
 	private void parseElement() {
 		if(previousChar != '<') {
-			throw new Error("This method should be only used by parseTag.");
+			throw new XMLParserError("This method should be only used by parseTag.");
 		}
 
 		nodeType = NodeType.ELEMENT;
@@ -649,6 +654,13 @@ public class XMLParser {
 				tagName.append((char)currentChar);
 				getNext();
 			}
+		} else {
+			appendLog("Invalid character in tag name");
+			return;
+		}
+		if(isAlphabet(currentChar, false)) {
+			appendLog("Invalid character in tag name");
+			return;
 		}
 		tagNameId = getTagNameId(tagName);
 
