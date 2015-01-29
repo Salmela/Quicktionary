@@ -20,10 +20,11 @@ import java.io.Reader;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.lang.StringBuilder;
 
-public class WikiMarkup {
-	private Reader reader;
-	private char currentChar;
+public class WikiMarkup extends Parser {
+	private final StringBuilder content;
+	private ArrayList<TextFragment> fragments;
 
 	public class TextFragment {
 		private int type;
@@ -51,36 +52,23 @@ public class WikiMarkup {
 	}
 
 	public WikiMarkup() {
-		this.reader = null;
+		super();
+		content = new StringBuilder(256);
+		fragments = null;
 	}
 
-	public boolean parse(Reader reader) {
-		this.currentChar = 0;
-		this.reader = reader;
+	public boolean parse(Reader reader) throws IOException {
+		boolean status;
 
-		if(!getNext()) {
+		status = super.parse(reader);
+		if(!status) {
 			return false;
 		}
+
+		fragments = new ArrayList<TextFragment>();
 
 		/*TODO: make this into loop */
 		parseLine();
-		return true;
-	}
-
-	private boolean getNext() {
-		int result;
-
-		currentChar = '\0';
-		try {
-			result = reader.read();
-		} catch(IOException e) {
-			return false;
-		}
-
-		if(result == -1) {
-			return false;
-		}
-		currentChar = (char)result;
 		return true;
 	}
 
@@ -93,10 +81,10 @@ public class WikiMarkup {
 			//parseRuler();
 			break;
 		case '*':
-			//parseBulletItem();
+			//parseListItem();
 			break;
 		case '#':
-			//parseNumberedItem();
+			//parseListItem();
 			break;
 		case ':':
 			//parseIndentation();
@@ -126,5 +114,47 @@ public class WikiMarkup {
 		default:
 			break;
 		}
+	}
+
+	private void parseHeader() {
+		TextFragment fragment;
+		int i;
+
+		//wasChar('=');
+		for(i = 1; i < 6; i++) {
+			if(currentChar != '=') break;
+		}
+
+		expectChar(' ');
+		content.setLength(0);
+		while(currentChar == '=') {
+			content.append(currentChar);
+			getNext();
+		}
+		//wasChar(' ');
+
+		for(; i >= 0; i--) {
+			if(currentChar != '=') break;
+		}
+		if(i == 0) {
+			appendLog("Invalid formatting of header");
+		}
+		expectChar('\n');
+
+		fragment = new TextFragment(0);
+		fragments.add(fragment);
+		fragment.setContent(content.toString());
+
+		return;
+	}
+
+	private void parseRuler() {
+		//wasChar('-');
+		if(currentChar != '-') {
+			return;
+		}
+	}
+
+	private void parseBulletItem() {
 	}
 }
