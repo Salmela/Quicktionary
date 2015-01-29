@@ -105,7 +105,7 @@ public class XMLParser {
 		attributeBuilder = new StringBuilder(64);
 		textContent  = new StringBuilder(4096);
 		reader       = null;
-		currentChar  = '\0';
+		currentChar  = 0;
 		verbose = false;
 	}
 
@@ -116,8 +116,8 @@ public class XMLParser {
 	 */
 	public boolean parseFile(Reader reader) throws IOException {
 		this.reader  = new BufferedReader(reader);
-		previousChar = '\0';
-		currentChar  = '\0';
+		previousChar = 0;
+		currentChar  = 0;
 		currentDepth = 0;
 		preserveWhitespaces = false;
 		saveTextContent     = false;
@@ -132,7 +132,7 @@ public class XMLParser {
 	}
 
 	public boolean isInitialized() {
-		return currentChar != '\0';
+		return currentChar != 0;
 	}
 
 	/**
@@ -437,14 +437,14 @@ public class XMLParser {
 		try {
 			result = reader.read();
 		} catch(IOException e) {
-			currentChar = '\0';
+			currentChar = 0;
 			return false;
 		}
 
 		if(result != -1) {
 			currentChar = (char)result;
 		} else {
-			currentChar = '\0';
+			currentChar = 0;
 			return false;
 		}
 		return true;
@@ -502,7 +502,7 @@ public class XMLParser {
 		}
 
 		try {
-			if(currentChar == -1) {
+			if(currentChar == 0) {
 				return false;
 			} else if(currentChar == '<') {
 				parseTag();
@@ -715,7 +715,8 @@ public class XMLParser {
 
 		/* get the value */
 		attributeBuilder.setLength(0);
-		while(currentChar != quoteChar && currentChar != '<' && currentChar != -1) {
+		while(currentChar != quoteChar && currentChar != 0 &&
+		      currentChar != '<' && currentChar != '>') {
 			/* push this char to element name */
 			attributeBuilder.append((char)currentChar);
 			getNext();
@@ -738,7 +739,7 @@ public class XMLParser {
 		/* reset the buffer */
 		textContent.setLength(0);
 
-		while(currentChar != -1 && currentChar != '<') {
+		while(currentChar != 0 && currentChar != '<') {
 			/* check if we want to just ignore all text content */
 			if(!saveTextContent) {
 				getNext();
@@ -750,7 +751,7 @@ public class XMLParser {
 				/* get next non whitespace */
 				skipWhitespaces(true);
 
-				if(currentChar == -1 || currentChar == '<') {
+				if(currentChar == 0 || currentChar == '<') {
 					return;
 				}
 				textContent.append(' ');
