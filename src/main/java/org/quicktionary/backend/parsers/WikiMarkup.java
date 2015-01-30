@@ -75,16 +75,19 @@ public class WikiMarkup extends Parser {
 	private void parseLine() {
 		switch(currentChar) {
 		case '=':
-			//parseHeader();
+			parseHeader();
 			break;
 		case '-':
-			//parseRuler();
+			parseRuler();
 			break;
 		case '*':
 			//parseListItem();
 			break;
 		case '#':
 			//parseListItem();
+			break;
+		case ';':
+			//parseDefinition();
 			break;
 		case ':':
 			//parseIndentation();
@@ -103,7 +106,7 @@ public class WikiMarkup extends Parser {
 			//parseInline();
 			break;
 		case '[':
-			//parseLink();
+			parseLink();
 			break;
 		case '{':
 			//parseTemplate();
@@ -120,7 +123,7 @@ public class WikiMarkup extends Parser {
 		TextFragment fragment;
 		int i;
 
-		//wasChar('=');
+		expectChar('=');
 		for(i = 1; i < 6; i++) {
 			if(currentChar != '=') break;
 			getNext();
@@ -142,19 +145,41 @@ public class WikiMarkup extends Parser {
 		expectChar('\n');
 
 		fragment = new TextFragment(0);
-		fragments.add(fragment);
 		fragment.setContent(content.toString());
+		fragments.add(fragment);
 
 		return;
 	}
 
 	private void parseRuler() {
-		//wasChar('-');
+		expectChar('-');
 		if(currentChar != '-') {
 			return;
 		}
 	}
 
-	private void parseBulletItem() {
+	private void parseListItem() {
+	}
+
+	private parseLink() {
+		expectChar('[');
+		expectChar('[');
+
+
+		content.setLength(0);
+		while(currentChar != ']' && currentChar != '|') {
+			content.append(currentChar);
+			getNext();
+		}
+
+		fragment = new TextFragment(1);
+		fragment.setContent(content.toString());
+		fragments.add(fragment);
+
+		if(currentChar == '|') {
+		}
+
+		expectChar(']');
+		expectChar(']');
 	}
 }
