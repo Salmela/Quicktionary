@@ -18,14 +18,16 @@ SRC_DIRS=src/main/java/org/quicktionary/gui/ \\
 SRC = \$(shell find \$(SRC_DIRS) -name '*.java')
 
 all:
-	rm -f ./gui ./backend ./tests
-	ln -s ./src/main/java/org/quicktionary/gui ./gui
-	ln -s ./src/main/java/org/quicktionary/backend ./backend
-	ln -s ./src/test/java/org/quicktionary/ ./tests
 	$compiler -g -O0 -o quicktionary-gui --main=org.quicktionary.gui.Main --bounds-check \$(SRC)
+	$compiler -g -O0 -o test --main=org.quicktionary.gui.Test --bounds-check \$(SRC)
 EOF
 
 echo "$text" > Makefile
-mv .LICENSE LICENSE
-mv .README.md README.md
-mv .docs docs
+rm -f ./gui ./backend ./tests LICENSE README.md docs
+ln -s ./src/main/java/org/quicktionary/gui ./gui
+ln -s ./src/main/java/org/quicktionary/backend ./backend
+ln -s ./src/test/java/org/quicktionary/ ./tests
+
+ln -s .LICENSE LICENSE
+ln -s .README.md README.md
+ln -s .docs docs
