@@ -1,7 +1,7 @@
 #!/bin/bash
 
 folder_name=`basename "$PWD"`
-if [[ "x$folder_name" != "xQuicktionary" ]]; then
+if [[ "x$folder_name" != "xQuicktionary" && "x$folder_name" != "xquicktionary" ]]; then
 	echo "You are in wrong directory"
 	echo "You are in $folder_name"
 	exit
