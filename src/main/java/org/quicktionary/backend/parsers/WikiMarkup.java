@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.lang.StringBuilder;
 
 public class WikiMarkup extends Parser {
+	private final StringBuilder lineBuffer;
 	private final StringBuilder content;
 	private ArrayList<MarkupStart> lineMarkup;
 	private TextFragment rootFragment;
@@ -93,6 +94,7 @@ public class WikiMarkup extends Parser {
 	public WikiMarkup() {
 		super();
 		content = new StringBuilder(256);
+		lineBuffer = new StringBuilder(256);
 		lineMarkup = new ArrayList<MarkupStart>(16);
 
 		rootFragment = null;
@@ -140,6 +142,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseLine() {
+		lineBuffer.setLength(0);
 		lineMarkup.clear();
 
 		/* trim the whitespace from the start of line */
@@ -188,6 +191,26 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseMarkup() {
+		boolean wasWhitespace = false;
+		do {
+			/* return from the function at the newline character */
+			if(currentChar == '\n') {
+				return;
+			/* ignore whitespace */
+			} else if(isWhitespace(currentChar)) {
+				wasWhitespace = true;
+				continue;
+			}
+
+			/* replace multiple whitespaces with one space character */
+			if(wasWhitespace) {
+				lineBuffer.append(' ');
+				wasWhitespace = false;
+			}
+
+			/* add every non-whitespace character into lineBuffer */
+			lineBuffer.append(currentChar);
+		} while(getNext());
 	}
 
 	}
