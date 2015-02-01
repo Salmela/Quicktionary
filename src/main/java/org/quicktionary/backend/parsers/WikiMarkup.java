@@ -28,14 +28,20 @@ public class WikiMarkup extends Parser {
 	private SymbolType[] symbolLut;
 
 	public class TextFragment {
+		private TextFragment parent;
 		private int type;
 		private String content;
 		private ArrayList<TextFragment> childs;
 
-		public TextFragment(int type) {
+		public TextFragment(TextFragment parent, int type) {
+			this.parent = parent;
 			this.type = type;
 			this.content = null;
 			this.childs = new ArrayList<TextFragment>();
+
+			if(parent != null) {
+				parent.addFragment(this);
+			}
 		}
 
 		public void setContent(String content) {
@@ -50,6 +56,10 @@ public class WikiMarkup extends Parser {
 				throw new Error("TextFragment must have only child fragments or text content.");
 			}
 			this.childs.add(fragment);
+		}
+
+		public TextFragment getParent() {
+			return parent;
 		}
 	}
 
