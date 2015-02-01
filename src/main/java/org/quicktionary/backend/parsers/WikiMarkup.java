@@ -24,7 +24,8 @@ import java.lang.StringBuilder;
 
 public class WikiMarkup extends Parser {
 	private final StringBuilder content;
-	private ArrayList<TextFragment> fragments;
+	private TextFragment rootFragment;
+	private TextFragment currentFragment;
 	private SymbolType[] symbolLut;
 
 	public class TextFragment {
@@ -66,7 +67,9 @@ public class WikiMarkup extends Parser {
 	public WikiMarkup() {
 		super();
 		content = new StringBuilder(256);
-		fragments = null;
+
+		rootFragment = null;
+		currentFragment = null;
 
 		createSymbolLut();
 	}
@@ -101,7 +104,8 @@ public class WikiMarkup extends Parser {
 			return false;
 		}
 
-		fragments = new ArrayList<TextFragment>();
+		rootFragment = new TextFragment(null, 0);
+		currentFragment = rootFragment;
 
 		/*TODO: make this into loop */
 		parseLine();
