@@ -210,9 +210,33 @@ public class WikiMarkup extends Parser {
 
 			/* add every non-whitespace character into lineBuffer */
 			lineBuffer.append(currentChar);
+
+			/* parse a markup */
+			if(currentChar < symbolLut.length && symbolLut[currentChar] != null) {
+				handleInlineMarkup(symbolLut[currentChar]);
+			}
 		} while(getNext());
 	}
 
+	private void handleInlineMarkup(SymbolType symbol) {
+		if(lineMarkup.size() > 0) {
+			MarkupStart markup;
+			int lastMarkupIndex = lineMarkup.size() - 1;
+
+			markup = lineMarkup.get(lastMarkupIndex);
+
+			if(previousChar == currentChar && symbol.multiple) {
+				markup.count++;
+				return;
+			}
+		}
+
+		MarkupStart start = new MarkupStart();
+		start.location = lineBuffer.length();
+		start.sourceLocation = getAddress();
+		start.symbol = symbol;
+		start.count = 1;
+		lineMarkup.add(start);
 	}
 
 
