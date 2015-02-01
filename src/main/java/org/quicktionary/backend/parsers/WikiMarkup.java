@@ -24,6 +24,7 @@ import java.lang.StringBuilder;
 
 public class WikiMarkup extends Parser {
 	private final StringBuilder content;
+	private ArrayList<MarkupStart> lineMarkup;
 	private TextFragment rootFragment;
 	private TextFragment currentFragment;
 	private SymbolType[] symbolLut;
@@ -64,9 +65,35 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
+	private class MarkupStart {
+		public long location;
+		public long sourceLocation;
+		public SymbolType symbol;
+		public int count;
+		public int length;
+	}
+
+	private class SymbolType {
+		public char character;
+		public boolean multiple;
+		public boolean end;
+		public int priority;
+
+		public SymbolType(char character, boolean multiple, int priority, boolean end) {
+			this.character = character;
+			this.multiple = multiple;
+			this.priority = priority;
+			this.end = end;
+		}
+		public SymbolType(char character, boolean multiple, int priority) {
+			this(character, multiple, priority, false);
+		}
+	}
+
 	public WikiMarkup() {
 		super();
 		content = new StringBuilder(256);
+		lineMarkup = new ArrayList<MarkupStart>(16);
 
 		rootFragment = null;
 		currentFragment = null;
@@ -113,6 +140,8 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseLine() {
+		lineMarkup.clear();
+
 		/* trim the whitespace from the start of line */
 		do {
 			if(!isWhitespace(currentChar)) break;
@@ -150,6 +179,12 @@ public class WikiMarkup extends Parser {
 		/*TODO: create new paragraph if neaded */
 
 		parseMarkup();
+
+		/*TODO: handle partial markups */
+		for(int i = lineMarkup.size() - 1; i >= 0; i--) {
+			MarkupStart start = lineMarkup.get(i);
+			System.out.println("markupStart " + start.sourceLocation + ", symbol: " + start.symbol.character + ", count: " + start.count);
+		}
 	}
 
 	private void parseMarkup() {
