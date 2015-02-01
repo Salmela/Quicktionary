@@ -52,6 +52,41 @@ public class WikiMarkupTest {
 
 	@Test
 	public void headerAndText() {
-		Assert.assertTrue(parse("==hello==\nhe"));
+		parse("==hello==\nhe");
+	}
+
+	@Test
+	public void headerAndTextWithSpaces() {
+		parse("== hello ==\nhe");
+	}
+
+	@Test
+	public void headerWithOneEqualSignAtStart() {
+		parse("=== hello ==\nhe");
+	}
+
+	@Test
+	public void headerWithOneEqualSignAtEnd() {
+		parse("== hello ===\nhe");
+	}
+
+	@Test
+	public void headerWithNonEndingTextStyleMarkup() {
+		parse("== he'''llo ==\nhe");
+	}
+
+	@Test
+	public void linkAndTemplateMerged() {
+		parse("te[[st {{smallcaps| thin]]g}}.");
+	}
+
+	@Test
+	public void linkWithNonEndingBold() {
+		parse("[[li'''nk]].");
+	}
+
+	@Test
+	public void linkWithBold() {
+		parse("he'''llo, [[link]] this.");
 	}
 }
