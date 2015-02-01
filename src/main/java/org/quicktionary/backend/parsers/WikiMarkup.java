@@ -25,6 +25,7 @@ import java.lang.StringBuilder;
 public class WikiMarkup extends Parser {
 	private final StringBuilder content;
 	private ArrayList<TextFragment> fragments;
+	private SymbolType[] symbolLut;
 
 	public class TextFragment {
 		private int type;
@@ -43,6 +44,7 @@ public class WikiMarkup extends Parser {
 			}
 			this.content = content;
 		}
+
 		public void addFragment(TextFragment fragment) {
 			if(content != null) {
 				throw new Error("TextFragment must have only child fragments or text content.");
@@ -55,6 +57,30 @@ public class WikiMarkup extends Parser {
 		super();
 		content = new StringBuilder(256);
 		fragments = null;
+
+		createSymbolLut();
+	}
+
+	/**
+	 * Create the look up table that is used in parseMarkup.
+	 */
+	public void createSymbolLut() {
+		symbolLut = new SymbolType[127];
+		Arrays.fill(symbolLut, null);
+		/* text style */
+		symbolLut['\''] = new SymbolType('\'', true, 0, true);
+		/* link */
+		symbolLut['['] = new SymbolType('[', true, 1);
+		symbolLut[']'] = new SymbolType(']', true, 1, true);
+		/* html tag */
+		symbolLut['<'] = new SymbolType('<', false, 2);
+		symbolLut['>'] = new SymbolType('>', false, 2, true);
+		/* template */
+		symbolLut['{'] = new SymbolType('{', true, 3);
+		symbolLut['}'] = new SymbolType('}', true, 3, true);
+		/* header end */
+		symbolLut['='] = new SymbolType('=', true, 0, true);
+
 	}
 
 	public boolean parse(Reader reader) throws IOException {
