@@ -153,85 +153,11 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseMarkup() {
-		switch(currentChar) {
-		case '\'':
-			//parseInline();
-			break;
-		case '[':
-			parseLink();
-			break;
-		case '{':
-			//parseTemplate();
-			break;
-		case '<':
-			//parseHTML();
-			break;
-		default:
-			break;
-		}
 	}
 
-	private void parseHeader() {
-		TextFragment fragment;
-		int i;
-
-		expectChar('=');
-		for(i = 1; i < 6; i++) {
-			if(currentChar != '=') break;
-			getNext();
-		}
-
-		content.setLength(0);
-		while(currentChar == '=') {
-			content.append(currentChar);
-			getNext();
-		}
-
-		for(; i >= 0; i--) {
-			if(currentChar != '=') break;
-			getNext();
-		}
-		if(i == 0) {
-			appendLog("Invalid formatting of header");
-		}
-		expectChar('\n');
-
-		fragment = new TextFragment(0);
-		fragment.setContent(content.toString());
-		fragments.add(fragment);
-
-		return;
 	}
 
-	private void parseRuler() {
-		expectChar('-');
-		if(currentChar != '-') {
-			return;
-		}
-	}
-
-	private void parseListItem() {
-	}
-
-	private parseLink() {
-		expectChar('[');
-		expectChar('[');
 
 
-		content.setLength(0);
-		while(currentChar != ']' && currentChar != '|') {
-			content.append(currentChar);
-			getNext();
-		}
-
-		fragment = new TextFragment(1);
-		fragment.setContent(content.toString());
-		fragments.add(fragment);
-
-		if(currentChar == '|') {
-		}
-
-		expectChar(']');
-		expectChar(']');
 	}
 }
