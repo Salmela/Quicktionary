@@ -113,30 +113,42 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseLine() {
+		/* trim the whitespace from the start of line */
+		do {
+			if(!isWhitespace(currentChar)) break;
+		} while(getNext());
+
 		switch(currentChar) {
+		/* header */
 		case '=':
-			parseHeader();
 			break;
+		/* ruler */
 		case '-':
-			parseRuler();
+			//parseRuler();
 			break;
+		/* bullet list */
 		case '*':
-			//parseListItem();
-			break;
+		/* numbered list */
 		case '#':
+		/* definition list */
+		case ';':
+		/* indentation */
+		case ':':
 			//parseListItem();
 			break;
-		case ';':
-			//parseDefinition();
+		/* paragraph */
+		case '\n':
 			break;
-		case ':':
-			//parseIndentation();
+		/* table */
+		case '{':
+			//parseTable();
 			break;
 		default:
 			break;
 		}
 
-		/*TODO: make this into loop */
+		/*TODO: create new paragraph if neaded */
+
 		parseMarkup();
 	}
 
