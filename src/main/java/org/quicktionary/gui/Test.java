@@ -20,7 +20,12 @@ public class Test {
 		parserWiki = new WikiMarkup();
 
 		xmlParserTest();
+
 		wikiParserTest();
+		wikiParserTest2();
+		wikiParserTest3();
+		wikiParserTest4();
+		wikiParserTest5();
 	}
 
 	public static void main(String[] args) {
@@ -35,6 +40,7 @@ public class Test {
 	}
 
 	public void parse(String wikiText) {
+		System.out.println("\nWiki test: " + wikiText);
 		try {
 			parserWiki.parse(new StringReader(wikiText));
 		} catch(Exception e) {
@@ -50,5 +56,17 @@ public class Test {
 
 	public void wikiParserTest() {
 		parse("== t'''est''' == \nhello");
+	}
+	public void wikiParserTest2() {
+		parse("helloha{{lgh|uh'''gr}}eugh");
+	}
+	public void wikiParserTest3() {
+		parse("hello[[ha{{lgh|uh]]gr}}eugh");
+	}
+	public void wikiParserTest4() {
+		parse("hello{{hal|gh[[uh}}gr]]eugh");
+	}
+	public void wikiParserTest5() {
+		parse("hello [uhgr]] eugh");
 	}
 }
