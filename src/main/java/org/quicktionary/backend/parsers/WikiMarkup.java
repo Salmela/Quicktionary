@@ -218,6 +218,8 @@ public class WikiMarkup extends Parser {
 				handleInlineMarkup(symbolLut[currentChar]);
 			}
 		} while(getNext());
+
+		handlePreviousMarkup();
 	}
 
 	private MarkupStart appendMarkupStart(SymbolType symbol) {
@@ -244,12 +246,45 @@ public class WikiMarkup extends Parser {
 				markup.count++;
 				return;
 			}
+
+			handlePreviousMarkup();
 		}
 
 		start = appendMarkupStart(symbol);
 
 
 		System.out.println("Symbol: " + currentChar + " location: " + start.location);
+	}
+
+	private void handlePreviousMarkup() {
+		MarkupStart start, markup;
+		int lastMarkupIndex = lineMarkup.size() - 1;
+
+		if(lineMarkup.size() == 0) {
+			return;
+		}
+
+		markup = lineMarkup.get(lastMarkupIndex);
+
+		/* handle only the end markups */
+		if(!markup.symbol.end) {
+			return;
+		}
+
+		System.out.println("Handle previous markup " + markup.symbol.character);
+
+		switch(markup.symbol.character) {
+		case '\'':
+			break;
+		case ']':
+			break;
+		case '}':
+			break;
+		case '>':
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void parseHeaderMarkupStart() {
