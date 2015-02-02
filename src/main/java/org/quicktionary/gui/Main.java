@@ -54,7 +54,7 @@ public class Main {
 			          option.equals("-t")) {
 				themeName = args[++i];
 
-			} else if(option.equals("--nohtml") ||
+			} else if(option.equals("--no-html") ||
 			          option.equals("-h")) {
 				useHTML = false;
 
