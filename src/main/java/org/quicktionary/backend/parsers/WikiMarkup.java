@@ -154,6 +154,7 @@ public class WikiMarkup extends Parser {
 		switch(currentChar) {
 		/* header */
 		case '=':
+			parseHeaderMarkupStart();
 			break;
 		/* ruler */
 		case '-':
@@ -219,7 +220,20 @@ public class WikiMarkup extends Parser {
 		} while(getNext());
 	}
 
+	private MarkupStart appendMarkupStart(SymbolType symbol) {
+		MarkupStart start = new MarkupStart();
+		start.location = lineBuffer.length() - 1;
+		start.sourceLocation = getAddress();
+		start.symbol = symbol;
+		start.count = 1;
+		start.length = -1;
+		lineMarkup.add(start);
+		return start;
+	}
+
 	private void handleInlineMarkup(SymbolType symbol) {
+		MarkupStart start;
+
 		if(lineMarkup.size() > 0) {
 			MarkupStart markup;
 			int lastMarkupIndex = lineMarkup.size() - 1;
@@ -232,15 +246,24 @@ public class WikiMarkup extends Parser {
 			}
 		}
 
-		MarkupStart start = new MarkupStart();
-		start.location = lineBuffer.length();
-		start.sourceLocation = getAddress();
-		start.symbol = symbol;
-		start.count = 1;
-		lineMarkup.add(start);
+		start = appendMarkupStart(symbol);
+
+
+		System.out.println("Symbol: " + currentChar + " location: " + start.location);
 	}
 
+	private void parseHeaderMarkupStart() {
+		SymbolType equalSymbol = new SymbolType('=', true, 0);
+		MarkupStart start;
+		int i;
 
-
+		for(i = 0; i < 6; i++) {
+			if(currentChar != '=') break;
+			lineBuffer.append(currentChar);
+			getNext();
+		}
+		start = appendMarkupStart(equalSymbol);
+		start.count = i;
+		System.out.println("Header parsed " + i + ".");
 	}
 }
