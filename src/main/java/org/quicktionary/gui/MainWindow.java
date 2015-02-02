@@ -30,6 +30,9 @@ import org.quicktionary.backend.Quicktionary;
 public class MainWindow extends JFrame implements ActionListener {
 	static final long serialVersionUID = 1L;
 
+	private final String appTitle;
+	private String pageTitle;
+
 	private Quicktionary dictionary;
 	private boolean showSearchResults;
 	private StyleManager styleManager;
@@ -43,7 +46,10 @@ public class MainWindow extends JFrame implements ActionListener {
 		this.dictionary = dictionary;
 		this.showSearchResults = false;
 
-		setTitle("Quicktionary");
+		appTitle = "Quicktionary";
+		pageTitle = null;
+
+		setTitle(appTitle);
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -164,13 +170,19 @@ public class MainWindow extends JFrame implements ActionListener {
 		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
+	private String capitalizeWord(String word) {
+		return word.substring(0, 1).toUpperCase() + word.substring(1);
+	}
+
 	private void changeView(boolean changeToSearchResults) {
 		showSearchResults = changeToSearchResults;
 
 		if(changeToSearchResults) {
 			mainPane.setViewportView(searchResults);
+			setTitle(appTitle + " \u2014 Search results");
 		} else {
 			mainPane.setViewportView(pageArea);
+			setTitle(appTitle + " \u2014 " + pageTitle);
 		}
 	}
 
@@ -196,6 +208,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			pageEvent = (SearchResults.PageLoadEvent)event;
 			text = dictionary.getPageContent(pageEvent.getSearchItem(), searchBox.getText());
 			pageArea.setText(text);
+			pageTitle = capitalizeWord(pageEvent.getSearchItem().getWord());
 			changeView(false);
 
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
