@@ -187,7 +187,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			System.out.println("main window: search event " + searchBox.getText());
 
 			//dictionary.search(searchBox.getText());
-			//show the first item's page
+			/*TODO: show the first item's page */
 
 		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
 			SearchResults.PageLoadEvent pageEvent;
@@ -209,6 +209,23 @@ public class MainWindow extends JFrame implements ActionListener {
 
 			dataEvent = (SettingsButton.ReadDatabaseEvent) event;
 			dictionary.readDatabase(dataEvent.getFilename());
+
+		} else if(event.getActionCommand() == SettingsButton.ASK_NEW_WORD_EVENT) {
+				String name = (String)JOptionPane.showInputDialog(this,
+				                      "Create a new word.\nWrite the name of the word into textbox?",
+				                      "Create a word", JOptionPane.PLAIN_MESSAGE, null, null, null);
+				if(name != null) {
+					dictionary.newWord(name);
+				}
+
+		} else if(event.getActionCommand() == SettingsButton.ASK_REMOVE_WORD_EVENT) {
+				String word = null;
+				int res = JOptionPane.showConfirmDialog(this,
+				          "Are you sure that you wan't to remove word " + word + "?",
+				          "Remove a word", JOptionPane.YES_NO_OPTION);
+				if(res == JOptionPane.YES_OPTION) {
+					dictionary.removeWord(word);
+				}
 
 		} else {
 			System.out.println("main window: unknown event (" +
