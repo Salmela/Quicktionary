@@ -19,6 +19,7 @@ package org.quicktionary.backend.parsers;
 import java.io.Reader;
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.lang.StringBuilder;
 
