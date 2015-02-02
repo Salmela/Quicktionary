@@ -62,7 +62,10 @@ public class Quicktionary {
 		parser = new WikiDBReader(database);
 		thread = new Thread(parser);
 
-		parser.check(filename);
+		if(! parser.check(filename)) {
+			/* send this info to the gui */
+			System.out.println("The file couldn't be opened.");
+		}
 		thread.start();
 	}
 
