@@ -170,6 +170,9 @@ public class MainWindow extends JFrame implements ActionListener {
 		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
+	/**
+	 * Change the first letter of the word into upper case.
+	 */
 	private String capitalizeWord(String word) {
 		return word.substring(0, 1).toUpperCase() + word.substring(1);
 	}
