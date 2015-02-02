@@ -100,9 +100,6 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 
 		Container pane;
 		pane = getContentPane();
-		//pane = new JPanel();
-		//getContentPane().add(pane);
-		//pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 		pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 		pane.add(new JLabel(descString));
 		pane.add(fileSelectorBox);
