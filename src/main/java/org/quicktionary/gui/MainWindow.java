@@ -226,6 +226,9 @@ public class MainWindow extends JFrame implements ActionListener {
 			if(res == JOptionPane.YES_OPTION) {
 				dictionary.removeWord(word);
 			}
+
+		} else if(event.getActionCommand() == SettingsButton.OPEN_PREFERENCES_EVENT) {
+			new SettingsDialog(this, this);
 		} else {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");

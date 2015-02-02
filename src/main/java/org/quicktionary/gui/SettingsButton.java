@@ -39,10 +39,10 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 	static final String PREFERENCES_ITEM_EVENT   = "preferences-item-event";
 
 	/* events send to the parent class */
-	static final String ASK_NEW_WORD_EVENT    = "new-word-event";
-	static final String ASK_REMOVE_WORD_EVENT = "remove-word-event";
-	static final String READ_DATABASE_EVENT   = "read-database-event";
-	static final String PREFERENCES_EVENT     = "preferences-event";
+	static final String ASK_NEW_WORD_EVENT     = "new-word-event";
+	static final String ASK_REMOVE_WORD_EVENT  = "remove-word-event";
+	static final String READ_DATABASE_EVENT    = "read-database-event";
+	static final String OPEN_PREFERENCES_EVENT = "open-preferences-event";
 
 	private ActionListener listener;
 	private JPopupMenu menu;
@@ -169,6 +169,11 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		} else if(event.getActionCommand().equals(REMOVE_WORD_ITEM_EVENT)) {
 			ActionEvent newEvent;
 			newEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ASK_REMOVE_WORD_EVENT);
+			listener.actionPerformed(newEvent);
+		/* open settings dialog */
+		} else if(event.getActionCommand().equals(PREFERENCES_ITEM_EVENT)) {
+			ActionEvent newEvent;
+			newEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, OPEN_PREFERENCES_EVENT);
 			listener.actionPerformed(newEvent);
 		/* unknown option */
 		} else {
