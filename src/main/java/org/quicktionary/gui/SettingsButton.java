@@ -109,8 +109,10 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		dialog = ReadDatabaseDialog.createDialog(this, listener);
 		filename = dialog.getFilename();
 
-		event = new ReadDatabaseEvent(this, filename);
-		listener.actionPerformed((ActionEvent)event);
+		if(filename != null) {
+				event = new ReadDatabaseEvent(this, filename);
+				listener.actionPerformed((ActionEvent)event);
+		}
 	}
 
 	public class ReadDatabaseEvent extends ActionEvent {
