@@ -33,6 +33,12 @@ public class Application implements ActionListener {
 		this.mainWindow = new MainWindow(dictionary, this);
 		this.dictionary = dictionary;
 
+		dictionary.newWord("hello");
+		dictionary.newWord("hey");
+		dictionary.newWord("he");
+		dictionary.newWord("hi");
+		dictionary.newWord("howdy");
+
 		mainWindow.setVisible(true);
 	}
 

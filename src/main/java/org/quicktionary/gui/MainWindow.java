@@ -56,12 +56,6 @@ public class MainWindow extends JFrame implements ActionListener {
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		dictionary.newWord("hello");
-		dictionary.newWord("hey");
-		dictionary.newWord("he");
-		dictionary.newWord("hi");
-		dictionary.newWord("howdy");
-
 		styleManager = new StyleManager();
 		styleManager.changeStyle(Main.themeName);
 		makeComponents();
