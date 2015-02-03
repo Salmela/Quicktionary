@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.quicktionary.backend.Quicktionary;
 
+import org.quicktionary.backend.SearchResultListener;
+
 /**
  * The MainWindow is only class that communicates with the backend.
  */
@@ -164,7 +166,6 @@ public class MainWindow extends JFrame implements ActionListener {
 		this.add(mainPane);
 
 		searchResults.inLayout();
-		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
 	/**
@@ -172,6 +173,10 @@ public class MainWindow extends JFrame implements ActionListener {
 	 */
 	private String capitalizeWord(String word) {
 		return word.substring(0, 1).toUpperCase() + word.substring(1);
+	}
+
+	public SearchResultListener getSearchResultListener() {
+		return searchResults.getSearchResultListener();
 	}
 
 	private void changeView(boolean changeToSearchResults) {

@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.Quicktionary;
+import org.quicktionary.backend.SearchResultListener;
 
 /**
  * The MainWindow is only class that communicates with the backend.
@@ -40,6 +41,7 @@ public class Application implements ActionListener {
 		dictionary.newWord("hi");
 		dictionary.newWord("howdy");
 
+		dictionary.setSearchResultListener(mainWindow.getSearchResultListener());
 		mainWindow.setVisible(true);
 	}
 
