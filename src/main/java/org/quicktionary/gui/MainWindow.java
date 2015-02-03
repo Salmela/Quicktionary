@@ -35,8 +35,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	private String pageTitle;
 
 	private final Application app;
-
-	private boolean showSearchResults;
 	private StyleManager styleManager;
 
 	private JScrollPane mainPane;
@@ -46,7 +44,6 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	public MainWindow(Application app) {
 		this.app = app;
-		this.showSearchResults = false;
 
 		appTitle = "Quicktionary";
 		pageTitle = null;
@@ -170,8 +167,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void changeView(boolean changeToSearchResults) {
-		showSearchResults = changeToSearchResults;
-
 		if(changeToSearchResults) {
 			mainPane.setViewportView(searchResults);
 			setTitle(appTitle + " \u2014 Search results");
