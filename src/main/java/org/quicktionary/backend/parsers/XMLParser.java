@@ -354,7 +354,7 @@ public class XMLParser extends Parser {
 		this.preserveWhitespaces = preserveWhitespaces;
 	}
 
-	public void setTextContentStoring(boolean storeTextContent) {
+	public void setTextContentStoring(boolean saveTextContent) {
 		this.saveTextContent = saveTextContent;
 	}
 
