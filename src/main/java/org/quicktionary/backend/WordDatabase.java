@@ -90,6 +90,11 @@ public class WordDatabase {
 			currentEntry = map.higherEntry(currentEntry.getKey());
 		}
 
+		/* append null terminator to the list */
+		if(i < count) {
+			entries[i] = null;
+		}
+
 		return i;
 	}
 
