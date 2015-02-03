@@ -54,6 +54,30 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 		setForeground(placeHolderColor);
 	}
 
+	public class SearchEvent extends ActionEvent {
+		final static long serialVersionUID = 1L;
+		private String searchQuery;
+		private int searchResultCount;
+
+		public SearchEvent(SearchBox searchBox, String command) {
+			super(searchBox, ActionEvent.ACTION_PERFORMED, command);
+			this.searchQuery = searchBox.getText();
+			searchResultCount = 0;
+		}
+
+		public void setSearchResultCount(int count) {
+			searchResultCount = count;
+		}
+
+		public int getSearchResultCount() {
+			return searchResultCount;
+		}
+
+		public String getSearchQuery() {
+			return searchQuery;
+		}
+	}
+
 	private class onChangeEvents implements DocumentListener {
 		private final ActionListener listener;
 		private final SearchBox searchBox;
@@ -78,7 +102,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 			if(hasPlaceHolder) {
 				return;
 			}
-			event = new ActionEvent(searchBox, ActionEvent.ACTION_PERFORMED, SEARCH_EVENT);
+			event = new SearchEvent(searchBox, SEARCH_EVENT);
 			listener.actionPerformed(event);
 		}
 		public void changedUpdate(DocumentEvent event) {
@@ -109,7 +133,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 	}
 	public void actionPerformed(ActionEvent e) {
 		ActionEvent event;
-		event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, SEARCH_ENTER_EVENT);
+		event = new SearchEvent(this, SEARCH_ENTER_EVENT);
 		searchListener.actionPerformed(event);
 	}
 }
