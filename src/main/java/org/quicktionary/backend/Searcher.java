@@ -91,12 +91,18 @@ public class Searcher {
 		}
 
 		entries = new WordDatabase.WordEntry[count];
-		count = database.fetchResults(entries, count);
+		database.fetchResults(entries, count);
 
-		for(i = 0; i < count; i++) {
+		for(i = 0; i < count && entries[i] != null; i++) {
 			resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
 		}
-		processedEntries += count;
+
+		/* inform the gui that there isn't more search results */
+		if(i != count) {
+			System.out.println("end");
+			resultListener.appendSearchResult(null);
+		}
+		processedEntries += i;
 
 		searchRunning = false;
 		return true;
