@@ -83,7 +83,5 @@ public class Main {
 
 		quicktionary = new Quicktionary();
 		application = new Application(quicktionary);
-
-		System.out.println("Hello world!");
 	}
 }
