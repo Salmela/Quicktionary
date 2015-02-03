@@ -74,7 +74,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Quicktionary quicktionary;
-		MainWindow window;
+		Application application;
 
 		//Test test = new Test();
 
@@ -82,9 +82,8 @@ public class Main {
 		Main.parseCommandlineArgs(args);
 
 		quicktionary = new Quicktionary();
-		window = new MainWindow(quicktionary);
+		application = new Application(quicktionary);
 
-		window.setVisible(true);
 		System.out.println("Hello world!");
 	}
 }
