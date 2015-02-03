@@ -30,7 +30,7 @@ public class Application implements ActionListener {
 	private Quicktionary dictionary;
 
 	public Application(Quicktionary dictionary) {
-		this.mainWindow = new MainWindow(dictionary);
+		this.mainWindow = new MainWindow(dictionary, this);
 		this.dictionary = dictionary;
 
 		mainWindow.setVisible(true);
@@ -42,12 +42,42 @@ public class Application implements ActionListener {
 		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
 		} else if(event.getActionCommand() == SettingsButton.READ_DATABASE_EVENT) {
+			handleReadDatabaseRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.ASK_NEW_WORD_EVENT) {
+			handleAskNewWordRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.ASK_REMOVE_WORD_EVENT) {
+			handleAskRemoveWordRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.OPEN_PREFERENCES_EVENT) {
+			new SettingsDialog(mainWindow, this);
 		} else {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");
+		}
+	}
+
+	private void handleReadDatabaseRequest(ActionEvent event) {
+		SettingsButton.ReadDatabaseEvent dataEvent;
+
+		dataEvent = (SettingsButton.ReadDatabaseEvent) event;
+		dictionary.readDatabase(dataEvent.getFilename());
+	}
+
+	private void handleAskNewWordRequest(ActionEvent event) {
+		String name = (String)JOptionPane.showInputDialog(mainWindow,
+		                      "Create a new word.\nWrite the name of the word into textbox?",
+		                      "Create a word", JOptionPane.PLAIN_MESSAGE, null, null, null);
+		if(name != null) {
+			dictionary.newWord(name);
+		}
+	}
+
+	private void handleAskRemoveWordRequest(ActionEvent event) {
+		String word = null;
+		int res = JOptionPane.showConfirmDialog(mainWindow,
+		          "Are you sure that you wan't to remove word " + word + "?",
+		          "Remove a word", JOptionPane.YES_NO_OPTION);
+		if(res == JOptionPane.YES_OPTION) {
+			dictionary.removeWord(word);
 		}
 	}
 }

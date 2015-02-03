@@ -34,6 +34,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	private String pageTitle;
 
 	private Quicktionary dictionary;
+	private final Application app;
+
 	private boolean showSearchResults;
 	private StyleManager styleManager;
 
@@ -42,7 +44,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JTextArea pageArea;
 	private JTextField searchBox;
 
-	public MainWindow(Quicktionary dictionary) {
+	public MainWindow(Quicktionary dictionary, Application app) {
+		this.app = app;
 		this.dictionary = dictionary;
 		this.showSearchResults = false;
 
@@ -144,7 +147,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		backButton = new HeaderButton("Back");
 		nextButton = new HeaderButton("Next");
 		searchBox  = new SearchBox(this);
-		settingsButton = new SettingsButton(this);
+		settingsButton = new SettingsButton(app);
 
 		/*TODO: gui is currently not high priority, but this
 		        should be cleaned up */
