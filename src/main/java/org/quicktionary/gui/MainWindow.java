@@ -22,7 +22,6 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.quicktionary.backend.Quicktionary;
 
 import org.quicktionary.backend.SearchResultListener;
 
@@ -35,7 +34,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	private final String appTitle;
 	private String pageTitle;
 
-	private Quicktionary dictionary;
 	private final Application app;
 
 	private boolean showSearchResults;
@@ -46,9 +44,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JTextArea pageArea;
 	private JTextField searchBox;
 
-	public MainWindow(Quicktionary dictionary, Application app) {
+	public MainWindow(Application app) {
 		this.app = app;
-		this.dictionary = dictionary;
 		this.showSearchResults = false;
 
 		appTitle = "Quicktionary";

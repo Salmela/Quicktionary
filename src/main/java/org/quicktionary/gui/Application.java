@@ -32,7 +32,7 @@ public class Application implements ActionListener {
 	private Quicktionary dictionary;
 
 	public Application(Quicktionary dictionary) {
-		this.mainWindow = new MainWindow(dictionary, this);
+		this.mainWindow = new MainWindow(this);
 		this.dictionary = dictionary;
 
 		dictionary.newWord("hello");
