@@ -45,11 +45,22 @@ public class Application implements ActionListener {
 		mainWindow.setVisible(true);
 	}
 
+	/**
+	 * Change the first letter of the word into upper case.
+	 */
+	private String capitalizeWord(String word) {
+		return word.substring(0, 1).toUpperCase() + word.substring(1);
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
+			handleSearchRequest(event);
 		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
+			handleLoadFirstResultRequest(event);
 		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
+			handlePageLoadRequest(event);
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
+			handleSearchResultRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.READ_DATABASE_EVENT) {
 			handleReadDatabaseRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.ASK_NEW_WORD_EVENT) {
@@ -62,6 +73,44 @@ public class Application implements ActionListener {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");
 		}
+	}
+
+	private void handleSearchRequest(ActionEvent event) {
+		SearchBox searchBox = (SearchBox)event.getSource();
+		SearchBox.SearchEvent searchEvent;
+
+		searchEvent = (SearchBox.SearchEvent)event;
+		System.out.println("main window: search event " + searchBox.getText());
+
+		dictionary.search(searchEvent.getSearchQuery());
+		dictionary.requestSearchResults(0, searchEvent.getSearchResultCount());
+	}
+
+	private void handleLoadFirstResultRequest(ActionEvent event) {
+		handleLoadFirstResultRequest(event);
+		SearchBox searchBox = (SearchBox)event.getSource();
+		System.out.println("main window: search event " + searchBox.getText());
+
+		//dictionary.search(searchBox.getText());
+		/*TODO: show the first item's page */
+	}
+
+	private void handlePageLoadRequest(ActionEvent event) {
+		SearchResults.PageLoadEvent pageEvent;
+		String pageTitle, text;
+
+		pageEvent = (SearchResults.PageLoadEvent)event;
+		text = dictionary.getPageContent(pageEvent.getSearchItem(), pageEvent.getSearchQuery());
+		pageTitle = capitalizeWord(pageEvent.getSearchItem().getWord());
+
+		mainWindow.openPage(pageTitle, text);
+	}
+
+	private void handleSearchResultRequest(ActionEvent event) {
+		SearchResults.RequestSearchResultEvent requestEvent;
+
+		requestEvent = (SearchResults.RequestSearchResultEvent)event;
+		dictionary.requestSearchResults(requestEvent.getStart(), requestEvent.getEnd());
 	}
 
 	private void handleReadDatabaseRequest(ActionEvent event) {

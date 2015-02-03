@@ -168,13 +168,6 @@ public class MainWindow extends JFrame implements ActionListener {
 		searchResults.inLayout();
 	}
 
-	/**
-	 * Change the first letter of the word into upper case.
-	 */
-	private String capitalizeWord(String word) {
-		return word.substring(0, 1).toUpperCase() + word.substring(1);
-	}
-
 	public SearchResultListener getSearchResultListener() {
 		return searchResults.getSearchResultListener();
 	}
@@ -191,40 +184,28 @@ public class MainWindow extends JFrame implements ActionListener {
 		}
 	}
 
+	public void openPage(String title, String text) {
+		pageArea.setText(text);
+		pageTitle = title;
+		changeView(false);
+	}
+
+	/**
+	 * Listen events from the searchBox. The method sets the
+	 * wanted search result count and passes the event to the app.
+	 */
 	public void actionPerformed(ActionEvent event) {
-		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
-			SearchBox searchBox = (SearchBox)event.getSource();
-			System.out.println("main window: search event " + searchBox.getText());
-
+		if(event.getActionCommand() == SearchBox.SEARCH_EVENT ||
+		   event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
+			SearchBox.SearchEvent e = (SearchBox.SearchEvent)event;
+			e.setSearchResultCount(searchResults.getVisibleRowCount());
 			changeView(true);
-			dictionary.search(searchBox.getText());
-			dictionary.requestSearchResults(0, searchResults.getVisibleRowCount());
-
-		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
-			System.out.println("main window: search event " + searchBox.getText());
-
-			//dictionary.search(searchBox.getText());
-			/*TODO: show the first item's page */
+			app.actionPerformed(event);
 
 		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
-			SearchResults.PageLoadEvent pageEvent;
-			String text;
-
-			pageEvent = (SearchResults.PageLoadEvent)event;
-			text = dictionary.getPageContent(pageEvent.getSearchItem(), searchBox.getText());
-			pageArea.setText(text);
-			pageTitle = capitalizeWord(pageEvent.getSearchItem().getWord());
-			changeView(false);
-
-		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
-			SearchResults.RequestSearchResultEvent requestEvent;
-
-			requestEvent = (SearchResults.RequestSearchResultEvent)event;
-			dictionary.requestSearchResults(requestEvent.getStart(), requestEvent.getEnd());
-
-		} else {
-			System.out.println("main window: unknown event (" +
-			                   event.getActionCommand() + ")");
+			SearchResults.PageLoadEvent e = (SearchResults.PageLoadEvent)event;
+			e.setSearchQuery(searchBox.getText());
+			app.actionPerformed(event);
 		}
 	}
 }
