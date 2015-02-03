@@ -110,19 +110,31 @@ public class SearchResults extends JList {
 	}
 
 	public class PageLoadEvent extends ActionEvent {
+		final static long serialVersionUID = 1L;
+		private String searchQuery;
 		private SearchItem searchItem;
 
 		public PageLoadEvent(Object source, SearchItem item) {
 			super(source, ActionEvent.ACTION_PERFORMED, PAGE_LOAD_EVENT);
 			this.searchItem = item;
+			this.searchQuery = null;
 		}
 
 		public SearchItem getSearchItem() {
 			return searchItem;
 		}
+
+		public void setSearchQuery(String query) {
+			searchQuery = query;
+		}
+
+		public String getSearchQuery() {
+			return searchQuery;
+		}
 	}
 
 	public class RequestSearchResultEvent extends ActionEvent {
+		final static long serialVersionUID = 1L;
 		private int startIndex, endIndex;
 
 		public RequestSearchResultEvent(Object source, int startIndex, int endIndex) {
