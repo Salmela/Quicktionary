@@ -31,4 +31,7 @@ public interface SearchResultListener {
 	 */
 	void resetSearchResults();
 	void setStatistics(int totalCount, int time);
+
+	int getSize();
+	SearchItem getSearchItemAt(int index);
 }

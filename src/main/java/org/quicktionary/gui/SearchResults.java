@@ -177,6 +177,11 @@ public class SearchResults extends JList {
 			return results.get(index);
 		}
 
+		public SearchItem getSearchItemAt(int index) {
+			if(index == results.size()) return null;
+			return results.get(index);
+		}
+
 		public int getSize() {
 			if(isLoading) {
 				return results.size() + 1;
