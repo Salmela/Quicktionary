@@ -91,35 +91,44 @@ public class Searcher {
 	 */
 	public boolean requestSearchResults(int offset, int count) {
 		WordDatabase.WordEntry[] entries;
-		int i;
+		int resultCount, requestCount, i;
 
 		if(resultListener == null) {
 			searchRunning = false;
 			return false;
 		}
 
-		count = offset + count - processedEntries;
-		if(count <= 0) {
+		resultCount = 0;
+		requestCount = offset + count - processedEntries;
+
+		if(requestCount <= 0) {
 			searchRunning = false;
+			System.out.println("ERROR: Invalid search result request");
 			return false;
 		}
 
-		entries = new WordDatabase.WordEntry[count];
-		database.fetchResults(entries, count);
+		entries = new WordDatabase.WordEntry[requestCount];
 
-		for(i = 0; i < count && entries[i] != null; i++) {
-			/* remove duplicates */
-			if(isSearchResultDuplicate(entries[i])) continue;
-			resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
+		while(resultCount < requestCount) {
+				/* check if we didn't get any words then exit */
+				if(database.fetchResults(entries, requestCount) == 0) {
+					/* inform the gui that there isn't more search results */
+					resultListener.appendSearchResult(null);
+					break;
+				}
+
+				/* go through all words that datbase gave to us */
+				for(i = 0; i < requestCount && entries[i] != null; i++) {
+					/* remove duplicates */
+					if(isSearchResultDuplicate(entries[i])) continue;
+
+					/* give the new item to gui */
+					resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
+					resultCount++;
+				}
 		}
 
-		/* inform the gui that there isn't more search results */
-		if(i != count) {
-			System.out.println("end");
-			resultListener.appendSearchResult(null);
-		}
-		processedEntries += i;
-
+		processedEntries += resultCount;
 		searchRunning = false;
 		return true;
 	}
