@@ -70,6 +70,20 @@ public class Searcher {
 		resultListener = listener;
 	}
 
+	private boolean isSearchResultDuplicate(WordDatabase.WordEntry entry) {
+		int size = resultListener.getSize();
+		int i;
+
+		for(i = 0;  i < size; i++) {
+			SearchItem item;
+			item = resultListener.getSearchItemAt(i);
+			if(item != null && item.getInternal() == entry) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Fetch the words from WordDatabase that fit the search term
 	 * and send them to SearchResultListener. This method also
@@ -94,6 +108,8 @@ public class Searcher {
 		database.fetchResults(entries, count);
 
 		for(i = 0; i < count && entries[i] != null; i++) {
+			/* remove duplicates */
+			if(isSearchResultDuplicate(entries[i])) continue;
 			resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
 		}
 
