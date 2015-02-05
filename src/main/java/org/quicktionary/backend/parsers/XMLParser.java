@@ -52,7 +52,6 @@ public class XMLParser extends Parser {
 	 */
 	private int  currentDepth;
 	private boolean parsingError;
-	private boolean parsingErrorHappened;
 	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
 	private boolean verbose;
@@ -96,7 +95,6 @@ public class XMLParser extends Parser {
 		attributeBuilder = new StringBuilder(64);
 		textContent  = new StringBuilder(4096);
 		verbose = false;
-		parsingErrorHappened = false;
 	}
 
 	/**
@@ -109,17 +107,8 @@ public class XMLParser extends Parser {
 		currentDepth = 0;
 		preserveWhitespaces  = false;
 		saveTextContent      = false;
-		parsingErrorHappened = false;
 
 		return super.parse(reader);
-	}
-
-	public boolean isInitialized() {
-		return currentChar != 0;
-	}
-
-	public boolean parsingErrorHappened() {
-		return parsingErrorHappened;
 	}
 
 	/**
