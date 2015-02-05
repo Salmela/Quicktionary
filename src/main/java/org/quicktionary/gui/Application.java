@@ -39,6 +39,12 @@ public class Application implements ActionListener {
 		dictionary.newWord("he");
 		dictionary.newWord("hi");
 		dictionary.newWord("howdy");
+		dictionary.newWord("crody");
+		dictionary.newWord("foggy");
+		dictionary.newWord("hay");
+		dictionary.newWord("bay");
+		dictionary.newWord("say");
+		dictionary.newWord("lay");
 
 		dictionary.setSearchResultListener(mainWindow.getSearchResultListener());
 		mainWindow.setVisible(true);
