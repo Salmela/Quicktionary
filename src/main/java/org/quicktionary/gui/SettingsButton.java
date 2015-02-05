@@ -22,6 +22,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import org.quicktionary.gui.dialogs.ReadDatabaseDialog;
+import org.quicktionary.gui.theme.HeaderButton;
 
 /**
  * The MainWindow is only class that communicates with the backend.

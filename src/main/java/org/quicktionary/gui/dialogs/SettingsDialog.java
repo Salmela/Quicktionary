@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.gui;
+package org.quicktionary.gui.dialogs;
 
 import javax.swing.JFrame;
 import javax.swing.JDialog;

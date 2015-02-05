@@ -23,10 +23,10 @@ import org.quicktionary.backend.Quicktionary;
  * The Main class parses the command line arguments and starts the main window.
  */
 public class Main {
-	static boolean useNativeFileDialog;
-	static boolean useHTML;
-	static String databasePath;
-	static String themeName;
+	public static boolean useNativeFileDialog;
+	public static boolean useHTML;
+	public static String databasePath;
+	public static String themeName;
 
 	public static void init() {
 		useNativeFileDialog = false;

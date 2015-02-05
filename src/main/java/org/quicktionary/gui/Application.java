@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.Quicktionary;
+import org.quicktionary.gui.dialogs.SettingsDialog;
 
 /**
  * The MainWindow is only class that communicates with the backend.

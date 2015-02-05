@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.SearchResultListener;
+import org.quicktionary.gui.theme.HeaderButton;
+import org.quicktionary.gui.theme.StyleManager;
 
 /**
  * The MainWindow is only class that communicates with the backend.
