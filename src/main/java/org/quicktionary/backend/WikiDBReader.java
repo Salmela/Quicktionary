@@ -69,7 +69,7 @@ public class WikiDBReader implements Runnable {
 		return true;
 	}
 
-	public void readPage() {
+	private void readPage() {
 		String text, title, ns;
 		ns = null;
 		title = null;
