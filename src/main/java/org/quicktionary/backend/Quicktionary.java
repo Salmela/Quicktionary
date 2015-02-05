@@ -17,7 +17,7 @@
 package org.quicktionary.backend;
 
 /**
- * The backend class for the quicktionary.
+ * The backend class for the Quicktionary.
  */
 public class Quicktionary {
 	private WordDatabase database;
@@ -46,7 +46,7 @@ public class Quicktionary {
 	}
 
 	public void removeWord(String word) {
-		database.newWord(word);
+		database.removeWord(word);
 	}
 
 	public void readDatabase(String filename) {
