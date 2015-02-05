@@ -42,7 +42,6 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	static final String CANCEL_EVENT = "cancel-button";
 
 	private String filename;
-	private JDialog dialog;
 	private JTextField filenameField;
 
 	public ReadDatabaseDialog(Frame frame, ActionListener listener) {

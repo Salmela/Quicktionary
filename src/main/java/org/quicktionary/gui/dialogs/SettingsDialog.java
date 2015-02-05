@@ -39,7 +39,6 @@ public class SettingsDialog extends JDialog implements ActionListener {
 	static final String CANCEL_BUTTON_EVENT = "cancel-button";
 
 	private String filename;
-	private JDialog dialog;
 	private JTextField filenameField;
 
 	public SettingsDialog(Frame frame, ActionListener listener) {

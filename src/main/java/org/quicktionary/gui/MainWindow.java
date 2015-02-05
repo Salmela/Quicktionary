@@ -35,8 +35,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	private String pageTitle;
 
 	private final Application app;
-
-	private boolean showSearchResults;
 	private StyleManager styleManager;
 
 	private JScrollPane mainPane;
@@ -46,7 +44,6 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	public MainWindow(Application app) {
 		this.app = app;
-		this.showSearchResults = false;
 
 		appTitle = "Quicktionary";
 		pageTitle = null;
@@ -170,8 +167,6 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private void changeView(boolean changeToSearchResults) {
-		showSearchResults = changeToSearchResults;
-
 		if(changeToSearchResults) {
 			mainPane.setViewportView(searchResults);
 			setTitle(appTitle + " \u2014 Search results");
@@ -192,6 +187,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	 * wanted search result count and passes the event to the app.
 	 */
 	public void actionPerformed(ActionEvent event) {
+		/* set the search result count for SearchEvents */
 		if(event.getActionCommand() == SearchBox.SEARCH_EVENT ||
 		   event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
 			SearchBox.SearchEvent e = (SearchBox.SearchEvent)event;
@@ -199,9 +195,14 @@ public class MainWindow extends JFrame implements ActionListener {
 			changeView(true);
 			app.actionPerformed(event);
 
+		/* set the search query for PageLoadEvents */
 		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
 			SearchResults.PageLoadEvent e = (SearchResults.PageLoadEvent)event;
 			e.setSearchQuery(searchBox.getText());
+			app.actionPerformed(event);
+
+		/* do nothing special for search result requests */
+		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
 			app.actionPerformed(event);
 		}
 	}

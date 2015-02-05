@@ -155,23 +155,37 @@ public class SearchResults extends JList {
 	 */
 	private class SearchResultModel extends AbstractListModel implements SearchResultListener {
 		static final long serialVersionUID = 1L;
+		private final SearchItem loadingItem;
 		private ArrayList<SearchItem> results;
+		private boolean isLoading;
 
 		public SearchResultModel() {
+			loadingItem = new SearchItem("Loading...", "", null);
 			results = new ArrayList<SearchItem>();
+			isLoading = true;
 		}
 
 		public Object getElementAt(int index) {
 			/* request more search results if we are at last item */
-			if(index == results.size() - 1) {
+			if(isLoading && index == results.size()) {
 				RequestSearchResultEvent event;
 				event = new RequestSearchResultEvent(this, 0, results.size() + getVisibleRowCount());
 				listener.actionPerformed(event);
+
+				return loadingItem;
 			}
 			return results.get(index);
 		}
 
+		public SearchItem getSearchItemAt(int index) {
+			if(index == results.size()) return null;
+			return results.get(index);
+		}
+
 		public int getSize() {
+			if(isLoading) {
+				return results.size() + 1;
+			}
 			return results.size();
 		}
 
@@ -180,12 +194,20 @@ public class SearchResults extends JList {
 		 */
 		public void appendSearchResult(SearchItem item) {
 			int index;
+
+			if(item == null) {
+				isLoading = false;
+				fireIntervalRemoved(this, results.size(), results.size());
+				return;
+			}
+
 			results.add(item);
 			index = results.size() - 1;
 			fireIntervalAdded(this, index, index);
 		}
 
 		public void resetSearchResults() {
+			isLoading = true;
 			results.clear();
 			fireIntervalRemoved(this, 0, results.size());
 		}

@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Arrays;
 import java.lang.StringBuilder;
 
 /**
@@ -344,7 +343,7 @@ public class XMLParser extends Parser {
 		this.preserveWhitespaces = preserveWhitespaces;
 	}
 
-	public void setTextContentStoring(boolean storeTextContent) {
+	public void setTextContentStoring(boolean saveTextContent) {
 		this.saveTextContent = saveTextContent;
 	}
 
