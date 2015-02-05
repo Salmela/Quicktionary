@@ -31,11 +31,14 @@ public class SearcherTest implements SearchResultListener {
 	private WordDatabase database;
 	private ArrayList<SearchItem> results;
 
+	final SearchItem RESET;
+
 	public SearcherTest() {
 		results = new ArrayList<SearchItem>();
 		database = new WordDatabase(null);
 		searcher = new Searcher(null, database);
 		searcher.setResultListener(this);
+		RESET = new SearchItem("RESET", "RESET", null);
 	}
 
 	public void appendSearchResult(SearchItem item) {
@@ -43,10 +46,20 @@ public class SearcherTest implements SearchResultListener {
 	}
 
 	public void resetSearchResults() {
-		results.add(null);
+		results.add(RESET);
 	}
 
 	public void setStatistics(int totalCount, int time) {
+	}
+
+	@Override
+	public int getSize() {
+		return results.size();
+	}
+
+	@Override
+	public SearchItem getSearchItemAt(int index) {
+		return results.get(index);
 	}
 
 	private boolean getResults(int count) {
@@ -56,6 +69,7 @@ public class SearcherTest implements SearchResultListener {
 		if(!ret) {
 			Assert.assertTrue(searcher.hasCompleted());
 		}
+
 		/* this will fail when the searcher is threaded */
 		Assume.assumeTrue(searcher.hasCompleted());
 		return ret;
@@ -75,7 +89,15 @@ public class SearcherTest implements SearchResultListener {
 		searcher.search("hello");
 
 		getResults();
-		Assert.assertEquals(1, results.size());
+		Assert.assertEquals(2, results.size());
+	}
+
+	@Test
+	public void checkThatListEndsToNull() {
+		searcher.search("hello");
+
+		getResults();
+		Assert.assertEquals(null, results.get(1));
 	}
 
 	@Test
@@ -83,7 +105,7 @@ public class SearcherTest implements SearchResultListener {
 		searcher.search("hello");
 
 		getResults();
-		Assert.assertEquals(null, results.get(0));
+		Assert.assertEquals(RESET, results.get(0));
 	}
 
 	@Test
@@ -111,5 +133,31 @@ public class SearcherTest implements SearchResultListener {
 
 		getResults();
 		Assert.assertEquals(20 + 1, results.size());
+	}
+
+	@Test
+	public void givesOnlyItemsThatHaveSamePrefix() {
+		database.newWord("hello");
+		database.newWord("hello fool");
+		database.newWord("hey");
+		database.newWord("cool");
+
+		searcher.search("hello");
+
+		getResults();
+		Assert.assertEquals(2 + 2, results.size());
+	}
+
+	@Test
+	public void fragmentsTheSearchResultsCorrectly() {
+		for(int i = 0; i < 30; i++) {
+			database.newWord("hello " + i);
+		}
+		searcher.search("hello");
+
+		getResults(5);
+		Assert.assertEquals(5 + 1, results.size());
+		searcher.requestSearchResults(0, 10);
+		Assert.assertEquals(10 + 1, results.size());
 	}
 }
