@@ -39,6 +39,7 @@ public class Searcher {
 	 * Search words from WordDatabase that are similar
 	 * to search query. This method is called for all
 	 * search events coming from gui.
+	 * @param query The search query
 	 */
 	public void search(String query) {
 		parseSearchQuery(query);
@@ -65,6 +66,7 @@ public class Searcher {
 	/**
 	 * Set the SearchResultListener. All future search results
 	 * are given to the listener.
+	 * @param listener The search result listener
 	 */
 	public void setResultListener(SearchResultListener listener) {
 		resultListener = listener;
@@ -88,6 +90,9 @@ public class Searcher {
 	 * Fetch the words from WordDatabase that fit the search term
 	 * and send them to SearchResultListener. This method also
 	 * will possibly reorder the search results.
+	 * @param offset First search result that is wanted
+	 * @param count  The number of search results
+	 * @return True if the request was successful
 	 */
 	public boolean requestSearchResults(int offset, int count) {
 		WordDatabase.WordEntry[] entries;

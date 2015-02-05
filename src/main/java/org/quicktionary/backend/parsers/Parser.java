@@ -52,7 +52,7 @@ public abstract class Parser {
 	/**
 	 * The method for starting the parser.
 	 *
-	 * @param stream The input stream which will be readed
+	 * @param reader The input data
 	 * @throws IOException
 	 */
 	public boolean parse(Reader reader) throws IOException {
@@ -85,6 +85,7 @@ public abstract class Parser {
 
 	/**
 	 * The method prints parsing errors to log and the current stack trace.
+	 * @param message The message to be written to log
 	 */
 	protected void appendLog(String message) {
 		System.out.println("Parsing error occured at " + address + ": " + message);
@@ -144,6 +145,7 @@ public abstract class Parser {
 	/**
 	 * Skip over all following whitespace. The method throws exception if
 	 * the current char isn't whitespace and the atLeastOne parameter is set.
+	 * @param atLeastOne Print error message if there isn't single whitespace
 	 */
 	protected void skipWhitespaces(boolean atLeastOne) {
 		/* check that there is whitespace */
