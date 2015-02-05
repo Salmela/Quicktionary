@@ -16,6 +16,7 @@
  */
 package org.quicktionary.backend.parsers;
 
+import java.io.IOException;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.Assert;
@@ -23,6 +24,7 @@ import org.junit.Rule;
 import org.junit.rules.Timeout;
 
 import java.io.StringReader;
+import org.junit.Assume;
 
 import org.quicktionary.backend.parsers.WikiMarkup;
 
@@ -37,7 +39,12 @@ public class WikiMarkupTest {
 	}
 
 	private boolean parse(String markupString) {
-		return parser.parse(new StringReader(markupString));
+		try {
+			return parser.parse(new StringReader(markupString));
+		} catch(IOException e) {
+			Assume.assumeTrue(false);
+		}
+		return false;
 	}
 
 	@Test
