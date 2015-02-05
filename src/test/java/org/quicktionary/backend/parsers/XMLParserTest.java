@@ -292,7 +292,8 @@ public class XMLParserTest {
 		String s = xmlDecl + "<test></hello/></test>";
 		parseString(s);
 
-		Assert.assertFalse(parser.findElement("hello"));
+		parser.findElement("hello");
+		Assert.assertFalse(!parser.parsingErrorHappened());
 	}
 
 
@@ -529,8 +530,8 @@ public class XMLParserTest {
 		String s = xmlDecl + "<test><cool space=> foo </cool><hello></hello></test>";
 		parseString(s);
 
-		Assert.assertFalse(parser.findElement("cool"));
 		Assert.assertTrue(parser.findElement("hello"));
+		Assert.assertFalse(!parser.parsingErrorHappened());
 	}
 
 	@Test
