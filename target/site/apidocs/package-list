@@ -1,0 +1,5 @@
+org.quicktionary.backend
+org.quicktionary.backend.parsers
+org.quicktionary.gui
+org.quicktionary.gui.dialogs
+org.quicktionary.gui.theme
