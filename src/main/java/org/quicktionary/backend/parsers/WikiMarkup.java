@@ -20,8 +20,14 @@ import java.io.Reader;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.lang.StringBuilder;
 
+/**
+ * The WikiMarkup class parses the wiki markup.
+ * This class is developed at another git branch.
+ * TODO: Rename to WikiMarkupReader
+ */
 public class WikiMarkup extends Parser {
 	private final StringBuilder lineBuffer;
 	private final StringBuilder content;
@@ -237,9 +243,5 @@ public class WikiMarkup extends Parser {
 		start.symbol = symbol;
 		start.count = 1;
 		lineMarkup.add(start);
-	}
-
-
-
 	}
 }
