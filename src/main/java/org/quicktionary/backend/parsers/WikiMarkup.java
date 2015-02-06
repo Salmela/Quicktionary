@@ -65,10 +65,12 @@ public class WikiMarkup extends Parser {
 	}
 
 	private class MarkupStart {
-		public long location;
-		public long sourceLocation;
 		public SymbolType symbol;
+
+		public long sourceLocation;
+		public int location;
 		public int count;
+
 		public int length;
 	}
 
