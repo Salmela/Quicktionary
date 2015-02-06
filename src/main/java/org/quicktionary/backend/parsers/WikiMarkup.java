@@ -190,10 +190,11 @@ public class WikiMarkup extends Parser {
 			break;
 		/* paragraph */
 		case '\n':
+			handleParagraph();
 			break;
 		/* table */
 		case '{':
-			//parseTable();
+			parseTable();
 			break;
 		default:
 			break;
@@ -287,6 +288,20 @@ public class WikiMarkup extends Parser {
 		start = appendMarkupStart(symbol);
 
 		System.out.println("Symbol: " + currentChar + " location: " + start.location);
+	}
+
+	/* remove this method */
+	private void handleParagraph() {
+		TextFragment oldParagraph, parent;
+
+		oldParagraph = getTextFragment(TextFragment.PARAGRAPH_TYPE);
+		if(oldParagraph == null) {
+			parent = rootFragment;
+		} else {
+			parent = oldParagraph.getParent();
+		}
+		currentFragment = new TextFragment(TextFragment.PARAGRAPH_TYPE);
+		rootFragment.appendChild(currentFragment);
 	}
 
 	private MarkupStart getMarkupSymbol(SymbolType symbol) {
