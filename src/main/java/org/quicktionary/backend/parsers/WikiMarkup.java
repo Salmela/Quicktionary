@@ -185,9 +185,12 @@ public class WikiMarkup extends Parser {
 		parseMarkup();
 
 		/*TODO: handle partial markups */
-		for(int i = lineMarkup.size() - 1; i >= 0; i--) {
+		for(int i = 0; i < lineMarkup.size(); i++) {
 			MarkupStart start = lineMarkup.get(i);
-			System.out.println("markupStart " + start.sourceLocation + ", symbol: " + start.symbol.character + ", count: " + start.count);
+			if(start.length > 0) {
+				System.out.print("START ");
+			}
+			System.out.println("PROCESS markupStart " + start.sourceLocation + ", symbol: " + start.symbol.character + ", count: " + start.count);
 		}
 	}
 
