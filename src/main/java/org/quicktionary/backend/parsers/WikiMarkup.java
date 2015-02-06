@@ -213,12 +213,15 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
+	private void parseTable() {
+	}
+
 	private void parseMarkup() {
 		boolean wasWhitespace = false;
 		do {
 			/* return from the function at the newline character */
 			if(currentChar == '\n') {
-				return;
+				break;
 			/* ignore whitespace */
 			} else if(isWhitespace(currentChar)) {
 				wasWhitespace = true;
