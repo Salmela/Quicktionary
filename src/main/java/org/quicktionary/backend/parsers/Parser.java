@@ -22,6 +22,10 @@ import java.io.IOException;
 
 import java.util.Arrays;
 
+/**
+ * The Parser class is used as base class for all parsers.
+ * It has some helper methods for parsing.
+ */
 public abstract class Parser {
 	private BufferedReader reader;
 	private long address;

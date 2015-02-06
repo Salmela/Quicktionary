@@ -24,7 +24,7 @@ import org.quicktionary.backend.Quicktionary;
 import org.quicktionary.gui.dialogs.SettingsDialog;
 
 /**
- * The MainWindow is only class that communicates with the backend.
+ * The Application class is the only class that communicates with the backend.
  */
 public class Application implements ActionListener {
 	static final long serialVersionUID = 1L;

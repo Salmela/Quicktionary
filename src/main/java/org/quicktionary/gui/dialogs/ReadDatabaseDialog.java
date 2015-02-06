@@ -36,6 +36,10 @@ import java.awt.event.ActionListener;
 
 import org.quicktionary.gui.Main;
 
+/**
+ * This dialog asks the filename of the wiki database dump.
+ * TODO: Give some feedback to user if the file is not valid.
+ */
 public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	static final long serialVersionUID = 1L;
 

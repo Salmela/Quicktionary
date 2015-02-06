@@ -20,7 +20,7 @@ import java.io.IOException;
 import org.quicktionary.backend.Quicktionary;
 
 /**
- * The Main class parses the command line arguments and starts the main window.
+ * The Main class parses the command line arguments and starts the application.
  */
 public class Main {
 	public static boolean useNativeFileDialog;

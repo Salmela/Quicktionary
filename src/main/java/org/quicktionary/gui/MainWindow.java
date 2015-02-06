@@ -28,7 +28,8 @@ import org.quicktionary.gui.theme.HeaderButton;
 import org.quicktionary.gui.theme.StyleManager;
 
 /**
- * The MainWindow is only class that communicates with the backend.
+ * The MainWindow initializes the window components
+ * and updates them as neaded.
  */
 public class MainWindow extends JFrame implements ActionListener {
 	static final long serialVersionUID = 1L;
@@ -59,6 +60,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		makeComponents();
 	}
 
+	/*TODO: remove/move somewhere else */
 	private void makeRoundedBorders(JComponent component, boolean top, boolean right,
 	                                boolean bottom, boolean left) {
 		CompoundBorder compoundBorder;

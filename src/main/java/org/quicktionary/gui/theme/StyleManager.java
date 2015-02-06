@@ -26,6 +26,9 @@ import java.awt.geom.Point2D;
 
 import java.lang.IllegalStateException;
 
+/**
+ * This class provides an easy way to color the custom widgets.
+ */
 public class StyleManager {
 	static HashMap<String, Object> styles;
 	static ArrayList<StyleListener> listeners;

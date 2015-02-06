@@ -24,8 +24,7 @@ import java.io.IOException;
 import org.quicktionary.backend.parsers.XMLParser;
 
 /**
- * WikiDBReader goes through a wikimedia database dump.
- * TODO: Remove Parser from name.
+ * WikiDBReader extracts the wiki pages from a wikimedia database dump.
  */
 public class WikiDBReader implements Runnable {
 	private XMLParser parser;

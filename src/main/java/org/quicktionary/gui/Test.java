@@ -6,8 +6,8 @@ import java.io.StringReader;
 import org.quicktionary.backend.parsers.XMLParser;
 import org.quicktionary.backend.parsers.WikiMarkup;
 
-/*
- * this file is for debugging the test cases.
+/**
+ * This file is for debugging the test cases.
  */
 public class Test {
 	private XMLParser  parserXML;

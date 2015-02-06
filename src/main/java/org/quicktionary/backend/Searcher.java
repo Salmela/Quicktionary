@@ -17,8 +17,8 @@
 package org.quicktionary.backend;
 
 /**
- * The Searcher class parses the search queries from gui and
- * sends results back to gui.
+ * The Searcher class parses the search queries from WordDatabase and
+ * sends results to the gui.
  */
 public class Searcher {
 	private Quicktionary dictionary;
@@ -140,7 +140,7 @@ public class Searcher {
 
 	/**
 	 * Split the search query to parts. Currently the
-	 * method is just nop.
+	 * method does nothing.
 	 */
 	private String parseSearchQuery(String query) {
 		return query;

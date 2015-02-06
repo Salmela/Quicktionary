@@ -31,6 +31,10 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Dialog contains list of tabs that enables the user to
+ * change every aspect of the program.
+ */
 public class SettingsDialog extends JDialog implements ActionListener {
 	static final long serialVersionUID = 1L;
 
