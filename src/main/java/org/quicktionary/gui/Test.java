@@ -26,6 +26,7 @@ public class Test {
 		wikiParserTest3();
 		wikiParserTest4();
 		wikiParserTest5();
+		wikiParserTest6();
 	}
 
 	public static void main(String[] args) {
@@ -44,6 +45,7 @@ public class Test {
 		try {
 			parserWiki.parse(new StringReader(wikiText));
 		} catch(Exception e) {
+			System.out.println("!!! EXCEPTION !!!");
 		}
 	}
 
@@ -68,5 +70,8 @@ public class Test {
 	}
 	public void wikiParserTest5() {
 		parse("hello [uhgr]] eugh");
+	}
+	public void wikiParserTest6() {
+		parse("hello [[uhgr]] eugh [[ufhwuf]] heuw hgf [[algh|gjrehrgu]] hwfewf {ugeu|wgf} ehgg {fuwh|jrgh|gerugh}\n");
 	}
 }
