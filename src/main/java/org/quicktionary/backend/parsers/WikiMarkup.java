@@ -315,16 +315,47 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 
-		System.out.println("Handle previous markup " + markup.symbol.character);
-
 		switch(markup.symbol.character) {
 		case '\'':
+			parseTextStyleMarkup(markup);
 			break;
 		case ']':
+			parseLinkMarkup(markup);
 			break;
 		case '}':
+			parseTemplateMarkup(markup);
 			break;
 		case '>':
+			start = getMarkupSymbol(symbolLut['<']);
+			if(start == null) return;
+			System.out.println("HTML range " + start.location + ", " + markup.location);
+			break;
+		case '=':
+			parseHeaderMarkup(markup);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void createTextFragment(MarkupStart markup) {
+		switch(markup.symbol.character) {
+		case '\'':
+			finalizeTextStyleMarkup(markup);
+			break;
+		case ']':
+			finalizeLinkMarkup(markup);
+			break;
+		case '}':
+			finalizeTemplateMarkup(markup);
+			break;
+		case '>':
+			start = getMarkupSymbol(symbolLut['<']);
+			if(start == null) return;
+			System.out.println("HTML range " + start.location + ", " + markup.location);
+			break;
+		case '=':
+			finalizeHeaderMarkup(markup);
 			break;
 		default:
 			break;
@@ -343,5 +374,123 @@ public class WikiMarkup extends Parser {
 		start = appendMarkupStart(symbolLut['=']);
 		start.count = i;
 		System.out.println("Header parsed " + i + ".");
+	}
+
+	private void appendInlineTextFragment(int type, int startIndex, int endIndex) {
+		TextFragment fragment;
+		String text;
+
+		text = lineBuffer.substring(startIndex, endIndex);
+
+		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
+		fragment.setContent(text);
+		currentFragment.getParent().appendChild(fragment);
+	}
+
+	private void parseTextStyleMarkup(MarkupStart end) {
+		MarkupStart start;
+		int quotes;
+
+		start = getMarkupSymbol(end.symbol);
+		if(start == null) return;
+		if(start.length > 0) return;
+
+		quotes = (end.count < start.count) ? end.count : start.count;
+		if(quotes >= 5) {
+			quotes = 5;
+		} else if(quotes >= 3) {
+			quotes = 3;
+		} else if(quotes >= 2) {
+			quotes = 2;
+		} else if(quotes == 1) {
+			return;
+		}
+
+		if(start.count > quotes) {
+			start.location += start.count - (quotes + 1);
+			start.count = quotes;
+		}
+		if(end.count > quotes) {
+			end.location += end.count - (quotes + 1);
+			end.count = quotes;
+		}
+
+		start.length = end.location - start.location;
+		start.endMarkup = end;
+
+		System.out.println("Inline range " + start.location + ", " + end.location + "  " +
+			lineBuffer.substring(start.location + start.count, end.location));
+	}
+
+	private void finalizeTextStyleMarkup(MarkupStart start) {
+		MarkupStart end = start.endMarkup;
+		int quotes = start.count;
+
+		/* put the previous text into plain text fragment */
+		appendInlineTextFragment(TextFragment.PLAIN_TYPE, prevLineMarkup.location + prevLineMarkup.count, start.location);
+
+		/* put the quoted text into inline text fragment */
+		if(quotes == 2) {
+			appendInlineTextFragment(TextFragment.EM_TYPE, start.location + start.count, end.location);
+		} else if(quotes == 3) {
+			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
+		} else if(quotes == 5) {
+			TextFragment parent, emFragment;
+
+			parent = currentFragment;
+			currentFragment = new TextFragment(TextFragment.EM_TYPE);
+			parent.appendChild(currentFragment);
+
+			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
+			currentFragment = parent;
+		}
+	}
+
+	private void parseLinkMarkup(MarkupStart end) {
+		MarkupStart start;
+		int brackets;
+
+		start = getMarkupSymbol(symbolLut['[']);
+		if(start == null) return;
+		if(start.length > 0) return;
+
+		brackets = (end.count < start.count) ? end.count : start.count;
+		if(start.count >= brackets) {
+			start.location += start.count - brackets;
+			start.count = brackets;
+		}
+		if(end.count >= brackets) {
+			end.count = brackets;
+		}
+
+		start.length = end.location - start.location;
+		start.endMarkup = end;
+
+		System.out.println("Link range " + start.location + ", " + end.location + "  " +
+			lineBuffer.substring(start.location + start.count, end.location));
+	}
+
+	private void parseTemplateMarkup(MarkupStart end) {
+		MarkupStart start, prevLink;
+
+		start = getMarkupSymbol(symbolLut['{']);
+		if(start == null) return;
+		if(start.length > 0) return;
+
+		prevLink = getMarkupSymbol(symbolLut['[']);
+		/* ignore the template if there is unfinished link */
+		if(prevLink != null && start.location < prevLink.location && prevLink.length == -1) {
+			System.out.println("Warning: the template contains unfinished link.");
+			return;
+		}
+		start.length = end.location - start.location;
+		start.endMarkup = end;
+
+		System.out.println("Template range " + start.location + ", " + end.location + "  " +
+			lineBuffer.substring(start.location + start.count, end.location));
+	}
+
+	private void parseHeaderMarkup(MarkupStart end) {
+
 	}
 }
