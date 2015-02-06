@@ -37,15 +37,11 @@ public class WikiMarkup extends Parser {
 		private String content;
 		private ArrayList<TextFragment> childs;
 
-		public TextFragment(TextFragment parent, int type) {
-			this.parent = parent;
+		public TextFragment(int type) {
+			this.parent = null;
 			this.type = type;
 			this.content = null;
 			this.childs = new ArrayList<TextFragment>();
-
-			if(parent != null) {
-				parent.addFragment(this);
-			}
 		}
 
 		public void setContent(String content) {
@@ -55,11 +51,12 @@ public class WikiMarkup extends Parser {
 			this.content = content;
 		}
 
-		public void addFragment(TextFragment fragment) {
+		public void appendChild(TextFragment fragment) {
 			if(content != null) {
 				throw new Error("TextFragment must have only child fragments or text content.");
 			}
 			this.childs.add(fragment);
+			fragment.parent = this;
 		}
 
 		public TextFragment getParent() {
@@ -134,7 +131,7 @@ public class WikiMarkup extends Parser {
 			return false;
 		}
 
-		rootFragment = new TextFragment(null, 0);
+		rootFragment = new TextFragment(0);
 		currentFragment = rootFragment;
 
 		/*TODO: make this into loop */
