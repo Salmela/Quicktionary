@@ -288,7 +288,6 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseHeaderMarkupStart() {
-		SymbolType equalSymbol = new SymbolType('=', true, 0);
 		MarkupStart start;
 		int i;
 
@@ -297,7 +296,7 @@ public class WikiMarkup extends Parser {
 			lineBuffer.append(currentChar);
 			getNext();
 		}
-		start = appendMarkupStart(equalSymbol);
+		start = appendMarkupStart(symbolLut['=']);
 		start.count = i;
 		System.out.println("Header parsed " + i + ".");
 	}
