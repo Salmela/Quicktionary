@@ -246,6 +246,16 @@ public class WikiMarkup extends Parser {
 		handlePreviousMarkup();
 	}
 
+	private TextFragment getTextFragment(int type) {
+		TextFragment fragment = currentFragment;
+
+		while(fragment != null) {
+			if(fragment.type == type) return fragment;
+			fragment = fragment.getParent();
+		}
+		return null;
+	}
+
 	private MarkupStart appendMarkupStart(SymbolType symbol) {
 		MarkupStart start = new MarkupStart();
 		start.location = lineBuffer.length() - 1;
@@ -276,8 +286,18 @@ public class WikiMarkup extends Parser {
 
 		start = appendMarkupStart(symbol);
 
-
 		System.out.println("Symbol: " + currentChar + " location: " + start.location);
+	}
+
+	private MarkupStart getMarkupSymbol(SymbolType symbol) {
+		int i;
+		for(i = lineMarkup.size() - 2; i >= 0; i--) {
+			MarkupStart start = lineMarkup.get(i);
+
+			if(start.symbol == symbol) return start;
+			if(start.symbol.priority > symbol.priority) break;
+		}
+		return null;
 	}
 
 	private void handlePreviousMarkup() {
