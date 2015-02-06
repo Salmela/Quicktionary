@@ -26,7 +26,10 @@ import java.lang.StringBuilder;
 public class WikiMarkup extends Parser {
 	private final StringBuilder lineBuffer;
 	private final StringBuilder content;
+
 	private ArrayList<MarkupStart> lineMarkup;
+	private MarkupStart prevLineMarkup;
+
 	private TextFragment rootFragment;
 	private TextFragment currentFragment;
 	private SymbolType[] symbolLut;
@@ -161,6 +164,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseLine() {
+		prevLineMarkup = null;
 		lineBuffer.setLength(0);
 		lineMarkup.clear();
 
