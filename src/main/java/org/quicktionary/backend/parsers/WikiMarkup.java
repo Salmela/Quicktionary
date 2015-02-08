@@ -359,6 +359,8 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void createTextFragment(MarkupStart markup) {
+		MarkupStart start;
+
 		switch(markup.symbol.character) {
 		case '\'':
 			finalizeTextStyleMarkup(markup);
