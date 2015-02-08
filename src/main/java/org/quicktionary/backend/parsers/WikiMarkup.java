@@ -492,6 +492,9 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
+	private void finalizeLinkMarkup(MarkupStart end) {
+	}
+
 	private void parseTemplateMarkup(MarkupStart end) {
 		MarkupStart start, prevLink;
 
@@ -512,7 +515,13 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
+	private void finalizeTemplateMarkup(MarkupStart end) {
+	}
+
 	private void parseHeaderMarkup(MarkupStart end) {
 
+	}
+
+	private void finalizeHeaderMarkup(MarkupStart end) {
 	}
 }
