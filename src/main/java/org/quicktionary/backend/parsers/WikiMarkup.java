@@ -25,7 +25,7 @@ import java.lang.StringBuilder;
 
 public class WikiMarkup extends Parser {
 	private final StringBuilder lineBuffer;
-	private final StringBuilder content;
+	//private final StringBuilder content;
 
 	private ArrayList<MarkupStart> lineMarkup;
 	private MarkupStart prevLineMarkup;
@@ -109,6 +109,7 @@ public class WikiMarkup extends Parser {
 			this.priority = priority;
 			this.end = end;
 		}
+
 		public SymbolType(char character, boolean multiple, int priority) {
 			this(character, multiple, priority, false);
 		}
@@ -116,7 +117,7 @@ public class WikiMarkup extends Parser {
 
 	public WikiMarkup() {
 		super();
-		content = new StringBuilder(256);
+		//content = new StringBuilder(256);
 		lineBuffer = new StringBuilder(256);
 		lineMarkup = new ArrayList<MarkupStart>(16);
 
