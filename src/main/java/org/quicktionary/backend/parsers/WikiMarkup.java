@@ -146,7 +146,6 @@ public class WikiMarkup extends Parser {
 		symbolLut['}'] = new SymbolType('}', true, 3, true);
 		/* header end */
 		symbolLut['='] = new SymbolType('=', true, 0, true);
-
 	}
 
 	public boolean parse(Reader reader) throws IOException {
@@ -210,6 +209,8 @@ public class WikiMarkup extends Parser {
 
 		parseMarkup();
 
+		finalizeHeader();
+
 		/*TODO: handle partial markups */
 		for(int i = 0; i < lineMarkup.size(); i++) {
 			MarkupStart start = lineMarkup.get(i);
@@ -221,6 +222,33 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseTable() {
+	}
+
+	private void finalizeHeader() {
+		MarkupStart start, end;
+		int i;
+
+		/* header must start with equal symbol */
+		start = lineMarkup.get(0);
+		if(start.symbol != symbolLut['=']) {
+			return;
+		}
+
+		/* header must end with equal symbol */
+		end = start.endMarkup;
+		if(end == null || end != lineMarkup.get(lineMarkup.size() - 1)) {
+			return;
+		}
+
+		/* there must be only whitespace after the header */
+		for(i = end.location + end.count + 1; i < lineBuffer.length(); i++) {
+			System.out.println("TEXT " + lineBuffer.charAt(i));
+			if(!isWhitespace(lineBuffer.charAt(i))) {
+				return;
+			}
+		}
+		lineBuffer.delete(0, start.location + start.count);
+		lineBuffer.setLength(start.length);
 	}
 
 	private void parseMarkup() {
