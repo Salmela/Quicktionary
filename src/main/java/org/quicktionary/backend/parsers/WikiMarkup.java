@@ -94,6 +94,7 @@ public class WikiMarkup extends Parser {
 		public int count;
 
 		public int length;
+		public MarkupStart endMarkup;
 	}
 
 	private class SymbolType {
