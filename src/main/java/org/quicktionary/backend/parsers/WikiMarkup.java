@@ -457,7 +457,7 @@ public class WikiMarkup extends Parser {
 		} else if(quotes == 3) {
 			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
 		} else if(quotes == 5) {
-			TextFragment parent, emFragment;
+			TextFragment parent;
 
 			parent = currentFragment;
 			currentFragment = new TextFragment(TextFragment.EM_TYPE);
