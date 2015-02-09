@@ -25,6 +25,7 @@ import java.util.Arrays;
 public abstract class Parser {
 	private BufferedReader reader;
 	private long address;
+	private long sourceLineNum, sourceColumnNum;
 
 	/**
 	 * The current char must be at the start of next node
@@ -62,6 +63,9 @@ public abstract class Parser {
 		address      = 0;
 		parsingErrorHappened = false;
 
+		sourceLineNum = 0;
+		sourceColumnNum = 0;
+
 		/* initialize the currentChar */
 		if(!getNext()) {
 			appendLog("File is empty");
@@ -79,8 +83,19 @@ public abstract class Parser {
 		return address;
 	}
 
+	public long getLocation() {
+		return address;
+	}
+
 	public boolean parsingErrorHappened() {
 		return parsingErrorHappened;
+	}
+
+	/**
+	 * This method is used for reporting where in the file something is.
+	 */
+	public String getSourceLocation() {
+		return String.format("%d:%d", sourceLineNum, sourceColumnNum);
 	}
 
 	/**
@@ -137,6 +152,13 @@ public abstract class Parser {
 		} else {
 			currentChar = 0;
 			return false;
+		}
+
+		if(currentChar == '\n') {
+			sourceLineNum++;
+			sourceColumnNum = 0;
+		} else if(previousChar != '\n') {
+			sourceColumnNum++;
 		}
 		return true;
 	}
