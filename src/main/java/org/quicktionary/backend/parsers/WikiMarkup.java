@@ -329,6 +329,11 @@ public class WikiMarkup extends Parser {
 		MarkupStart start, end;
 		int i;
 
+		/* if there is no change that this is header then return */
+		if(lineMarkup.size() < 2) {
+			return;
+		}
+
 		/* header must start with equal symbol */
 		start = lineMarkup.get(0);
 		if(start.symbol != symbolLut['=']) {
@@ -357,6 +362,7 @@ public class WikiMarkup extends Parser {
 		do {
 			/* return from the function at the newline character */
 			if(currentChar == '\n') {
+				getNext();
 				break;
 			/* ignore whitespace */
 			} else if(isWhitespace(currentChar)) {
