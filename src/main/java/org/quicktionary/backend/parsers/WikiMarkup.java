@@ -28,6 +28,7 @@ public class WikiMarkup extends Parser {
 	//private final StringBuilder content;
 
 	private ArrayList<MarkupStart> lineMarkup;
+	private ArrayList<TextFragment> itemList;
 	private MarkupStart prevLineMarkup;
 
 	private TextFragment rootFragment;
@@ -206,11 +207,17 @@ public class WikiMarkup extends Parser {
 		//content = new StringBuilder(256);
 		lineBuffer = new StringBuilder(256);
 		lineMarkup = new ArrayList<MarkupStart>(16);
+		itemList = new ArrayList<TextFragment>();
 
 		rootFragment = null;
 		currentFragment = null;
 
 		createSymbolLut();
+	}
+
+	private void itemListTruncate(int newSize) {
+		if(itemList.size() == newSize) return;
+		itemList.subList(newSize, itemList.size()).clear();
 	}
 
 	/**
@@ -244,6 +251,7 @@ public class WikiMarkup extends Parser {
 
 		rootFragment = new TextFragment(0);
 		currentFragment = rootFragment;
+		itemList.clear();
 
 		/*TODO: make this into loop */
 		parseLine();
