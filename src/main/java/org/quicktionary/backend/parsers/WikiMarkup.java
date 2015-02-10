@@ -292,17 +292,21 @@ public class WikiMarkup extends Parser {
 			break;
 		/* paragraph */
 		case '\n':
-			handleParagraph();
+			createParagraph();
+			getNext();
 			break;
 		/* table */
 		case '{':
 			parseTable();
 			break;
 		default:
+			/*TODO: create new paragraph if neaded */
+			if(itemList.size() == 0 || itemList.get(0).getType() != TextFragment.PARAGRAPH_TYPE) {
+				System.out.println("paragraph " + currentChar);
+				createParagraph();
+			}
 			break;
 		}
-
-		/*TODO: create new paragraph if neaded */
 
 		parseMarkup();
 
@@ -421,18 +425,15 @@ public class WikiMarkup extends Parser {
 		System.out.println("Symbol: " + currentChar + " location: " + start.location);
 	}
 
-	/* remove this method */
-	private void handleParagraph() {
-		TextFragment oldParagraph, parent;
+	private void createParagraph() {
+		TextFragment parent;
 
-		oldParagraph = getTextFragment(TextFragment.PARAGRAPH_TYPE);
-		if(oldParagraph == null) {
-			parent = rootFragment;
-		} else {
-			parent = oldParagraph.getParent();
-		}
+		System.out.println("New paragraph" + getSourceLocation());
+
 		currentFragment = new TextFragment(TextFragment.PARAGRAPH_TYPE);
 		rootFragment.appendChild(currentFragment);
+		itemListTruncate(0);
+		itemList.add(currentFragment);
 	}
 
 	private MarkupStart getMarkupSymbol(SymbolType symbol) {
