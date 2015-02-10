@@ -80,12 +80,83 @@ public class WikiMarkup extends Parser {
 			this.content = content;
 		}
 
-		public void appendChild(TextFragment fragment) {
+		/**
+		 * Add child to the TextFragment.
+		 * The method returns added fragment, so that the unit tests can
+		 * be writen more compactly.
+		 *
+		 * @param fragment The new child for the fragment
+		 * @return The added fragment
+		 */
+		public TextFragment appendChild(TextFragment fragment) {
 			if(content != null) {
 				throw new Error("TextFragment must have only child fragments or text content.");
 			}
 			this.childs.add(fragment);
 			fragment.parent = this;
+
+			return fragment;
+		}
+
+		/**
+		 * Print the parsing tree recursively.
+		 *
+		 * @param indentation The padding added to start of each line.
+		 */
+		public void print(int indentation) {
+			int i = indentation;
+			while(i-- > 0) System.out.print(" ");
+			System.out.println("Node type: " + type);
+
+			if(content != null) {
+				i = indentation + 2;
+				while(i-- > 0) System.out.print(" ");
+
+				System.out.println("Content: " + content);
+				return;
+			}
+
+			for(TextFragment child : childs) {
+				child.print(indentation + 2);
+			}
+		}
+
+		/**
+		 * Check that fragments are equal.
+		 * This method should be only used in tests.
+		 *
+		 * @return True if the fragments are equal
+		 */
+		public boolean equals(TextFragment fragment) {
+			if(fragment.type != type) {
+				return false;
+			}
+
+			if(parameter != null && parameter.equals(fragment.parameter)) {
+				return false;
+			}
+
+			if(content != null) {
+				if(!content.equals(fragment.content)) {
+					return false;
+				}
+				if(childs.size() != 0) {
+					System.out.println("ERROR: the fragment has invalid content");
+					return false;
+				}
+			}
+
+			if(childs.size() != fragment.childs.size()) {
+				System.out.println("ERROR: the fragment has invalid content");
+				return false;
+			}
+
+			for(int i = 0; i < childs.size(); i++) {
+				if(!childs.get(i).equals(fragment.childs.get(i))) {
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public TextFragment getParent() {
