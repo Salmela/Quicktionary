@@ -354,7 +354,13 @@ public class WikiMarkup extends Parser {
 			}
 		}
 		lineBuffer.delete(0, start.location + start.count);
+		System.out.println("length of the header " + start.length);
 		lineBuffer.setLength(start.length);
+
+		currentFragment = new TextFragment(TextFragment.HEADER_TYPE);
+		rootFragment.appendChild(currentFragment);
+		itemListTruncate(0);
+		itemList.add(currentFragment);
 	}
 
 	private void parseMarkup() {
@@ -510,7 +516,7 @@ public class WikiMarkup extends Parser {
 			System.out.println("HTML range " + start.location + ", " + markup.location);
 			break;
 		case '=':
-			finalizeHeaderMarkup(markup);
+			/* This is processed already */
 			break;
 		default:
 			break;
@@ -652,9 +658,15 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseHeaderMarkup(MarkupStart end) {
+		MarkupStart start;
 
-	}
+		start = lineMarkup.get(0);
 
-	private void finalizeHeaderMarkup(MarkupStart end) {
+		if(start.symbol != symbolLut['=']) {
+			return;
+		}
+
+		start.endMarkup = end;
+		start.length = end.location - start.location + start.count;
 	}
 }
