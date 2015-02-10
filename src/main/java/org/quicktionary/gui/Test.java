@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import org.quicktionary.backend.parsers.XMLParser;
 import org.quicktionary.backend.parsers.WikiMarkup;
+import org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 
 /*
  * this file is for debugging the test cases.
@@ -12,6 +13,7 @@ import org.quicktionary.backend.parsers.WikiMarkup;
 public class Test {
 	private XMLParser  parserXML;
 	private WikiMarkup parserWiki;
+	private TextFragment fragment;
 
 	String xmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 
@@ -21,12 +23,18 @@ public class Test {
 
 		xmlParserTest();
 
-		wikiParserTest();
-		wikiParserTest2();
-		wikiParserTest3();
-		wikiParserTest4();
-		wikiParserTest5();
-		wikiParserTest6();
+		headerAndParagraph();
+		templateWithPartialStrongMarkup();
+		templateAndLinkInterleaved();
+		linkAndTemplateInterleaved();
+		linkWithExtraBracket();
+		multpleValidLinksAndTemplates();
+		listWithTwoLevels();
+		listWithNoOwnItems();
+		listWithSublistAtMiddle();
+		listTypeChangeAtMiddle();
+		listTypeChangeAtMiddleInsideList();
+		twoParagraphs();
 	}
 
 	public static void main(String[] args) {
@@ -40,13 +48,15 @@ public class Test {
 		}
 	}
 
-	public void parse(String wikiText) {
-		System.out.println("\nWiki test: " + wikiText);
+	public TextFragment parse(String wikiText) {
+		System.out.println("\nWIKI TEST\n" + wikiText);
 		try {
 			parserWiki.parse(new StringReader(wikiText));
-		} catch(Exception e) {
-			System.out.println("!!! EXCEPTION !!!");
+			return parserWiki.getRoot();
+		} catch(IOException e) {
+			System.out.println("!!! IOEXCEPTION !!!");
 		}
+		return null;
 	}
 
 	public void xmlParserTest() {
@@ -55,23 +65,137 @@ public class Test {
 		parserXML.findElement("");
 		System.out.println(!parserXML.parsingErrorHappened());
 	}
-
 	public void wikiParserTest() {
-		parse("== t'''est''' == \nhello");
+		TextFragment wanted, node;
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.PARAGRAPH_TYPE));
+
+		fragment = parse("== t'''est''' == \nhello");
+		System.out.println("Result: " + fragment.equals(wanted));
 	}
-	public void wikiParserTest2() {
-		parse("helloha{{lgh|uh'''gr}}eugh");
+
+	/* WikiMarkup */
+	public void headerAndParagraph() {
+		TextFragment wanted, node;
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.PARAGRAPH_TYPE));
+
+		fragment = parse("== t'''est''' == \nhello");
+		System.out.println("Result: " + fragment.equals(wanted));
 	}
-	public void wikiParserTest3() {
-		parse("hello[[ha{{lgh|uh]]gr}}eugh");
+	public void templateWithPartialStrongMarkup() {
+		fragment = parse("helloha{{lgh|uh'''gr}}eugh");
 	}
-	public void wikiParserTest4() {
-		parse("hello{{hal|gh[[uh}}gr]]eugh");
+	public void templateAndLinkInterleaved() {
+		fragment = parse("hello[[ha{{lgh|uh]]gr}}eugh");
 	}
-	public void wikiParserTest5() {
-		parse("hello [uhgr]] eugh");
+	public void linkAndTemplateInterleaved() {
+		fragment = parse("hello{{hal|gh[[uh}}gr]]eugh");
 	}
-	public void wikiParserTest6() {
-		parse("hello [[uhgr]] eugh [[ufhwuf]] heuw hgf [[algh|gjrehrgu]] hwfewf {ugeu|wgf} ehgg {fuwh|jrgh|gerugh}\n");
+	public void linkWithExtraBracket() {
+		fragment = parse("hello [uhgr]] eugh");
+	}
+	public void multpleValidLinksAndTemplates() {
+		fragment = parse("hello [[uhgr]] eugh [[ufhwuf]] heuw hgf [[algh|gjrehrgu]] hwfewf {ugeu|wgf} ehgg {fuwh|jrgh|gerugh}\n");
+	}
+	public void listWithTwoLevels() {
+		TextFragment wanted, list, item;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("== hello ==\n# test\n# hello\n# cool\n# * test\n# * cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void listWithNoOwnItems() {
+		TextFragment wanted, list, item;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("== hello ==\n# test\n# hello\n# * * test\n# * * cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void listWithSublistAtMiddle() {
+		TextFragment wanted, list, item;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("# test\n# hello\n# * test\n# cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void listTypeChangeAtMiddle() {
+		TextFragment wanted, list;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("* howdy\n* hello\n# test\n# cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void listTypeChangeAtMiddleInsideList() {
+		TextFragment wanted, mainList, list, item;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		mainList = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		item = mainList.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("# test\n# * howdy\n# * hello\n# # test\n# # cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void twoParagraphs() {
+		TextFragment wanted, node;
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.PARAGRAPH_TYPE));
+		wanted.appendChild(parserWiki.new TextFragment(TextFragment.PARAGRAPH_TYPE));
+
+		fragment = parse("== hello ==\ntest\nhello\n\ncool\nlol");
+		System.out.println("Result: " + fragment.equals(wanted));
 	}
 }
