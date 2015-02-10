@@ -42,21 +42,22 @@ public class WikiMarkup extends Parser {
 
 		public final static int ROOT_TYPE = 0;
 		public final static int PLAIN_TYPE = 1;
-		public final static int PARAGRAPH_TYPE = 2;
-		public final static int STRONG_TYPE = 3;
-		public final static int EM_TYPE = 4;
-		public final static int LINK_TYPE = 5;
-		public final static int RULER_TYPE = 6;
-		public final static int TEMPLATE_TYPE = 7;
-		public final static int LIST_TYPE = 8;
-		public final static int LIST_ITEM_TYPE = 9;
-		public final static int TABLE_TYPE = 10;
-		public final static int TABLE_ROW_TYPE = 11;
-		public final static int TABLE_CELL_TYPE = 12;
-		public final static int TABLE_HEADING_TYPE = 13;
-		public final static int TABLE_CAPTION_TYPE = 14;
-		public final static int DEFINITION_LABEL_TYPE = 15;
-		public final static int DEFINITION_ITEM_TYPE = 16;
+		public final static int HEADER_TYPE = 2;
+		public final static int PARAGRAPH_TYPE = 3;
+		public final static int STRONG_TYPE = 4;
+		public final static int EM_TYPE = 5;
+		public final static int LINK_TYPE = 6;
+		public final static int RULER_TYPE = 7;
+		public final static int TEMPLATE_TYPE = 8;
+		public final static int LIST_TYPE = 9;
+		public final static int LIST_ITEM_TYPE = 10;
+		public final static int TABLE_TYPE = 11;
+		public final static int TABLE_ROW_TYPE = 12;
+		public final static int TABLE_CELL_TYPE = 13;
+		public final static int TABLE_HEADING_TYPE = 14;
+		public final static int TABLE_CAPTION_TYPE = 15;
+		public final static int DEFINITION_LABEL_TYPE = 16;
+		public final static int DEFINITION_ITEM_TYPE = 17;
 		public final static int MISC_TYPE = 100;
 
 		public TextFragment(int type) {
