@@ -253,8 +253,11 @@ public class WikiMarkup extends Parser {
 		currentFragment = rootFragment;
 		itemList.clear();
 
-		/*TODO: make this into loop */
-		parseLine();
+		/* parse every line from the reader */
+		while(currentChar != 0) {
+			parseLine();
+		}
+
 		return true;
 	}
 
@@ -265,7 +268,7 @@ public class WikiMarkup extends Parser {
 
 		/* trim the whitespace from the start of line */
 		do {
-			if(!isWhitespace(currentChar)) break;
+			if(currentChar == '\n' || !isWhitespace(currentChar)) break;
 		} while(getNext());
 
 		switch(currentChar) {
