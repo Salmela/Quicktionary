@@ -39,6 +39,7 @@ public class WikiMarkup extends Parser {
 		private int type;
 		private String content;
 		private ArrayList<TextFragment> childs;
+		private String parameter;
 
 		public final static int ROOT_TYPE = 0;
 		public final static int PLAIN_TYPE = 1;
@@ -60,11 +61,16 @@ public class WikiMarkup extends Parser {
 		public final static int DEFINITION_ITEM_TYPE = 17;
 		public final static int MISC_TYPE = 100;
 
-		public TextFragment(int type) {
+		public TextFragment(int type, String parameter) {
 			this.parent = null;
 			this.type = type;
 			this.content = null;
 			this.childs = new ArrayList<TextFragment>();
+			this.parameter = parameter;
+		}
+
+		public TextFragment(int type) {
+			this(type, null);
 		}
 
 		public void setContent(String content) {
@@ -84,6 +90,14 @@ public class WikiMarkup extends Parser {
 
 		public TextFragment getParent() {
 			return parent;
+		}
+
+		public int getType() {
+			return type;
+		}
+
+		public String getParameter() {
+			return parameter;
 		}
 	}
 
