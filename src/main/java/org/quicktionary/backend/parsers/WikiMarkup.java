@@ -215,6 +215,13 @@ public class WikiMarkup extends Parser {
 		createSymbolLut();
 	}
 
+	private TextFragment getCurrentFragment() {
+		if(itemList.size() == 0) {
+			return null;
+		}
+		return itemList.get(itemList.size() - 1);
+	}
+
 	private void itemListTruncate(int newSize) {
 		if(itemList.size() == newSize) return;
 		itemList.subList(newSize, itemList.size()).clear();
@@ -259,6 +266,10 @@ public class WikiMarkup extends Parser {
 		}
 
 		return true;
+	}
+
+	public TextFragment getRoot() {
+		return rootFragment;
 	}
 
 	private void parseLine() {
