@@ -79,6 +79,13 @@ public class Application implements ActionListener {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");
 		}
+
+		updateHistory();
+	}
+
+	private void updateHistory() {
+		mainWindow.updateHistoryButtons("next", dictionary.getNextView());
+		mainWindow.updateHistoryButtons("back", dictionary.getPreviousView());
 	}
 
 	private void handleSearchRequest(ActionEvent event) {
