@@ -40,10 +40,14 @@ public class MainWindow extends JFrame implements ActionListener {
 	private final Application app;
 	private StyleManager styleManager;
 
+	/* main components */
 	private JScrollPane mainPane;
 	private SearchResults searchResults;
 	private JTextArea pageArea;
 	private JTextField searchBox;
+
+	/* history buttons */
+	private JButton backButton, nextButton;
 
 	public MainWindow(Application app) {
 		this.app = app;
@@ -57,7 +61,10 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		styleManager = new StyleManager();
 		styleManager.changeStyle(Main.themeName);
+
 		makeComponents();
+		updateHistoryButtons("next", null);
+		updateHistoryButtons("back", null);
 	}
 
 	/*TODO: remove/move somewhere else */
@@ -131,9 +138,12 @@ public class MainWindow extends JFrame implements ActionListener {
 		return headerBar;
 	}
 
+	/**
+	 * Create the child components.
+	 */
 	private void makeComponents() {
 		JPanel     headerBar;
-		JButton    backButton, nextButton, settingsButton;
+		JButton    settingsButton;
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -166,24 +176,52 @@ public class MainWindow extends JFrame implements ActionListener {
 		searchResults.inLayout();
 	}
 
+	/**
+	 * Get the search result listener from searchResults.
+	 */
 	public SearchResultListener getSearchResultListener() {
 		return searchResults.getSearchResultListener();
 	}
 
+	/**
+	 * Change the content of the main area.
+	 */
 	private void changeView(boolean changeToSearchResults) {
+		/* swap to search results */
 		if(changeToSearchResults) {
 			mainPane.setViewportView(searchResults);
 			setTitle(appTitle + " \u2014 Search results");
+		/* swap to page area */
 		} else {
 			mainPane.setViewportView(pageArea);
 			setTitle(appTitle + " \u2014 " + pageTitle);
 		}
 	}
 
+	/**
+	 * Set the fetched page, given by Application class.
+	 */
 	public void openPage(String title, String text) {
 		pageArea.setText(text);
 		pageTitle = title;
 		changeView(false);
+	}
+
+	/**
+	 * Disable or enable one of the history buttons.
+	 */
+	public void updateHistoryButtons(String buttonString, Object view) {
+		JButton button;
+
+		if("next".equals(buttonString)) {
+			button = nextButton;
+		} else if("back".equals(buttonString)) {
+			button = backButton;
+		} else {
+			return;
+		}
+
+		button.setEnabled(view != null);
 	}
 
 	/**
