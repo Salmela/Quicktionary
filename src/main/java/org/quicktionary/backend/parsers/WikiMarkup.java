@@ -153,7 +153,10 @@ public class WikiMarkup extends Parser {
 				return false;
 			}
 
-			if(parameter != null && parameter.equals(fragment.parameter)) {
+			if(parameter != null && !parameter.equals(fragment.parameter)) {
+				return false;
+			/* check if one of the parameters is null and other isn't */
+			} else if((parameter == null) != (fragment.parameter == null)) {
 				return false;
 			}
 
