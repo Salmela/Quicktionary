@@ -409,9 +409,7 @@ public class WikiMarkup extends Parser {
 				return;
 			}
 		}
-		lineBuffer.delete(0, start.location + start.count);
 		System.out.println("length of the header " + start.length);
-		lineBuffer.setLength(start.length);
 
 		currentFragment = new TextFragment(TextFragment.HEADER_TYPE);
 		rootFragment.appendChild(currentFragment);
