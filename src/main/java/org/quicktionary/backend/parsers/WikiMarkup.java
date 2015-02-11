@@ -311,6 +311,27 @@ public class WikiMarkup extends Parser {
 		lineBuffer.setLength(0);
 		lineMarkup.clear();
 
+		/* parse the line */
+		parseLineStartMarkup();
+		parseInlineMarkup();
+
+		/* check if the line is valid header */
+		finalizeHeader();
+
+		/* generate the text content for the parsed markup (or the TextFragment) */
+		for(int i = 0; i < lineMarkup.size(); i++) {
+			MarkupStart start = lineMarkup.get(i);
+			if(start.length > 0) {
+				System.out.print("START ");
+			}
+			System.out.println("PROCESS markupStart " + start.sourceLocation + ", symbol: " + start.symbol.character + ", count: " + start.count);
+		}
+	}
+
+	/**
+	 * Parse the markup that can be only at the start of line.
+	 */
+	private void parseLineStartMarkup() {
 		/* trim the whitespace from the start of line */
 		do {
 			if(currentChar == '\n' || !isWhitespace(currentChar)) break;
@@ -351,19 +372,6 @@ public class WikiMarkup extends Parser {
 				createParagraph();
 			}
 			break;
-		}
-
-		parseMarkup();
-
-		finalizeHeader();
-
-		/*TODO: handle partial markups */
-		for(int i = 0; i < lineMarkup.size(); i++) {
-			MarkupStart start = lineMarkup.get(i);
-			if(start.length > 0) {
-				System.out.print("START ");
-			}
-			System.out.println("PROCESS markupStart " + start.sourceLocation + ", symbol: " + start.symbol.character + ", count: " + start.count);
 		}
 	}
 
@@ -414,7 +422,7 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Parse the inline markup at the line.
 	 */
-	private void parseMarkup() {
+	private void parseInlineMarkup() {
 		boolean wasWhitespace = false;
 		do {
 			/* return from the function at the newline character */
