@@ -48,6 +48,9 @@ public class Application implements ActionListener {
 		dictionary.newWord("lay");
 
 		dictionary.setSearchResultListener(mainWindow.getSearchResultListener());
+
+		/* add the main page to the history */
+		dictionary.storeEvent("page", "");
 		mainWindow.setVisible(true);
 	}
 

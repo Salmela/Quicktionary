@@ -50,6 +50,10 @@ public class Quicktionary {
 		database.removeWord(word);
 	}
 
+	public void storeEvent(String type, String data) {
+		history.saveEvent(type, data);
+	}
+
 	public void readDatabase(String filename) {
 		/* should we create file description here,
 		 * so that testing would be easier?
