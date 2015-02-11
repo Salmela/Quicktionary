@@ -22,19 +22,20 @@ package org.quicktionary.backend;
 public class Quicktionary {
 	private WordDatabase database;
 	private Searcher     searcher;
-	//private History    history;
+	private History      history;
 
 	public Quicktionary() {
 		database = new WordDatabase(this);
 		searcher = new Searcher(this, database);
-		//history = new History(this);
+		history = new History();
 
 		//searchThread = new Thread(searcher);
 		//searchThread.start();
 	}
 
-	public void search(String query) {
-		searcher.search(query);
+	public void search(String searchQuery) {
+		history.saveEvent("search", searchQuery);
+		searcher.search(searchQuery);
 	}
 
 	public void requestSearchResults(int offset, int count) {
@@ -74,8 +75,16 @@ public class Quicktionary {
 	}
 
 	public String getPageContent(SearchItem item, String searchQuery) {
-		//history.saveEvent("search", searchQuery);
-		//history.saveEvent("page", "" + item.getID());
+		history.saveEvent("search", searchQuery);
+		history.saveEvent("page", "" + item.getWord());
 		return database.fetchPage(item);
+	}
+
+	public Object getNextView() {
+		return history.getNext(false);
+	}
+
+	public Object getPreviousView() {
+		return history.getPrevious(false);
 	}
 }
