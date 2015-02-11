@@ -19,9 +19,11 @@ package org.quicktionary.backend;
 import java.lang.Runnable;
 import java.io.File;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.io.IOException;
 
 import org.quicktionary.backend.parsers.XMLParser;
+import org.quicktionary.backend.parsers.WikiMarkup;
 
 /**
  * WikiDBReader goes through a wikimedia database dump.
@@ -29,6 +31,7 @@ import org.quicktionary.backend.parsers.XMLParser;
  */
 public class WikiDBReader implements Runnable {
 	private XMLParser parser;
+	private WikiMarkup wikiParser;
 	private WordDatabase database;
 	private File file;
 
@@ -40,6 +43,7 @@ public class WikiDBReader implements Runnable {
 
 	public WikiDBReader(WordDatabase database) {
 		this.parser = new XMLParser();
+		this.wikiParser = new WikiMarkup();
 		this.database = database;
 
 		parser.setTagNameId("ns", NAMESPACE_TAG);
@@ -103,9 +107,18 @@ public class WikiDBReader implements Runnable {
 			}
 		} while(parser.getNextSibling());
 
+		/*TODO: check that title and text is set */
 		if("0".equals(ns)) {
+			WikiMarkup.TextFragment fragment;
+
+			System.out.println(text);
+			try {
+				wikiParser.parse(new StringReader(text));
+			} catch(IOException exception) {
+				return;
+			}
 			database.newWord(title);
-			database.newPage(title, text);
+			database.newPage(title, text + "\n" + wikiParser.getRoot().print(2));
 		}
 	}
 
