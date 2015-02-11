@@ -353,7 +353,7 @@ public class WikiMarkup extends Parser {
 		case ';':
 		/* indentation */
 		case ':':
-			//parseListItem();
+			parseListItem();
 			break;
 		/* paragraph */
 		case '\n':
@@ -491,6 +491,165 @@ public class WikiMarkup extends Parser {
 		start = appendMarkupStart(symbol);
 
 		System.out.println("Symbol: " + currentChar + " location: " + start.location);
+	}
+
+	private void parseListItem() {
+		boolean itemCreated = false;
+		int i = 0;
+
+		currentFragment = rootFragment;
+
+		/* close the previous nodes */
+		if(itemList.size() > i && itemList.get(i).getType() != TextFragment.LIST_TYPE) {
+			System.out.println("Truncate, not list item " + itemList.get(i).getType() + " " + getSourceLocation());
+			itemListTruncate(i);
+		}
+
+		do {
+			boolean listSymbol;
+			TextFragment list;
+			String parameter;
+
+			listSymbol = true;
+			parameter = null;
+
+			switch(currentChar) {
+			case '*':
+				parameter = "ul";
+				break;
+			case '#':
+				parameter = "ol";
+				break;
+			/*FIXME: following cases are not translated properly */
+			case ';':
+				parameter = "dt";
+				break;
+			case ':':
+				parameter = "dd";
+				break;
+			case '\n':
+				/*FIXME: this method shouldn't create anything if there is no text at the line */
+				/*TODO: write some code to remove the generated TextFragments */
+				return;
+			default:
+				listSymbol = false;
+				break;
+			}
+
+			/* discard whitespace */
+			if(isWhitespace(currentChar)) {
+				getNext();
+				continue;
+			}
+
+			/* end the loop if we hit the content of the list item */
+			if(!listSymbol) {
+				break;
+			}
+
+			/* get the current location in source file for debug messages */
+			String sourceLocation = getSourceLocation();
+			/* consume the list character */
+			getNext();
+
+			/*TODO: simplify the following mess */
+
+			/* check if there is already a list */
+			if(itemList.size() > i) {
+				list = itemList.get(i);
+
+				/* it's a list */
+				if(list.getType() == TextFragment.LIST_TYPE) {
+					/* if the list doesn't have same type,
+					   then end the previous list and create new one */
+					if(!parameter.equals(list.getParameter())) {
+						System.out.println("New list " + sourceLocation);
+
+						itemListTruncate(i);
+						createList(parameter);
+
+						createListItem();
+						itemCreated = true;
+						i++;
+
+						continue;
+					}
+
+					/* skip the list node */
+					list = itemList.get(++i);
+					itemCreated = false;
+
+					/* just skip the list items */
+					if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
+						i++;
+					} else {
+						System.out.println("ERROR ERROR impossible happened " + sourceLocation);
+						return;
+					}
+				} else {
+					System.out.println("ERROR ERROR impossible happened " + sourceLocation);
+					return;
+				}
+				continue;
+			}
+
+			/* create new list and it's first item */
+			System.out.println("New level list " + sourceLocation);
+			list = createList(parameter);
+			i++;
+
+			createListItem();
+			itemCreated = true;
+			i++;
+		} while(true);
+
+		/* append new list item after the previous list item */
+		if(!itemCreated) {
+			itemListTruncate(i);
+			createListItem();
+		}
+	}
+
+	/**
+	 * Helper method for creating a list TextFragment.
+	 */
+	private TextFragment createList(String parameter) {
+		TextFragment list, parent;
+
+		if(itemList.size() == 0) {
+			parent = rootFragment;
+		} else {
+			parent = itemList.get(itemList.size() - 1);
+		}
+
+		list = new TextFragment(TextFragment.LIST_TYPE, parameter);
+		parent.appendChild(list);
+		itemList.add(list);
+
+		return list;
+	}
+
+	/**
+	 * Helper method for creating a list item TextFragment.
+	 */
+	private void createListItem() {
+		TextFragment item, list;
+
+		list = itemList.get(itemList.size() - 1);
+		if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
+			itemListTruncate(itemList.size() - 1);
+			list = itemList.get(itemList.size() - 1);
+		}
+
+		if(list.getType() != TextFragment.LIST_TYPE) {
+			System.out.println("ERROR: must be list");
+		}
+
+		System.out.println("New list item " + getSourceLocation());
+		item = new TextFragment(TextFragment.LIST_ITEM_TYPE);
+		list.appendChild(item);
+		currentFragment = item;
+		itemList.add(item);
 	}
 
 	private void createParagraph() {
