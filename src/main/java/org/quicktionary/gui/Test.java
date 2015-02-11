@@ -24,17 +24,22 @@ public class Test {
 		xmlParserTest();
 
 		headerAndParagraph();
+		twoParagraphs();
+
 		templateWithPartialStrongMarkup();
 		templateAndLinkInterleaved();
 		linkAndTemplateInterleaved();
 		linkWithExtraBracket();
 		multpleValidLinksAndTemplates();
+
+		listMarkupWithoutSpace();
+		doubleUnorderedListMarkupWithoutSpace();
+
 		listWithTwoLevels();
 		listWithNoOwnItems();
 		listWithSublistAtMiddle();
 		listTypeChangeAtMiddle();
 		listTypeChangeAtMiddleInsideList();
-		twoParagraphs();
 	}
 
 	public static void main(String[] args) {
@@ -100,18 +105,48 @@ public class Test {
 	public void multpleValidLinksAndTemplates() {
 		fragment = parse("hello [[uhgr]] eugh [[ufhwuf]] heuw hgf [[algh|gjrehrgu]] hwfewf {ugeu|wgf} ehgg {fuwh|jrgh|gerugh}\n");
 	}
+	public void listMarkupWithoutSpace() {
+		TextFragment wanted, list, item;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
+		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("# test\n#* hello\n#* cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void doubleUnorderedListMarkupWithoutSpace() {
+		TextFragment wanted, list, item;
+
+		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
+		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+
+		fragment = parse("* test\n** hello\n** cool");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
 	public void listWithTwoLevels() {
 		TextFragment wanted, list, item;
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
@@ -124,14 +159,14 @@ public class Test {
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
 		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
@@ -143,12 +178,12 @@ public class Test {
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
 		fragment = parse("# test\n# hello\n# * test\n# cool");
@@ -159,11 +194,11 @@ public class Test {
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
@@ -174,14 +209,14 @@ public class Test {
 		TextFragment wanted, mainList, list, item;
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
-		mainList = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		mainList = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		item = mainList.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE));
+		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
