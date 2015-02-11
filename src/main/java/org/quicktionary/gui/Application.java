@@ -75,6 +75,10 @@ public class Application implements ActionListener {
 			handleAskRemoveWordRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.OPEN_PREFERENCES_EVENT) {
 			new SettingsDialog(mainWindow, this);
+		} else if(event.getActionCommand() == MainWindow.GO_NEXT_EVENT) {
+				mainWindow.updateHistoryButtons("next", dictionary.getNextView(true));
+		} else if(event.getActionCommand() == MainWindow.GO_BACK_EVENT) {
+				mainWindow.updateHistoryButtons("back", dictionary.getPreviousView(true));
 		} else {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");
@@ -84,8 +88,8 @@ public class Application implements ActionListener {
 	}
 
 	private void updateHistory() {
-		mainWindow.updateHistoryButtons("next", dictionary.getNextView());
-		mainWindow.updateHistoryButtons("back", dictionary.getPreviousView());
+		mainWindow.updateHistoryButtons("next", dictionary.getNextView(false));
+		mainWindow.updateHistoryButtons("back", dictionary.getPreviousView(false));
 	}
 
 	private void handleSearchRequest(ActionEvent event) {

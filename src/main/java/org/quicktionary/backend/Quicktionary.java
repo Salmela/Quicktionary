@@ -80,11 +80,11 @@ public class Quicktionary {
 		return database.fetchPage(item);
 	}
 
-	public Object getNextView() {
-		return history.getNext(false);
+	public Object getNextView(boolean go) {
+		return history.getNext(go);
 	}
 
-	public Object getPreviousView() {
-		return history.getPrevious(false);
+	public Object getPreviousView(boolean go) {
+		return history.getPrevious(go);
 	}
 }
