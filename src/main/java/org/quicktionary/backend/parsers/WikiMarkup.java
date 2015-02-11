@@ -238,6 +238,9 @@ public class WikiMarkup extends Parser {
 		createSymbolLut();
 	}
 
+	/**
+	 * Replace the currentFragment variable with call to this method.
+	 */
 	private TextFragment getCurrentFragment() {
 		if(itemList.size() == 0) {
 			return null;
@@ -271,6 +274,10 @@ public class WikiMarkup extends Parser {
 		symbolLut['='] = new SymbolType('=', true, 0, true);
 	}
 
+	/**
+	 * Parse the wikitext from reader.
+	 * @param reader The wikitext to be readed
+	 */
 	public boolean parse(Reader reader) throws IOException {
 		boolean status;
 
@@ -295,7 +302,11 @@ public class WikiMarkup extends Parser {
 		return rootFragment;
 	}
 
+	/**
+	 * Parse and generate parsing tree for single line of wikitext.
+	 */
 	private void parseLine() {
+		/* reset the class variables for next line */
 		prevLineMarkup = null;
 		lineBuffer.setLength(0);
 		lineMarkup.clear();
@@ -359,6 +370,9 @@ public class WikiMarkup extends Parser {
 	private void parseTable() {
 	}
 
+	/**
+	 * Try to match the header markup for the line and create the TextFragment for it.
+	 */
 	private void finalizeHeader() {
 		MarkupStart start, end;
 		int i;
@@ -397,6 +411,9 @@ public class WikiMarkup extends Parser {
 		itemList.add(currentFragment);
 	}
 
+	/**
+	 * Parse the inline markup at the line.
+	 */
 	private void parseMarkup() {
 		boolean wasWhitespace = false;
 		do {
@@ -493,6 +510,9 @@ public class WikiMarkup extends Parser {
 		return null;
 	}
 
+	/**
+	 * Generate TextFragments for the previous inline markup.
+	 */
 	private void handlePreviousMarkup() {
 		MarkupStart start, markup;
 		int lastMarkupIndex = lineMarkup.size() - 1;
@@ -557,6 +577,9 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
+	/**
+	 * Parse header start markup from the start of the line.
+	 */
 	private void parseHeaderMarkupStart() {
 		MarkupStart start;
 		int i;
@@ -582,6 +605,9 @@ public class WikiMarkup extends Parser {
 		currentFragment.getParent().appendChild(fragment);
 	}
 
+	/**
+	 * Parse text style markup.
+	 */
 	private void parseTextStyleMarkup(MarkupStart end) {
 		MarkupStart start;
 		int quotes;
@@ -617,6 +643,9 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
+	/**
+	 * Generate TextFragment for the text style markup.
+	 */
 	private void finalizeTextStyleMarkup(MarkupStart start) {
 		MarkupStart end = start.endMarkup;
 		int quotes = start.count;
