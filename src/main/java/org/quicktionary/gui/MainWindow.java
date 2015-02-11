@@ -33,6 +33,8 @@ import org.quicktionary.gui.theme.StyleManager;
  */
 public class MainWindow extends JFrame implements ActionListener {
 	static final long serialVersionUID = 1L;
+	static final String GO_NEXT_EVENT = "go-next-event";
+	static final String GO_BACK_EVENT = "go-back-event";
 
 	private final String appTitle;
 	private String pageTitle;
@@ -169,6 +171,12 @@ public class MainWindow extends JFrame implements ActionListener {
 		pageArea = new JTextArea();
 		pageArea.setText("Read database and write something to the search box.");
 		mainPane.setViewportView(pageArea);
+
+		/* add event listeners for the history buttons */
+		nextButton.addActionListener(app);
+		nextButton.setActionCommand(GO_NEXT_EVENT);
+		backButton.addActionListener(app);
+		backButton.setActionCommand(GO_BACK_EVENT);
 
 		this.add(headerBar);
 		this.add(mainPane);
