@@ -35,6 +35,12 @@ public class WikiMarkup extends Parser {
 	private TextFragment currentFragment;
 	private SymbolType[] symbolLut;
 
+	/**
+	 * Node in document tree. The node has type
+	 * and children or text content.
+	 *
+	 * TODO: Rename to TextNode and move to own file.
+	 */
 	public class TextFragment {
 		private TextFragment parent;
 		private int type;
@@ -104,22 +110,36 @@ public class WikiMarkup extends Parser {
 		 *
 		 * @param indentation The padding added to start of each line.
 		 */
-		public void print(int indentation) {
+		public String print(int indentation) {
+			StringBuilder treeString = new StringBuilder();
+			print(treeString, indentation);
+			System.out.print(treeString);
+			return treeString.toString();
+		}
+		private void print(StringBuilder treeString, int indentation) {
 			int i = indentation;
-			while(i-- > 0) System.out.print(" ");
-			System.out.println("Node type: " + type);
+
+			while(i-- > 0) treeString.append(" ");
+			treeString.append("Node type: " + type);
+
+			if(parameter != null) {
+				treeString.append(", parameter: " + parameter);
+			}
+			treeString.append("\n");
 
 			if(content != null) {
 				i = indentation + 2;
-				while(i-- > 0) System.out.print(" ");
+				while(i-- > 0) treeString.append(" ");
 
-				System.out.println("Content: " + content);
+				treeString.append("Content: " + content + "\n");
 				return;
 			}
 
 			for(TextFragment child : childs) {
-				child.print(indentation + 2);
+				child.print(treeString, indentation + 2);
 			}
+
+			return;
 		}
 
 		/**
