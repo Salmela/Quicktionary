@@ -171,7 +171,6 @@ public class WikiMarkup extends Parser {
 			}
 
 			if(childs.size() != fragment.childs.size()) {
-				System.out.println("ERROR: the fragment has invalid content");
 				return false;
 			}
 
