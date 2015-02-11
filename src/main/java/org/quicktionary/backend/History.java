@@ -29,7 +29,7 @@ public class History {
 
 	public History() {
 		events = new ArrayList<Event>();
-		currentIndex = 0;
+		currentIndex = -1;
 	}
 
 	private int indexOfLastEvent() {
@@ -42,6 +42,7 @@ public class History {
 		/* truncate the list if we aren't at the end */
 		if(indexOfLastEvent() > currentIndex) {
 			events.subList(currentIndex + 1, events.size()).clear();
+			currentIndex = events.size() - 1;
 		}
 
 		/* append the new event */
@@ -63,7 +64,7 @@ public class History {
 	}
 
 	public Object getNext(boolean go) {
-		if(indexOfLastEvent() < currentIndex + 1) {
+		if(indexOfLastEvent() <= currentIndex) {
 			return null;
 		}
 		return getRelative(1, go);
