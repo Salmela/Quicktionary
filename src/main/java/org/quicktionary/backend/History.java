@@ -77,4 +77,14 @@ public class History {
 		}
 		return getRelative(-1, go);
 	}
+
+	/**
+	 * Return the current page.
+	 */
+	public Object getCurrent() {
+		if(currentIndex == -1) {
+			return null;
+		}
+		return events.get(currentIndex);
+	}
 }
