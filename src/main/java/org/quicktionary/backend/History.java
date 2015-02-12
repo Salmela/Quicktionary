@@ -18,6 +18,11 @@ package org.quicktionary.backend;
 
 import java.util.ArrayList;
 
+/**
+ * The class stores browsing history and allows
+ * user to go forward and back in history.
+ * TODO: somehow compress many search events into one.
+ */
 public class History {
 	private ArrayList<Event> events;
 	private int currentIndex;
@@ -36,6 +41,9 @@ public class History {
 		return events.size() - 1;
 	}
 
+	/**
+	 * Store a event to the history.
+	 */
 	public void saveEvent(String event, String data) {
 		Event e = new Event();
 
@@ -63,6 +71,9 @@ public class History {
 		return events.get(newIndex);
 	}
 
+	/**
+	 * Get the next page from history.
+	 */
 	public Object getNext(boolean go) {
 		if(indexOfLastEvent() <= currentIndex) {
 			return null;
@@ -70,6 +81,9 @@ public class History {
 		return getRelative(1, go);
 	}
 
+	/**
+	 * Get the previous page from history.
+	 */
 	public Object getPrevious(boolean go) {
 		int index;
 		if(currentIndex <= 0) {
