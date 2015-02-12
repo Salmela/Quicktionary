@@ -91,7 +91,7 @@ public class Quicktionary {
 	 *
 	 * @param filename The filename for the database
 	 */
-	public void readDatabase(String filename) {
+	public void readDatabase(String filename, boolean wait) {
 		/* should we create file description here,
 		 * so that testing would be easier?
 		 */
@@ -107,8 +107,22 @@ public class Quicktionary {
 		if(! parser.check(filename)) {
 			/* send this info to the gui */
 			System.out.println("The file couldn't be opened.");
+			return;
 		}
 		thread.start();
+
+		if(!wait) {
+			return;
+		}
+
+		try {
+			thread.join();
+		} catch (InterruptedException ex) {
+		}
+	}
+
+	public void readDatabase(String filename) {
+		readDatabase(filename, false);
 	}
 
 	/**
