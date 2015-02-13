@@ -32,8 +32,8 @@ public class Test {
 		invalidMultiLineTemplate();
 
 		headerAndParagraph();
+		headerAndtwoParagraphs();
 		headerWithEmAndParagraph();
-		twoParagraphs();
 
 		templateWithPartialStrongMarkup();
 		templateAndLinkInterleaved();
@@ -126,6 +126,16 @@ public class Test {
 		newNode(wanted, "hello", TextFragment.PARAGRAPH_TYPE);
 
 		fragment = parse("== test == \nhello");
+		System.out.println("Result: " + fragment.equals(wanted));
+	}
+	public void headerAndtwoParagraphs() {
+		TextFragment wanted, node;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, "hello", TextFragment.HEADER_TYPE);
+		newNode(wanted, "test hello", TextFragment.PARAGRAPH_TYPE);
+		newNode(wanted, "cool lol", TextFragment.PARAGRAPH_TYPE);
+
+		fragment = parse("== hello ==\ntest\nhello\n\ncool\nlol");
 		System.out.println("Result: " + fragment.equals(wanted));
 	}
 	public void headerWithEmAndParagraph() {
@@ -341,16 +351,6 @@ public class Test {
 		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
 
 		fragment = parse("# test\n# * howdy\n# * hello\n# # test\n# # cool");
-		System.out.println("Result: " + fragment.equals(wanted));
-	}
-	public void twoParagraphs() {
-		TextFragment wanted, node;
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
-		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
-		wanted.appendChild(parserWiki.new TextFragment(TextFragment.PARAGRAPH_TYPE));
-		wanted.appendChild(parserWiki.new TextFragment(TextFragment.PARAGRAPH_TYPE));
-
-		fragment = parse("== hello ==\ntest\nhello\n\ncool\nlol");
 		System.out.println("Result: " + fragment.equals(wanted));
 	}
 }
