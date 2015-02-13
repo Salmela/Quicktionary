@@ -240,12 +240,12 @@ public class Test {
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
+		item = newNode(list, TextFragment.LIST_ITEM_TYPE);
 
 		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		newNode(list, TextFragment.LIST_ITEM_TYPE);
+		newNode(list, TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n#* hello\n#* cool");
 		System.out.println("Result: " + fragment.equals(wanted));
@@ -255,12 +255,12 @@ public class Test {
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ul");
+		item = newNode(list, TextFragment.LIST_ITEM_TYPE);
 
 		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		newNode(list, TextFragment.LIST_ITEM_TYPE);
+		newNode(list, TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("* test\n** hello\n** cool");
 		System.out.println("Result: " + fragment.equals(wanted));
@@ -268,17 +268,17 @@ public class Test {
 	public void listWithTwoLevels() {
 		TextFragment wanted, list, item;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
-		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, TextFragment.HEADER_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
+		item = newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("== hello ==\n# test\n# hello\n# cool\n# * test\n# * cool");
 		System.out.println("Result: " + fragment.equals(wanted));
@@ -290,15 +290,15 @@ public class Test {
 		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
 
 		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		item = newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+		item = newNode(list, TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("== hello ==\n# test\n# hello\n# * * test\n# * * cool");
 		System.out.println("Result: " + fragment.equals(wanted));
@@ -308,13 +308,13 @@ public class Test {
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		item = list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		item = newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n# hello\n# * test\n# cool");
 		System.out.println("Result: " + fragment.equals(wanted));
@@ -324,13 +324,13 @@ public class Test {
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "howdy", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("* howdy\n* hello\n# test\n# cool");
 		System.out.println("Result: " + fragment.equals(wanted));
@@ -338,17 +338,17 @@ public class Test {
 	public void listTypeChangeAtMiddleInsideList() {
 		TextFragment wanted, mainList, list, item;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
-		mainList = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		item = mainList.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		mainList = newNode(wanted, TextFragment.LIST_TYPE, "ol");
+		item = newNode(mainList, "test", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "howdy", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
-		list.appendChild(parserWiki.new TextFragment(TextFragment.LIST_ITEM_TYPE));
+		list = newNode(item, TextFragment.LIST_TYPE, "ol");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n# * howdy\n# * hello\n# # test\n# # cool");
 		System.out.println("Result: " + fragment.equals(wanted));
