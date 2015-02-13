@@ -15,6 +15,8 @@ public class Test {
 	private WikiMarkup parserWiki;
 	private TextFragment fragment;
 
+	private int testSuccess, testTotal;
+
 	String xmlDecl = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 
 	public Test() {
@@ -49,6 +51,16 @@ public class Test {
 		listWithSublistAtMiddle();
 		listTypeChangeAtMiddle();
 		listTypeChangeAtMiddleInsideList();
+
+		System.out.println("results " + testSuccess + " / " + testTotal);
+	}
+
+	private boolean result(boolean success) {
+		if(success) {
+			testSuccess++;
+		}
+		testTotal++;
+		return success;
 	}
 
 	public static void main(String[] args) {
@@ -126,7 +138,7 @@ public class Test {
 		newNode(wanted, "hello", TextFragment.PARAGRAPH_TYPE);
 
 		fragment = parse("== test == \nhello");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void headerAndtwoParagraphs() {
 		TextFragment wanted, node;
@@ -136,7 +148,7 @@ public class Test {
 		newNode(wanted, "cool lol", TextFragment.PARAGRAPH_TYPE);
 
 		fragment = parse("== hello ==\ntest\nhello\n\ncool\nlol");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void headerWithEmAndParagraph() {
 		TextFragment wanted, header;
@@ -149,7 +161,7 @@ public class Test {
 		addText(header, "er");
 
 		fragment = parse("== t'''est'''er == \nhello");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
 	public void whitespaceBefore() {
@@ -161,7 +173,7 @@ public class Test {
 		newNode(paragraph, "cool", TextFragment.EM_TYPE);
 
 		fragment = parse("test ''' cool'''");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void whitespaceAfter() {
 		TextFragment wanted, paragraph;
@@ -172,7 +184,7 @@ public class Test {
 		addText(paragraph, "test");
 
 		fragment = parse("'''cool ''' test");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void whitespaceMiddle() {
 		TextFragment wanted, paragraph;
@@ -183,7 +195,7 @@ public class Test {
 		addText(paragraph, "test");
 
 		fragment = parse("'''cool ''' '' test''");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
 	public void unendingTextStyle() {
@@ -195,7 +207,7 @@ public class Test {
 		newNode(paragraph, "so cool", TextFragment.EM_TYPE);
 
 		fragment = parse("This is '''so cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
 	public void multiLineTemplate() {
@@ -207,7 +219,7 @@ public class Test {
 		newNode(paragraph, "smallcaps\n|so cool\n\n", TextFragment.EM_TYPE);
 
 		fragment = parse("This is {{smallcaps\n|so cool\n\n}}");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void invalidMultiLineTemplate() {
 		TextFragment wanted, paragraph;
@@ -217,7 +229,7 @@ public class Test {
 		newNode(wanted, "}}", TextFragment.PARAGRAPH_TYPE);
 
 		fragment = parse("This is {{smallcaps\na|so cool\n\n}}");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
 	public void templateWithPartialStrongMarkup() {
@@ -248,7 +260,7 @@ public class Test {
 		newNode(list, TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n#* hello\n#* cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void doubleUnorderedListMarkupWithoutSpace() {
 		TextFragment wanted, list, item;
@@ -263,7 +275,7 @@ public class Test {
 		newNode(list, TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("* test\n** hello\n** cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listWithTwoLevels() {
 		TextFragment wanted, list, item;
@@ -281,7 +293,7 @@ public class Test {
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("== hello ==\n# test\n# hello\n# cool\n# * test\n# * cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listWithNoOwnItems() {
 		TextFragment wanted, list, item;
@@ -301,7 +313,7 @@ public class Test {
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("== hello ==\n# test\n# hello\n# * * test\n# * * cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listWithSublistAtMiddle() {
 		TextFragment wanted, list, item;
@@ -317,7 +329,7 @@ public class Test {
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n# hello\n# * test\n# cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listTypeChangeAtMiddle() {
 		TextFragment wanted, list;
@@ -333,7 +345,7 @@ public class Test {
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("* howdy\n* hello\n# test\n# cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listTypeChangeAtMiddleInsideList() {
 		TextFragment wanted, mainList, list, item;
@@ -351,6 +363,6 @@ public class Test {
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n# * howdy\n# * hello\n# # test\n# # cool");
-		System.out.println("Result: " + fragment.equals(wanted));
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 }
