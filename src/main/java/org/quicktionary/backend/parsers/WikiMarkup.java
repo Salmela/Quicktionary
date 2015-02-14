@@ -135,7 +135,7 @@ public class WikiMarkup extends Parser {
 				i = indentation + 2;
 				while(i-- > 0) treeString.append(" ");
 
-				treeString.append("Content: " + content + "\n");
+				treeString.append("Content: \"" + content + "\"\n");
 				return;
 			}
 
