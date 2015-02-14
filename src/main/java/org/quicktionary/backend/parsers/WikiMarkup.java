@@ -32,7 +32,6 @@ public class WikiMarkup extends Parser {
 	private MarkupStart prevLineMarkup;
 	private int inlineFragmentIndex;
 
-	private TextFragment currentFragment;
 	private SymbolType[] symbolLut;
 
 	/**
@@ -238,8 +237,6 @@ public class WikiMarkup extends Parser {
 		lineMarkup = new ArrayList<MarkupStart>(16);
 		itemList = new ArrayList<TextFragment>();
 
-		currentFragment = null;
-
 		createSymbolLut();
 	}
 
@@ -296,7 +293,6 @@ public class WikiMarkup extends Parser {
 		/* add the root node */
 		itemList.add(new TextFragment(0));
 		inlineFragmentIndex = itemList.size();
-		currentFragment = getRoot();
 
 		/* parse every line from the reader */
 		while(currentChar != 0) {
@@ -395,6 +391,7 @@ public class WikiMarkup extends Parser {
 	 * Try to match the header markup for the line and create the TextFragment for it.
 	 */
 	private void finalizeHeader() {
+		TextFragment fragment;
 		MarkupStart start, end;
 		int i;
 
@@ -424,10 +421,10 @@ public class WikiMarkup extends Parser {
 		}
 		System.out.println("length of the header " + start.length);
 
-		currentFragment = new TextFragment(TextFragment.HEADER_TYPE);
-		getRoot().appendChild(currentFragment);
+		fragment = new TextFragment(TextFragment.HEADER_TYPE);
+		getRoot().appendChild(fragment);
 		itemListTruncate(1);
-		itemList.add(currentFragment);
+		itemList.add(fragment);
 	}
 
 	/**
@@ -503,7 +500,6 @@ public class WikiMarkup extends Parser {
 
 	private void parseListItem() {
 		boolean itemCreated = false;
-		currentFragment = getRoot();
 		/* skip the root node */
 		int i = 1;
 
@@ -656,17 +652,17 @@ public class WikiMarkup extends Parser {
 		System.out.println("New list item " + getSourceLocation());
 		item = new TextFragment(TextFragment.LIST_ITEM_TYPE);
 		list.appendChild(item);
-		currentFragment = item;
 		itemList.add(item);
 	}
 
 	private void createParagraph() {
+		TextFragment paragraphNode;
 		System.out.println("New paragraph" + getSourceLocation());
 
-		currentFragment = new TextFragment(TextFragment.PARAGRAPH_TYPE);
-		getRoot().appendChild(currentFragment);
+		paragraphNode = new TextFragment(TextFragment.PARAGRAPH_TYPE);
+		getRoot().appendChild(paragraphNode);
 		itemListTruncate(1);
-		itemList.add(currentFragment);
+		itemList.add(paragraphNode);
 	}
 
 	private MarkupStart getMarkupSymbol(SymbolType symbol) {
@@ -772,7 +768,7 @@ public class WikiMarkup extends Parser {
 
 		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
 		fragment.setContent(text);
-		currentFragment.getParent().appendChild(fragment);
+		getCurrentFragment().getParent().appendChild(fragment);
 	}
 
 	/**
@@ -829,14 +825,13 @@ public class WikiMarkup extends Parser {
 		} else if(quotes == 3) {
 			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
 		} else if(quotes == 5) {
-			TextFragment parent;
+			TextFragment parent, node;
 
-			parent = currentFragment;
-			currentFragment = new TextFragment(TextFragment.EM_TYPE);
-			parent.appendChild(currentFragment);
+			parent = getCurrentFragment();
+			node = new TextFragment(TextFragment.EM_TYPE);
+			parent.appendChild(node);
 
 			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
-			currentFragment = parent;
 		}
 	}
 
