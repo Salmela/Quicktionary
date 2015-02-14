@@ -198,20 +198,26 @@ public class WikiMarkup extends Parser {
 	}
 
 	/*TODO: rename to MarkupSymbol */
-	private class MarkupStart {
+	private static class MarkupStart {
+		public enum MarkupType {
+			START,
+			END,
+			NONE
+		}
+
 		public SymbolType symbol;
 
 		public long sourceLocation;
 		public int location;
 		public int count;
 
+		/*TODO: remove */
 		public int length;
-		/*TODO rename to matchingMarkup */
-		public MarkupStart endMarkup;
-		/*TODO add a markup type (start, end, none) */
+		public MarkupStart matchingMarkup;
+		public MarkupType type;
 	}
 
-	private class SymbolType {
+	private static class SymbolType {
 		public char character;
 		public boolean multiple;
 		public boolean end;
@@ -332,16 +338,22 @@ public class WikiMarkup extends Parser {
 				System.out.print("START ");
 			}
 
-			finalizeMarkup(markupStart, previousMarkup);
 			System.out.println("PROCESS markupStart " + markupStart.sourceLocation +
 				", symbol: " + markupStart.symbol.character +
 				", count: " + markupStart.count);
+
+			if(markupStart.type == MarkupStart.MarkupType.NONE) {
+				System.out.println("Discarded the symbol");
+				return;
+			}
+
+			finalizeMarkup(markupStart, previousMarkup);
 
 			previousMarkup = markupStart;
 		}
 
 		if(headerMarkup != null) {
-			finalizeText(headerMarkup.endMarkup, previousMarkup);
+			finalizeText(headerMarkup.matchingMarkup, previousMarkup);
 		} else {
 			finalizeText(null, previousMarkup);
 		}
@@ -422,7 +434,7 @@ public class WikiMarkup extends Parser {
 		}
 
 		/* header must end with equal symbol */
-		end = start.endMarkup;
+		end = start.matchingMarkup;
 		if(end == null || end != lineMarkup.get(lineMarkup.size() - 1)) {
 			return null;
 		}
@@ -490,6 +502,7 @@ public class WikiMarkup extends Parser {
 		start.symbol = symbol;
 		start.count = 1;
 		start.length = -1;
+		start.type = MarkupStart.MarkupType.NONE;
 		lineMarkup.add(start);
 		return start;
 	}
@@ -849,6 +862,13 @@ public class WikiMarkup extends Parser {
 		itemList.add(fragment);
 	}
 
+	private void createMarkupStart(MarkupStart start, MarkupStart end) {
+		start.matchingMarkup = end;
+		end.matchingMarkup = start;
+		start.type = MarkupStart.MarkupType.START;
+		end.type = MarkupStart.MarkupType.END;
+	}
+
 	/**
 	 * Update the Markup start for text style markup.
 	 */
@@ -881,7 +901,7 @@ public class WikiMarkup extends Parser {
 		}
 
 		start.length = end.location - start.location;
-		start.endMarkup = end;
+		createMarkupStart(start, end);
 
 		System.out.println("Inline range " + start.location + ", " + end.location + "  " +
 			lineBuffer.substring(start.location + start.count, end.location));
@@ -894,7 +914,7 @@ public class WikiMarkup extends Parser {
 		int quotes = start.count;
 
 		/* return if this end markup */
-		if(start.endMarkup == null) {
+		if(start.type == MarkupStart.MarkupType.END) {
 			return;
 		}
 
@@ -933,7 +953,7 @@ public class WikiMarkup extends Parser {
 		}
 
 		start.length = end.location - start.location;
-		start.endMarkup = end;
+		createMarkupStart(start, end);
 
 		System.out.println("Link range " + start.location + ", " + end.location + "  " +
 			lineBuffer.substring(start.location + start.count, end.location));
@@ -956,7 +976,7 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 		start.length = end.location - start.location;
-		start.endMarkup = end;
+		createMarkupStart(start, end);
 
 		System.out.println("Template range " + start.location + ", " + end.location + "  " +
 			lineBuffer.substring(start.location + start.count, end.location));
@@ -974,7 +994,7 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 
-		start.endMarkup = end;
 		start.length = end.location - start.location + start.count;
+		createMarkupStart(start, end);
 	}
 }
