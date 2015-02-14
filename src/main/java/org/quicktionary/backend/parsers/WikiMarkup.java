@@ -310,8 +310,9 @@ public class WikiMarkup extends Parser {
 	 * Parse and generate parsing tree for single line of wikitext.
 	 */
 	private void parseLine() {
+		MarkupStart previousMarkup, headerMarkup;
+
 		/* reset the class variables for next line */
-		prevLineMarkup = null;
 		lineBuffer.setLength(0);
 		lineMarkup.clear();
 
@@ -320,15 +321,24 @@ public class WikiMarkup extends Parser {
 		parseInlineMarkup();
 
 		/* check if the line is valid header */
-		finalizeHeader();
+		headerMarkup = finalizeHeader();
 
 		/* generate the text content for the parsed markup (or the TextFragment) */
+		previousMarkup = headerMarkup;
 		for(int i = 0; i < lineMarkup.size(); i++) {
-			MarkupStart start = lineMarkup.get(i);
-			if(start.length > 0) {
+			MarkupStart markupStart;
+
+			markupStart = lineMarkup.get(i);
+			if(markupStart.length > 0) {
 				System.out.print("START ");
 			}
-			System.out.println("PROCESS markupStart " + start.sourceLocation + ", symbol: " + start.symbol.character + ", count: " + start.count);
+
+			//finalizeMarkup(markupStart, previousMarkup);
+			System.out.println("PROCESS markupStart " + markupStart.sourceLocation +
+				", symbol: " + markupStart.symbol.character +
+				", count: " + markupStart.count);
+
+			previousMarkup = markupStart;
 		}
 	}
 
@@ -390,33 +400,33 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Try to match the header markup for the line and create the TextFragment for it.
 	 */
-	private void finalizeHeader() {
+	private MarkupStart finalizeHeader() {
 		TextFragment fragment;
 		MarkupStart start, end;
 		int i;
 
 		/* if there is no change that this is header then return */
 		if(lineMarkup.size() < 2) {
-			return;
+			return null;
 		}
 
 		/* header must start with equal symbol */
 		start = lineMarkup.get(0);
 		if(start.symbol != symbolLut['=']) {
-			return;
+			return null;
 		}
 
 		/* header must end with equal symbol */
 		end = start.endMarkup;
 		if(end == null || end != lineMarkup.get(lineMarkup.size() - 1)) {
-			return;
+			return null;
 		}
 
 		/* there must be only whitespace after the header */
 		for(i = end.location + end.count + 1; i < lineBuffer.length(); i++) {
 			System.out.println("TEXT " + lineBuffer.charAt(i));
 			if(!isWhitespace(lineBuffer.charAt(i))) {
-				return;
+				return null;
 			}
 		}
 		System.out.println("length of the header " + start.length);
@@ -425,6 +435,12 @@ public class WikiMarkup extends Parser {
 		getRoot().appendChild(fragment);
 		itemListTruncate(1);
 		itemList.add(fragment);
+
+		/* remove the header symbols from lineMarkup list */
+		lineMarkup.remove(0);
+		lineMarkup.remove(lineMarkup.size() - 1);
+
+		return start;
 	}
 
 	/**
