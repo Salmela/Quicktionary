@@ -333,12 +333,18 @@ public class WikiMarkup extends Parser {
 				System.out.print("START ");
 			}
 
-			//finalizeMarkup(markupStart, previousMarkup);
+			finalizeMarkup(markupStart, previousMarkup);
 			System.out.println("PROCESS markupStart " + markupStart.sourceLocation +
 				", symbol: " + markupStart.symbol.character +
 				", count: " + markupStart.count);
 
 			previousMarkup = markupStart;
+		}
+
+		if(headerMarkup != null) {
+			finalizeText(headerMarkup.endMarkup, previousMarkup);
+		} else {
+			finalizeText(null, previousMarkup);
 		}
 	}
 
