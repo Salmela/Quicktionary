@@ -733,20 +733,23 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
-	private void createTextFragment(MarkupStart markup) {
-		MarkupStart start;
+	private void finalizeMarkup(MarkupStart markup, MarkupStart previousMarkup) {
+		/* append the text content to previous TextFragment */
+		finalizeText(markup, previousMarkup);
 
+		/* create TextFragment for the markup */
 		switch(markup.symbol.character) {
 		case '\'':
 			finalizeTextStyleMarkup(markup);
 			break;
-		case ']':
+		case '[':
 			finalizeLinkMarkup(markup);
 			break;
-		case '}':
+		case '{':
 			finalizeTemplateMarkup(markup);
 			break;
-		case '>':
+		case '<':
+			MarkupStart start;
 			start = getMarkupSymbol(symbolLut['<']);
 			if(start == null) return;
 			System.out.println("HTML range " + start.location + ", " + markup.location);
@@ -756,6 +759,63 @@ public class WikiMarkup extends Parser {
 			break;
 		default:
 			break;
+		}
+	}
+
+	private void finalizeText(MarkupStart markup, MarkupStart previousMarkup) {
+		TextFragment fragment, parent;
+		int currentIndex, startIndex, endIndex;
+
+		/* check if the text is between last markup and line ending */
+		if(markup == null) {
+			endIndex = lineBuffer.length();
+			/* remove whitespace from the end */
+			while(endIndex > 0 && isWhitespace(lineBuffer.charAt(endIndex - 1))) {
+				endIndex--;
+			}
+			/* handle the case where the line had no markup */
+			if(previousMarkup == null) {
+				startIndex = 0;
+			} else {
+				startIndex = previousMarkup.location + previousMarkup.count;
+			}
+		} else {
+			endIndex = markup.location;
+			/* check if this is the first markup */
+			if(previousMarkup == null) {
+				startIndex = 0;
+			} else {
+				startIndex = previousMarkup.location + previousMarkup.count;
+			}
+		}
+
+		/* remove whitespace from the start */
+		while(startIndex < lineBuffer.length() && isWhitespace(lineBuffer.charAt(startIndex))) {
+			startIndex++;
+		}
+
+		/* check if the substring is longer than zero */
+		if(endIndex - startIndex <= 0) {
+			/* the length will be negative if the substring is consists of only whitespace */
+			return;
+		}
+
+		System.out.println("Text start: " + startIndex + ", " + endIndex + " " + getSourceLocation());
+
+		/* create the node for text content */
+		parent = itemList.get(itemList.size() - 1);
+		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
+		fragment.setContent(lineBuffer.substring(startIndex, endIndex));
+
+		currentIndex = itemList.size() - 1;
+
+		/*TODO fix this */
+		if(parent.isEmpty()) {
+			getCurrentFragment().appendChild(fragment);
+			itemList.add(fragment);
+		} else if(currentIndex > 0) {
+			itemList.get(currentIndex - 1).appendChild(fragment);
+			itemList.set(currentIndex, fragment);
 		}
 	}
 
@@ -776,15 +836,12 @@ public class WikiMarkup extends Parser {
 		System.out.println("Header parsed " + i + ".");
 	}
 
-	private void appendInlineTextFragment(int type, int startIndex, int endIndex) {
+	private void appendInlineTextFragment(int type) {
 		TextFragment fragment;
-		String text;
 
-		text = lineBuffer.substring(startIndex, endIndex);
-
-		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
-		fragment.setContent(text);
+		fragment = new TextFragment(type);
 		getCurrentFragment().getParent().appendChild(fragment);
+		itemList.add(fragment);
 	}
 
 	/**
@@ -829,25 +886,27 @@ public class WikiMarkup extends Parser {
 	 * Generate TextFragment for the text style markup.
 	 */
 	private void finalizeTextStyleMarkup(MarkupStart start) {
-		MarkupStart end = start.endMarkup;
 		int quotes = start.count;
 
-		/* put the previous text into plain text fragment */
-		appendInlineTextFragment(TextFragment.PLAIN_TYPE, prevLineMarkup.location + prevLineMarkup.count, start.location);
+		/* return if this end markup */
+		if(start.endMarkup == null) {
+			return;
+		}
 
 		/* put the quoted text into inline text fragment */
 		if(quotes == 2) {
-			appendInlineTextFragment(TextFragment.EM_TYPE, start.location + start.count, end.location);
+			appendInlineTextFragment(TextFragment.EM_TYPE);
 		} else if(quotes == 3) {
-			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
+			appendInlineTextFragment(TextFragment.STRONG_TYPE);
 		} else if(quotes == 5) {
 			TextFragment parent, node;
 
 			parent = getCurrentFragment();
 			node = new TextFragment(TextFragment.EM_TYPE);
 			parent.appendChild(node);
+			itemList.add(node);
 
-			appendInlineTextFragment(TextFragment.STRONG_TYPE, start.location + start.count, end.location);
+			appendInlineTextFragment(TextFragment.STRONG_TYPE);
 		}
 	}
 
