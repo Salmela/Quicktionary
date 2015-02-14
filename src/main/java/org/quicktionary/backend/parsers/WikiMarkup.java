@@ -29,7 +29,6 @@ public class WikiMarkup extends Parser {
 
 	private ArrayList<MarkupStart> lineMarkup;
 	private ArrayList<TextFragment> itemList;
-	private MarkupStart prevLineMarkup;
 	private int inlineFragmentIndex;
 
 	private SymbolType[] symbolLut;
