@@ -52,7 +52,7 @@ public class Test {
 		listTypeChangeAtMiddle();
 		listTypeChangeAtMiddleInsideList();
 
-		System.out.println("results " + testSuccess + " / " + testTotal);
+		System.out.println("\n\nresults " + testSuccess + " / " + testTotal);
 	}
 
 	private boolean result(boolean success) {
@@ -157,7 +157,7 @@ public class Test {
 		newNode(wanted, "hello", TextFragment.PARAGRAPH_TYPE);
 
 		addText(header, "t");
-		newNode(header, "est", TextFragment.EM_TYPE);
+		newNode(header, "est", TextFragment.STRONG_TYPE);
 		addText(header, "er");
 
 		fragment = parse("== t'''est'''er == \nhello");
@@ -170,17 +170,18 @@ public class Test {
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
 		addText(paragraph, "test ");
-		newNode(paragraph, "cool", TextFragment.EM_TYPE);
+		newNode(paragraph, "cool", TextFragment.STRONG_TYPE);
 
 		fragment = parse("test ''' cool'''");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
+		wanted.print(2);
 	}
 	public void whitespaceAfter() {
 		TextFragment wanted, paragraph;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
-		newNode(paragraph, "cool ", TextFragment.EM_TYPE);
+		newNode(paragraph, "cool ", TextFragment.STRONG_TYPE);
 		addText(paragraph, "test");
 
 		fragment = parse("'''cool ''' test");
@@ -191,8 +192,8 @@ public class Test {
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
-		newNode(paragraph, "cool ", TextFragment.EM_TYPE);
-		addText(paragraph, "test");
+		newNode(paragraph, "cool ", TextFragment.STRONG_TYPE);
+		newNode(paragraph, "test", TextFragment.EM_TYPE);
 
 		fragment = parse("'''cool ''' '' test''");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
@@ -204,7 +205,7 @@ public class Test {
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
 		addText(paragraph, "This is ");
-		newNode(paragraph, "so cool", TextFragment.EM_TYPE);
+		newNode(paragraph, "so cool", TextFragment.STRONG_TYPE);
 
 		fragment = parse("This is '''so cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
@@ -216,13 +217,13 @@ public class Test {
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
 		addText(paragraph, "This is ");
-		newNode(paragraph, "smallcaps\n|so cool\n\n", TextFragment.EM_TYPE);
+		newNode(paragraph, "smallcaps\n|so cool\n\n", TextFragment.STRONG_TYPE);
 
 		fragment = parse("This is {{smallcaps\n|so cool\n\n}}");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void invalidMultiLineTemplate() {
-		TextFragment wanted, paragraph;
+		TextFragment wanted;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 
 		newNode(wanted, "This is {{smallcaps a|so cool", TextFragment.PARAGRAPH_TYPE);
@@ -253,14 +254,15 @@ public class Test {
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
-		item = newNode(list, TextFragment.LIST_ITEM_TYPE);
+		item = newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 
 		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		newNode(list, TextFragment.LIST_ITEM_TYPE);
-		newNode(list, TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n#* hello\n#* cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
+		wanted.print(2);
 	}
 	public void doubleUnorderedListMarkupWithoutSpace() {
 		TextFragment wanted, list, item;
@@ -268,11 +270,11 @@ public class Test {
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ul");
-		item = newNode(list, TextFragment.LIST_ITEM_TYPE);
+		item = newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 
 		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
-		newNode(list, TextFragment.LIST_ITEM_TYPE);
-		newNode(list, TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("* test\n** hello\n** cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
@@ -281,7 +283,6 @@ public class Test {
 		TextFragment wanted, list, item;
 
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
-		newNode(wanted, TextFragment.HEADER_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
@@ -292,14 +293,13 @@ public class Test {
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
-		fragment = parse("== hello ==\n# test\n# hello\n# cool\n# * test\n# * cool");
+		fragment = parse("# test\n# hello\n# cool\n# * test\n# * cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listWithNoOwnItems() {
 		TextFragment wanted, list, item;
 
 		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
-		wanted.appendChild(parserWiki.new TextFragment(TextFragment.HEADER_TYPE));
 
 		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
@@ -312,7 +312,7 @@ public class Test {
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
-		fragment = parse("== hello ==\n# test\n# hello\n# * * test\n# * * cool");
+		fragment = parse("# test\n# hello\n# * * test\n# * * cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listWithSublistAtMiddle() {
