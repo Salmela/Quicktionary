@@ -712,13 +712,13 @@ public class WikiMarkup extends Parser {
 		/* handle the markup ending */
 		switch(markup.symbol.character) {
 		case '\'':
-			parseTextStyleMarkup(markup);
+			createTextStyleMarkup(markup);
 			break;
 		case ']':
-			parseLinkMarkup(markup);
+			createLinkMarkup(markup);
 			break;
 		case '}':
-			parseTemplateMarkup(markup);
+			createTemplateMarkup(markup);
 			break;
 		case '>':
 			start = getMarkupSymbol(symbolLut['<']);
@@ -726,7 +726,7 @@ public class WikiMarkup extends Parser {
 			System.out.println("HTML range " + start.location + ", " + markup.location);
 			break;
 		case '=':
-			parseHeaderMarkup(markup);
+			createHeaderMarkup(markup);
 			break;
 		default:
 			break;
@@ -788,9 +788,9 @@ public class WikiMarkup extends Parser {
 	}
 
 	/**
-	 * Parse text style markup.
+	 * Update the Markup start for text style markup.
 	 */
-	private void parseTextStyleMarkup(MarkupStart end) {
+	private void createTextStyleMarkup(MarkupStart end) {
 		MarkupStart start;
 		int quotes;
 
@@ -851,7 +851,7 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
-	private void parseLinkMarkup(MarkupStart end) {
+	private void createLinkMarkup(MarkupStart end) {
 		MarkupStart start;
 		int brackets;
 
@@ -878,7 +878,7 @@ public class WikiMarkup extends Parser {
 	private void finalizeLinkMarkup(MarkupStart end) {
 	}
 
-	private void parseTemplateMarkup(MarkupStart end) {
+	private void createTemplateMarkup(MarkupStart end) {
 		MarkupStart start, prevLink;
 
 		start = getMarkupSymbol(symbolLut['{']);
@@ -901,7 +901,7 @@ public class WikiMarkup extends Parser {
 	private void finalizeTemplateMarkup(MarkupStart end) {
 	}
 
-	private void parseHeaderMarkup(MarkupStart end) {
+	private void createHeaderMarkup(MarkupStart end) {
 		MarkupStart start;
 
 		start = lineMarkup.get(0);
