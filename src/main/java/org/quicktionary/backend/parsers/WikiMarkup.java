@@ -465,16 +465,6 @@ public class WikiMarkup extends Parser {
 		handlePreviousMarkup();
 	}
 
-	private TextFragment getTextFragment(int type) {
-		TextFragment fragment = currentFragment;
-
-		while(fragment != null) {
-			if(fragment.type == type) return fragment;
-			fragment = fragment.getParent();
-		}
-		return null;
-	}
-
 	private MarkupStart appendMarkupStart(SymbolType symbol) {
 		MarkupStart start = new MarkupStart();
 		start.location = lineBuffer.length() - 1;
