@@ -199,6 +199,7 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
+	/*TODO: rename to MarkupSymbol */
 	private class MarkupStart {
 		public SymbolType symbol;
 
@@ -207,7 +208,9 @@ public class WikiMarkup extends Parser {
 		public int count;
 
 		public int length;
+		/*TODO rename to matchingMarkup */
 		public MarkupStart endMarkup;
+		/*TODO add a markup type (start, end, none) */
 	}
 
 	private class SymbolType {
@@ -242,7 +245,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	/**
-	 * Replace the currentFragment variable with call to this method.
+	 * Get the highest fragment.
 	 */
 	private TextFragment getCurrentFragment() {
 		if(itemList.size() == 0) {
@@ -451,6 +454,7 @@ public class WikiMarkup extends Parser {
 			}
 		} while(getNext());
 
+		/* handle the last markup */
 		handlePreviousMarkup();
 	}
 
@@ -479,19 +483,22 @@ public class WikiMarkup extends Parser {
 		MarkupStart start;
 
 		if(lineMarkup.size() > 0) {
-			MarkupStart markup;
+			MarkupStart previousMarkup;
 			int lastMarkupIndex = lineMarkup.size() - 1;
 
-			markup = lineMarkup.get(lastMarkupIndex);
+			previousMarkup = lineMarkup.get(lastMarkupIndex);
 
+			/* extend the previous markup if the symbol type allows it */
 			if(previousChar == currentChar && symbol.multiple) {
-				markup.count++;
+				previousMarkup.count++;
 				return;
 			}
 
+			/* process the previous markup */
 			handlePreviousMarkup();
 		}
 
+		/* create new markup start for the symbol */
 		start = appendMarkupStart(symbol);
 
 		System.out.println("Symbol: " + currentChar + " location: " + start.location);
@@ -559,7 +566,7 @@ public class WikiMarkup extends Parser {
 			/*TODO: simplify the following mess */
 
 			/* check if there is already a list */
-			if(itemList.size() > i) {
+			if(i < itemList.size()) {
 				list = itemList.get(i);
 
 				/* it's a list */
@@ -679,7 +686,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	/**
-	 * Generate TextFragments for the previous inline markup.
+	 * Validate the MarkupStart if the previous symbol was ending of inline markup.
 	 */
 	private void handlePreviousMarkup() {
 		MarkupStart start, markup;
@@ -691,11 +698,11 @@ public class WikiMarkup extends Parser {
 
 		markup = lineMarkup.get(lastMarkupIndex);
 
-		/* handle only the end markups */
 		if(!markup.symbol.end) {
 			return;
 		}
 
+		/* handle the markup ending */
 		switch(markup.symbol.character) {
 		case '\'':
 			parseTextStyleMarkup(markup);
