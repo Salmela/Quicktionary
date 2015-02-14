@@ -105,6 +105,10 @@ public class WikiMarkup extends Parser {
 			return fragment;
 		}
 
+		public boolean isEmpty() {
+			return (childs.size() == 0) && (content == null);
+		}
+
 		/**
 		 * Print the parsing tree recursively.
 		 *
