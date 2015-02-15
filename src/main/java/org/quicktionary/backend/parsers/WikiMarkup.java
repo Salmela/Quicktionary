@@ -518,6 +518,10 @@ public class WikiMarkup extends Parser {
 		lineMarkup.remove(0);
 		lineMarkup.remove(lineMarkup.size() - 1);
 
+		/* remove the end markup so that the text is trimmed just like the whitespace
+		   before new line character */
+		lineBuffer.setLength(end.location);
+
 		return start;
 	}
 
