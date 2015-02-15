@@ -78,6 +78,7 @@ public class WikiMarkup extends Parser {
 			this(type, null);
 		}
 
+		/*TODO: rename to setTextContent */
 		public void setContent(String content) {
 			if(childs.size() != 0) {
 				throw new Error("TextFragment must have only child fragments or text content.");
@@ -101,6 +102,10 @@ public class WikiMarkup extends Parser {
 			fragment.parent = this;
 
 			return fragment;
+		}
+
+		public void removeChild(int index) {
+			this.childs.remove(index);
 		}
 
 		public boolean isEmpty() {
@@ -184,6 +189,36 @@ public class WikiMarkup extends Parser {
 			return true;
 		}
 
+		/**
+		 * The method combines neighbour text childs into one.
+		 */
+		public void normalize() {
+			StringBuilder normalizedText;
+			TextFragment firstText = null;
+
+			normalizedText = new StringBuilder();
+			for(int j = 0; j < childs.size(); j++) {
+				if(childs.get(j).getType() == TextFragment.PLAIN_TYPE) {
+					normalizedText.append(childs.get(j).getTextContent());
+					if(firstText != null) {
+						removeChild(j);
+						j--;
+					} else {
+						firstText = childs.get(j);
+					}
+				} else {
+					if(firstText != null) {
+						firstText.setContent(normalizedText.toString());
+					}
+					firstText = null;
+					normalizedText.setLength(0);
+				}
+			}
+			if(firstText != null) {
+				firstText.setContent(normalizedText.toString());
+			}
+		}
+
 		public TextFragment getParent() {
 			return parent;
 		}
@@ -257,6 +292,15 @@ public class WikiMarkup extends Parser {
 
 	private void itemListTruncate(int newSize) {
 		if(itemList.size() == newSize) return;
+		if(itemList.size() < newSize) {
+			throw new Error("The new size must be less than the current size.");
+		}
+
+		/* normalize the text nodes */
+		for(int i = itemList.size() - 1; i >= newSize; i--) {
+			itemList.get(i).normalize();
+		}
+
 		itemList.subList(newSize, itemList.size()).clear();
 	}
 
@@ -303,6 +347,9 @@ public class WikiMarkup extends Parser {
 		while(currentChar != 0) {
 			parseLine();
 		}
+
+		/* end all open nodes */
+		itemListTruncate(1);
 
 		return true;
 	}
