@@ -788,10 +788,6 @@ public class WikiMarkup extends Parser {
 
 		markup = lineMarkup.get(lastMarkupIndex);
 
-		if(!markup.symbol.end) {
-			return;
-		}
-
 		/* handle the markup ending */
 		switch(markup.symbol.character) {
 		case '\'':
