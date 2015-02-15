@@ -391,7 +391,7 @@ public class WikiMarkup extends Parser {
 
 			if(markupStart.type == MarkupStart.MarkupType.NONE) {
 				System.out.println("Discarded the symbol");
-				return;
+				continue;
 			}
 
 			finalizeMarkup(markupStart, previousMarkup);
