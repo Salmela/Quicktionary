@@ -444,9 +444,8 @@ public class WikiMarkup extends Parser {
 			parseTable();
 			break;
 		default:
-			/*TODO: create new paragraph if neaded */
-			if(itemList.size() == 0 || itemList.get(0).getType() != TextFragment.PARAGRAPH_TYPE) {
-				System.out.println("paragraph " + currentChar);
+			/* create new paragraph if neaded */
+			if(getCurrentFragment().getType() != TextFragment.PARAGRAPH_TYPE) {
 				createParagraph();
 			}
 			break;
