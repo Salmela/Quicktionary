@@ -25,6 +25,8 @@ public class Test {
 
 		xmlParserTest();
 
+		whitespaceAtStart();
+		whitespaceAtEnd();
 		whitespaceBefore();
 		whitespaceAfter();
 		whitespaceMiddle();
@@ -32,6 +34,12 @@ public class Test {
 		unendingTextStyle();
 		multiLineTemplate();
 		invalidMultiLineTemplate();
+
+		/* verify */
+		//mergeTextStyleMarkups();
+		quoteAtStartAtTextStyleMarkup();
+		oneExtraQuoteAtTextStyleMarkup();
+		threeExtraQuoteAtTextStyleMarkup();
 
 		headerAndParagraph();
 		headerAndtwoParagraphs();
@@ -164,6 +172,28 @@ public class Test {
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
+	public void whitespaceAtStart() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "test ");
+		newNode(paragraph, "cool", TextFragment.STRONG_TYPE);
+
+		fragment = parse(" test ''' cool'''");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void whitespaceAtEnd() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "test ");
+		newNode(paragraph, "cool", TextFragment.STRONG_TYPE);
+
+		fragment = parse("test ''' cool''' ");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
 	public void whitespaceBefore() {
 		TextFragment wanted, paragraph;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
@@ -174,7 +204,6 @@ public class Test {
 
 		fragment = parse("test ''' cool'''");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
-		wanted.print(2);
 	}
 	public void whitespaceAfter() {
 		TextFragment wanted, paragraph;
@@ -198,6 +227,55 @@ public class Test {
 		fragment = parse("'''cool ''' '' test''");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
+	public void mergeTextStyleMarkups() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		/* verify */
+		newNode(paragraph, "cool ", TextFragment.STRONG_TYPE);
+		newNode(paragraph, "test", TextFragment.EM_TYPE);
+
+		fragment = parse("'''cool ''''' test''");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+
+	public void quoteAtStartAtTextStyleMarkup() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		newNode(paragraph, "'cool", TextFragment.STRONG_TYPE);
+
+		fragment = parse("''' 'cool '''");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void oneExtraQuoteAtTextStyleMarkup() {
+		TextFragment wanted, paragraph, em;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "'");
+		em = newNode(paragraph, TextFragment.EM_TYPE);
+		newNode(em, "cool'", TextFragment.STRONG_TYPE);
+		addText(paragraph, "a");
+
+		fragment = parse("''''''cool''''''a");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void threeExtraQuoteAtTextStyleMarkup() {
+		TextFragment wanted, paragraph, em;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "'''");
+		em = newNode(paragraph, TextFragment.EM_TYPE);
+		newNode(em, "cool'''", TextFragment.STRONG_TYPE);
+		addText(paragraph, "a");
+
+		fragment = parse("''''''''cool''''''''a");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
 
 	public void unendingTextStyle() {
 		TextFragment wanted, paragraph;
@@ -217,9 +295,20 @@ public class Test {
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
 		addText(paragraph, "This is ");
-		newNode(paragraph, "smallcaps\n|so cool\n\n", TextFragment.STRONG_TYPE);
+		newNode(paragraph, "so cool", TextFragment.TEMPLATE_TYPE, "smallcaps");
 
 		fragment = parse("This is {{smallcaps\n|so cool\n\n}}");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void multiLineTemplate() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "This is ");
+		newNode(paragraph, "so cool", TextFragment.TEMPLATE_TYPE, "smallcaps");
+
+		fragment = parse("This is {{smallcaps\n|\nso cool\n\n}}");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void invalidMultiLineTemplate() {
