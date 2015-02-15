@@ -231,6 +231,14 @@ public class WikiMarkup extends Parser {
 		public String getParameter() {
 			return parameter;
 		}
+
+		public ArrayList<TextFragment> getChildren() {
+			return childs;
+		}
+
+		public String getTextContent() {
+			return content;
+		}
 	}
 
 	/*TODO: rename to MarkupSymbol */
