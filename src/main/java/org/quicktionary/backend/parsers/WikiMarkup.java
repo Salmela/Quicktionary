@@ -31,6 +31,7 @@ public class WikiMarkup extends Parser {
 	private ArrayList<TextFragment> itemList;
 	private int inlineFragmentIndex;
 	private boolean inlineWhitespaceConsumed;
+	private int openTemplates;
 
 	private SymbolType[] symbolLut;
 
@@ -377,6 +378,7 @@ public class WikiMarkup extends Parser {
 		/* reset the class variables for next line */
 		lineBuffer.setLength(0);
 		lineMarkup.clear();
+		openTemplates = 0;
 
 		/* parse the line */
 		parseLineStartMarkup();
@@ -533,8 +535,15 @@ public class WikiMarkup extends Parser {
 		do {
 			/* return from the function at the newline character */
 			if(currentChar == '\n') {
+				/* handle the last markup of the line */
+				handlePreviousMarkup();
+
 				getNext();
-				break;
+
+				/* return if there isn't any multiline markup */
+				if(openTemplates == 0) {
+					return;
+				}
 			/* ignore whitespace */
 			} else if(isWhitespace(currentChar)) {
 				wasWhitespace = true;
@@ -795,6 +804,11 @@ public class WikiMarkup extends Parser {
 			break;
 		case ']':
 			createLinkMarkup(markup);
+			break;
+		case '{':
+			if(markup.count >= 2) {
+				openTemplates++;
+			}
 			break;
 		case '}':
 			createTemplateMarkup(markup);
@@ -1078,6 +1092,7 @@ public class WikiMarkup extends Parser {
 		if(end.count == 1) {
 			return;
 		}
+		openTemplates--;
 
 		start = getMarkupSymbol(symbolLut['{']);
 		if(start == null) return;
