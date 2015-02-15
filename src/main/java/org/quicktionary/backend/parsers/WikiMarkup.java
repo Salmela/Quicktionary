@@ -938,11 +938,11 @@ public class WikiMarkup extends Parser {
 		}
 
 		if(start.count > quotes) {
-			start.location += start.count - (quotes + 1);
+			start.location += start.count - quotes;
 			start.count = quotes;
 		}
 		if(end.count > quotes) {
-			end.location += end.count - (quotes + 1);
+			end.location += end.count - quotes;
 			end.count = quotes;
 		}
 
@@ -990,6 +990,9 @@ public class WikiMarkup extends Parser {
 		if(start.length > 0) return;
 
 		brackets = (end.count < start.count) ? end.count : start.count;
+		if(brackets > 2) {
+			brackets = 2;
+		}
 		if(start.count >= brackets) {
 			start.location += start.count - brackets;
 			start.count = brackets;
@@ -1020,16 +1023,38 @@ public class WikiMarkup extends Parser {
 	private void createTemplateMarkup(MarkupStart end) {
 		MarkupStart start, prevLink;
 
+		/* there must be atleast two brackets */
+		if(end.count == 1) {
+			return;
+		}
+
 		start = getMarkupSymbol(symbolLut['{']);
 		if(start == null) return;
-		if(start.length > 0) return;
+		if(start.type == MarkupStart.MarkupType.START) {
+			throw new Error("We should try to find earlier starting markup");
+		}
+
+		/* there must be atleast two brackets */
+		if(start.count == 1) {
+			throw new Error("We should try to find earlier starting markup");
+		}
 
 		prevLink = getMarkupSymbol(symbolLut['[']);
 		/* ignore the template if there is unfinished link */
-		if(prevLink != null && start.location < prevLink.location && prevLink.length == -1) {
+		if(prevLink != null && start.location < prevLink.location && prevLink.type == MarkupStart.MarkupType.NONE) {
 			System.out.println("Warning: the template contains unfinished link.");
 			return;
 		}
+
+		if(start.count > 2) {
+			start.location += 2 - start.count;
+			start.count = 2;
+		}
+
+		if(end.count > 2) {
+			end.count = 2;
+		}
+
 		start.length = end.location - start.location;
 		createMarkupStart(start, end);
 
