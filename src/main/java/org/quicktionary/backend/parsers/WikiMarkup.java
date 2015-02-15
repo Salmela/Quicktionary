@@ -399,11 +399,7 @@ public class WikiMarkup extends Parser {
 			previousMarkup = markupStart;
 		}
 
-		if(headerMarkup != null) {
-			finalizeText(headerMarkup.matchingMarkup, previousMarkup);
-		} else {
-			finalizeText(null, previousMarkup);
-		}
+		finalizeText(null, previousMarkup);
 	}
 
 	/**
@@ -829,12 +825,12 @@ public class WikiMarkup extends Parser {
 
 	private void finalizeText(MarkupStart markup, MarkupStart previousMarkup) {
 		TextFragment fragment, parent;
-		int currentIndex, startIndex, endIndex;
+		int startIndex, endIndex;
 
 		/* check if the text is between last markup and line ending */
 		if(markup == null) {
 			endIndex = lineBuffer.length();
-			/* remove whitespace from the end */
+			/* trim the end */
 			while(endIndex > 0 && isWhitespace(lineBuffer.charAt(endIndex - 1))) {
 				endIndex--;
 			}
@@ -872,16 +868,8 @@ public class WikiMarkup extends Parser {
 		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
 		fragment.setContent(lineBuffer.substring(startIndex, endIndex));
 
-		currentIndex = itemList.size() - 1;
-
-		/*TODO fix this */
-		if(parent.isEmpty()) {
-			getCurrentFragment().appendChild(fragment);
-			itemList.add(fragment);
-		} else if(currentIndex > 0) {
-			itemList.get(currentIndex - 1).appendChild(fragment);
-			itemList.set(currentIndex, fragment);
-		}
+		/* append the text node into the parent */
+		getCurrentFragment().appendChild(fragment);
 	}
 
 	/**
@@ -905,7 +893,7 @@ public class WikiMarkup extends Parser {
 		TextFragment fragment;
 
 		fragment = new TextFragment(type);
-		getCurrentFragment().getParent().appendChild(fragment);
+		getCurrentFragment().appendChild(fragment);
 		itemList.add(fragment);
 	}
 
