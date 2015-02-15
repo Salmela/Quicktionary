@@ -802,18 +802,30 @@ public class WikiMarkup extends Parser {
 		case '\'':
 			finalizeTextStyleMarkup(markup);
 			break;
+
 		case '[':
 			finalizeLinkMarkup(markup);
 			break;
+		case ']':
+			finalizeLinkMarkupEnd(markup);
+			break;
+
 		case '{':
 			finalizeTemplateMarkup(markup);
 			break;
+		case '}':
+			finalizeTemplateMarkupEnd(markup);
+			break;
+
 		case '<':
 			MarkupStart start;
 			start = getMarkupSymbol(symbolLut['<']);
 			if(start == null) return;
 			System.out.println("HTML range " + start.location + ", " + markup.location);
 			break;
+		case '>':
+			break;
+
 		case '=':
 			/* This is processed already */
 			break;
@@ -993,7 +1005,16 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
-	private void finalizeLinkMarkup(MarkupStart end) {
+	private void finalizeLinkMarkup(MarkupStart start) {
+		appendInlineTextFragment(TextFragment.LINK_TYPE);
+	}
+
+	private void finalizeLinkMarkupEnd(MarkupStart end) {
+		TextFragment current = getCurrentFragment();
+		while(current.getType() != TextFragment.LINK_TYPE) {
+			current = current.getParent();
+		}
+		itemListTruncate(itemList.size() - 1);
 	}
 
 	private void createTemplateMarkup(MarkupStart end) {
@@ -1016,7 +1037,16 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
-	private void finalizeTemplateMarkup(MarkupStart end) {
+	private void finalizeTemplateMarkup(MarkupStart start) {
+		appendInlineTextFragment(TextFragment.TEMPLATE_TYPE);
+	}
+
+	private void finalizeTemplateMarkupEnd(MarkupStart end) {
+		TextFragment current = getCurrentFragment();
+		while(current.getType() != TextFragment.TEMPLATE_TYPE) {
+			current = current.getParent();
+		}
+		itemListTruncate(itemList.size() - 1);
 	}
 
 	private void createHeaderMarkup(MarkupStart end) {
