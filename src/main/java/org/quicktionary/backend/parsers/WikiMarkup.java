@@ -946,7 +946,7 @@ public class WikiMarkup extends Parser {
 
 		start = getMarkupSymbol(end.symbol);
 		if(start == null) return;
-		if(start.length > 0) return;
+		if(start.matchingMarkup != null) return;
 
 		quotes = (end.count < start.count) ? end.count : start.count;
 		if(quotes >= 5) {
@@ -978,11 +978,32 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Generate TextFragment for the text style markup.
 	 */
-	private void finalizeTextStyleMarkup(MarkupStart start) {
-		int quotes = start.count;
+	private void finalizeTextStyleMarkup(MarkupStart markup) {
+		int quotes = markup.count;
 
 		/* return if this end markup */
-		if(start.type == MarkupStart.MarkupType.END) {
+		if(markup.type == MarkupStart.MarkupType.END) {
+			System.out.println("End text style node");
+			TextFragment current = getCurrentFragment();
+			if(current.getType() == TextFragment.PLAIN_TYPE) {
+				current = current.getParent();
+			}
+			if(quotes == 2) {
+				if(current.getType() == TextFragment.EM_TYPE) {
+					itemListTruncate(itemList.size() - 1);
+				}
+			} else if(quotes == 3) {
+				if(current.getType() == TextFragment.STRONG_TYPE) {
+					itemListTruncate(itemList.size() - 1);
+				}
+			} else if(quotes == 5) {
+				if(current.getType() == TextFragment.STRONG_TYPE) {
+					current = current.getParent();
+					if(current.getType() == TextFragment.EM_TYPE) {
+						itemListTruncate(itemList.size() - 2);
+					}
+				}
+			}
 			return;
 		}
 
