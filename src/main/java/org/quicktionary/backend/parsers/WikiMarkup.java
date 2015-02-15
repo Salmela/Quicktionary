@@ -30,6 +30,7 @@ public class WikiMarkup extends Parser {
 	private ArrayList<MarkupStart> lineMarkup;
 	private ArrayList<TextFragment> itemList;
 	private int inlineFragmentIndex;
+	private boolean inlineWhitespaceConsumed;
 
 	private SymbolType[] symbolLut;
 
@@ -342,6 +343,7 @@ public class WikiMarkup extends Parser {
 		/* add the root node */
 		itemList.add(new TextFragment(0));
 		inlineFragmentIndex = itemList.size();
+		inlineWhitespaceConsumed = true;
 
 		/* parse every line from the reader */
 		while(currentChar != 0) {
@@ -447,9 +449,18 @@ public class WikiMarkup extends Parser {
 			/* create new paragraph if neaded */
 			if(getCurrentFragment().getType() != TextFragment.PARAGRAPH_TYPE) {
 				createParagraph();
+			} else if(!inlineWhitespaceConsumed) {
+				TextFragment fragment;
+				/* add extra whitespace */
+				fragment = new TextFragment(TextFragment.PLAIN_TYPE);
+				fragment.setContent(" ");
+				getCurrentFragment().appendChild(fragment);
+				inlineWhitespaceConsumed = true;
+				return;
 			}
 			break;
 		}
+		inlineWhitespaceConsumed = false;
 		inlineFragmentIndex = itemList.size();
 	}
 
@@ -861,15 +872,26 @@ public class WikiMarkup extends Parser {
 			}
 		}
 
-		/* remove whitespace from the start */
-		while(startIndex < lineBuffer.length() && isWhitespace(lineBuffer.charAt(startIndex))) {
-			startIndex++;
+		/* remove whitespace from the start if the whitespace is given to previous node */
+		if(inlineWhitespaceConsumed) {
+			while(startIndex < lineBuffer.length() && isWhitespace(lineBuffer.charAt(startIndex))) {
+				startIndex++;
+			}
 		}
 
 		/* check if the substring is longer than zero */
 		if(endIndex - startIndex <= 0) {
-			/* the length will be negative if the substring is consists of only whitespace */
 			return;
+		}
+
+		System.out.println("Inline whitespace restored.");
+		inlineWhitespaceConsumed = false;
+		System.out.println("Text ends with \'" + lineBuffer.charAt(endIndex - 1) + "\'.");
+
+		/* consume whitespace if the test ends with space */
+		if(endIndex > 0 && isWhitespace(lineBuffer.charAt(endIndex - 1))) {
+			System.out.println("Inline whitespace consumed.");
+			inlineWhitespaceConsumed = true;
 		}
 
 		System.out.println("Text start: " + startIndex + ", " + endIndex + " " + getSourceLocation());
