@@ -123,8 +123,10 @@ public class SettingsDialog extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand() == OK_BUTTON_EVENT) {
+			dispose();
 		} else if(event.getActionCommand() == APPLY_BUTTON_EVENT) {
 		} else if(event.getActionCommand() == CANCEL_BUTTON_EVENT) {
+			dispose();
 		}
 	}
 }
