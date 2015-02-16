@@ -43,62 +43,69 @@ public class PageArea extends JPanel {
 	}
 
 	public void setPage(TextFragment root) {
-		StringBuilder source;
-		source = new StringBuilder();
+		String source;
 
 		if(Main.useHTML) {
-			generateHTML(root, source);
-			pane.setText(source.toString());
+			source = generateHTML(root);
+			pane.setText(source);
 		} else {
-			generateMarkdown(root, source);
-			area.setText(source.toString());
+			source = generateMarkdown(root);
+			area.setText(source);
 		}
+		System.out.println(source);
 	}
 
-	private String getStartTag(TextFragment fragment) {
-		switch(fragment.getType()) {
-		case TextFragment.ROOT_TYPE:
-			return "<html><body>";
-		case TextFragment.HEADER_TYPE:
-			return "<h1>";
-		case TextFragment.PARAGRAPH_TYPE:
-			return "<p>";
-		case TextFragment.STRONG_TYPE:
-			return "<strong>";
-		case TextFragment.EM_TYPE:
-			return "<em>";
-		default:
-			return "";
-		}
-	}
+	private String generateHTML(TextFragment fragment) {
+		StringBuilder content = new StringBuilder();
 
-	private String getEndTag(TextFragment fragment) {
-		switch(fragment.getType()) {
-		case TextFragment.ROOT_TYPE:
-			return "</body></html>";
-		case TextFragment.HEADER_TYPE:
-			return "</h1>";
-		case TextFragment.PARAGRAPH_TYPE:
-			return "</p>";
-		case TextFragment.STRONG_TYPE:
-			return "</strong>";
-		case TextFragment.EM_TYPE:
-			return "</em>";
-		default:
-			return "";
-		}
-	}
-
-	private void generateHTML(TextFragment root, StringBuilder src) {
-		src.append(getStartTag(root));
-		if(root.getContent() != null) {
-			src.append(root.getContent());
+		if(fragment.getContent() != null) {
+			content.append(fragment.getContent());
 		} else {
-			for(TextFragment child : root.getChildren()) {
-				generateHTML(child, src);
+			for(TextFragment child : fragment.getChildren()) {
+				content.append(generateHTML(child));
 			}
 		}
-		src.append(getEndTag(root));
+		switch(fragment.getType()) {
+		case TextFragment.ROOT_TYPE:
+			return "<html><body>" + content + "</body></html>";
+		case TextFragment.HEADER_TYPE:
+			return "<h1>" + content + "</h1>";
+		case TextFragment.PARAGRAPH_TYPE:
+			return "<p>" + content + "</p>";
+		case TextFragment.STRONG_TYPE:
+			return "<strong>" + content + "</strong>";
+		case TextFragment.EM_TYPE:
+			return "<em>" + content + "</em>";
+		case TextFragment.LINK_TYPE:
+			return "<a href=\'" + content + "\'>" + content + "</a>";
+		default:
+			return content.toString();
+		}
+	}
+
+	private String generateMarkdown(TextFragment root) {
+		StringBuilder src = new StringBuilder();
+
+		for(TextFragment child : root.getChildren()) {
+			String md = generateSubMarkdown(child);
+
+			if(child.getType() == TextFragment.HEADER_TYPE) {
+				src.append(md);
+				src.append("\n");
+
+				for(char a : md.toCharArray()) {
+					src.append("=");
+				}
+				src.append("\n");
+			} else if(child.getType() == TextFragment.PARAGRAPH_TYPE) {
+				src.append("\n");
+				src.append(md);
+				src.append("\n");
+			} else {
+				src.append(md);
+			}
+		}
+		return src.toString();
 	}
 
 	private String generateSubMarkdown(TextFragment fragment) {
@@ -128,23 +135,5 @@ public class PageArea extends JPanel {
 		}
 
 		return markdown;
-	}
-
-	private void generateMarkdown(TextFragment root, StringBuilder src) {
-		for(TextFragment child : root.getChildren()) {
-			String md = generateSubMarkdown(child);
-
-			if(child.getType() == TextFragment.HEADER_TYPE) {
-				src.append(md + "\n");
-				for(char a : md.toCharArray()) {
-					src.append("=");
-				}
-				src.append("\n");
-			} else if(child.getType() == TextFragment.PARAGRAPH_TYPE) {
-				src.append("\n" + md + "\n");
-			} else {
-				src.append(md);
-			}
-		}
 	}
 }
