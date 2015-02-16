@@ -299,6 +299,10 @@ public class WikiMarkup extends Parser {
 		return parentList.get(parentList.size() - 1);
 	}
 
+	private void closePreviousFragment() {
+		itemListTruncate(parentList.size() - 1);
+	}
+
 	private void itemListTruncate(int newSize) {
 		if(parentList.size() == newSize) return;
 		if(parentList.size() < newSize) {
@@ -741,7 +745,7 @@ public class WikiMarkup extends Parser {
 
 		list = getCurrentFragment();
 		if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
-			itemListTruncate(parentList.size() - 1);
+			closePreviousFragment();
 			list = getCurrentFragment();
 		}
 
@@ -1014,17 +1018,18 @@ public class WikiMarkup extends Parser {
 			}
 			if(quotes == 2) {
 				if(current.getType() == TextFragment.EM_TYPE) {
-					itemListTruncate(parentList.size() - 1);
+					closePreviousFragment();
 				}
 			} else if(quotes == 3) {
 				if(current.getType() == TextFragment.STRONG_TYPE) {
-					itemListTruncate(parentList.size() - 1);
+					closePreviousFragment();
 				}
 			} else if(quotes == 5) {
 				if(current.getType() == TextFragment.STRONG_TYPE) {
 					current = current.getParent();
 					if(current.getType() == TextFragment.EM_TYPE) {
-						itemListTruncate(parentList.size() - 2);
+						closePreviousFragment();
+						closePreviousFragment();
 					}
 				}
 			}
@@ -1084,7 +1089,7 @@ public class WikiMarkup extends Parser {
 		while(current.getType() != TextFragment.LINK_TYPE) {
 			current = current.getParent();
 		}
-		itemListTruncate(parentList.size() - 1);
+		closePreviousFragment();
 	}
 
 	private void createTemplateMarkup(MarkupStart end) {
@@ -1147,7 +1152,7 @@ public class WikiMarkup extends Parser {
 		while(current.getType() != TextFragment.TEMPLATE_TYPE) {
 			current = current.getParent();
 		}
-		itemListTruncate(parentList.size() - 1);
+		closePreviousFragment();
 	}
 
 	private void createHeaderMarkup(MarkupStart end) {
