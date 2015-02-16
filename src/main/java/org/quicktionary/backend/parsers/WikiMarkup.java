@@ -36,11 +36,18 @@ public class WikiMarkup extends Parser {
 	private TextFragment currentFragment;
 	private SymbolType[] symbolLut;
 
-	public class TextFragment {
+	public static class TextFragment {
 		private TextFragment parent;
 		private int type;
 		private String content;
 		private ArrayList<TextFragment> childs;
+
+		public final static int ROOT_TYPE = 0;
+		public final static int HEADER_TYPE = 1;
+		public final static int PARAGRAPH_TYPE = 2;
+		public final static int STRONG_TYPE = 3;
+		public final static int EM_TYPE = 4;
+		public final static int LINK_TYPE = 5;
 
 		public TextFragment(TextFragment parent, int type) {
 			this.parent = parent;
@@ -69,6 +76,18 @@ public class WikiMarkup extends Parser {
 
 		public TextFragment getParent() {
 			return parent;
+		}
+
+		public int getType() {
+			return type;
+		}
+
+		public String getContent() {
+			return content;
+		}
+
+		public ArrayList<TextFragment> getChildren() {
+			return childs;
 		}
 	}
 
