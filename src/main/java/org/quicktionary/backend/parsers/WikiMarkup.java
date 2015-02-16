@@ -855,12 +855,12 @@ public class WikiMarkup extends Parser {
 			break;
 
 		case '<':
+			break;
+		case '>':
 			MarkupStart start;
 			start = getMarkupSymbol(symbolLut['<']);
 			if(start == null) return;
 			System.out.println("HTML range " + start.location + ", " + markup.location);
-			break;
-		case '>':
 			break;
 
 		case '=':
