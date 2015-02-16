@@ -32,8 +32,6 @@ public class Test {
 		whitespaceMiddle();
 
 		unendingTextStyle();
-		multiLineTemplate();
-		invalidMultiLineTemplate();
 
 		/* verify */
 		//mergeTextStyleMarkups();
@@ -41,15 +39,26 @@ public class Test {
 		oneExtraQuoteAtTextStyleMarkup();
 		threeExtraQuoteAtTextStyleMarkup();
 
+		header();
+		headerWithSpace();
 		headerAndParagraph();
 		headerAndtwoParagraphs();
 		headerWithEmAndParagraph();
+
+		templateMarkup();
+		linkMarkup();
+		linkMarkupWithName();
+		linkMarkupToOutside();
 
 		templateWithPartialStrongMarkup();
 		templateAndLinkInterleaved();
 		linkAndTemplateInterleaved();
 		linkWithExtraBracket();
 		multpleValidLinksAndTemplates();
+
+		multiLineTemplate();
+		multiLineTemplate2();
+		invalidMultiLineTemplate();
 
 		listMarkupWithoutSpace();
 		doubleUnorderedListMarkupWithoutSpace();
@@ -66,6 +75,8 @@ public class Test {
 	private boolean result(boolean success) {
 		if(success) {
 			testSuccess++;
+		} else {
+			System.out.println("##################");
 		}
 		testTotal++;
 		return success;
@@ -139,6 +150,22 @@ public class Test {
 		textNode.setContent(text);
 	}
 
+	public void header() {
+		TextFragment wanted, header;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, "test", TextFragment.HEADER_TYPE);
+
+		fragment = parse("==test==\n");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void headerWithSpace() {
+		TextFragment wanted, header;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, "test", TextFragment.HEADER_TYPE);
+
+		fragment = parse("== test == \n");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
 	public void headerAndParagraph() {
 		TextFragment wanted, header;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
@@ -300,7 +327,7 @@ public class Test {
 		fragment = parse("This is {{smallcaps\n|so cool\n\n}}");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
-	public void multiLineTemplate() {
+	public void multiLineTemplate2() {
 		TextFragment wanted, paragraph;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
@@ -322,20 +349,108 @@ public class Test {
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
+	public void templateMarkup() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "hello ");
+		newNode(paragraph, "world", TextFragment.TEMPLATE_TYPE, "smallcaps");
+		addText(paragraph, "!");
+
+		fragment = parse("hello {{smallcaps|world}}!");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void linkMarkup() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "hello ");
+		newNode(paragraph, "url", TextFragment.LINK_TYPE);
+		addText(paragraph, "!");
+
+		fragment = parse("hello [[url]]!");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void linkMarkupWithName() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "hello ");
+		newNode(paragraph, "url", TextFragment.LINK_TYPE, "world");
+		addText(paragraph, "!");
+
+		fragment = parse("hello [[url|world]]!");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void linkMarkupToOutside() {
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "hello ");
+		newNode(paragraph, "url", TextFragment.LINK_TYPE, "world");
+		addText(paragraph, "!");
+
+		fragment = parse("hello [url|world]!");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
 	public void templateWithPartialStrongMarkup() {
-		fragment = parse("helloha{{lgh|uh'''gr}}eugh");
+		TextFragment wanted, paragraph, template;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+		addText(paragraph, "helloha");
+
+		template = newNode(paragraph, TextFragment.TEMPLATE_TYPE, "smallcaps");
+		addText(template, "uh");
+		newNode(template, "gr", TextFragment.STRONG_TYPE);
+
+		addText(paragraph, "eugh");
+
+		fragment = parse("helloha{{smallcaps|uh'''gr}}eugh");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void templateAndLinkInterleaved() {
-		fragment = parse("hello[[ha{{lgh|uh]]gr}}eugh");
+		fragment = parse("hello[[ha{{smallcaps|uh]]gr}}eugh");
 	}
 	public void linkAndTemplateInterleaved() {
-		fragment = parse("hello{{hal|gh[[uh}}gr]]eugh");
+		TextFragment wanted;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, "hello{{smallcaps|gh[[uh}}gr]]eugh", TextFragment.PARAGRAPH_TYPE);
+
+		fragment = parse("hello{{smallcaps|gh[[uh}}gr]]eugh");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void linkWithExtraBracket() {
-		fragment = parse("hello [uhgr]] eugh");
+		TextFragment wanted, paragraph;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+		addText(paragraph, "hello ");
+		newNode(paragraph, "world", TextFragment.LINK_TYPE);
+		addText(paragraph, "] cool");
+
+		fragment = parse("hello [world]] cool");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void multpleValidLinksAndTemplates() {
-		fragment = parse("hello [[uhgr]] eugh [[ufhwuf]] heuw hgf [[algh|gjrehrgu]] hwfewf {ugeu|wgf} ehgg {fuwh|jrgh|gerugh}\n");
+		TextFragment wanted, paragraph, template;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+
+		addText(paragraph, "hello ");
+		newNode(paragraph, "this", TextFragment.LINK_TYPE);
+		addText(paragraph, " is ");
+		addText(paragraph, " complicated wikitext, ");
+		newNode(paragraph, "url", TextFragment.LINK_TYPE, "which");
+		addText(paragraph, " contains ");
+		newNode(paragraph, "lots", TextFragment.TEMPLATE_TYPE, "smallcaps");
+		addText(paragraph, " of ");
+		newNode(paragraph, "stuff" + ((char)0) + "gerugh", TextFragment.TEMPLATE_TYPE, "smallcaps");
+
+		fragment = parse("hello [[this]] is [[pretty]] complicated wikitext, [[url|which]] contains {{smallcaps|lots}} of {{smallcaps|stuff|gerugh}}\n");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void listMarkupWithoutSpace() {
 		TextFragment wanted, list, item;
@@ -351,7 +466,6 @@ public class Test {
 
 		fragment = parse("# test\n#* hello\n#* cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
-		wanted.print(2);
 	}
 	public void doubleUnorderedListMarkupWithoutSpace() {
 		TextFragment wanted, list, item;
