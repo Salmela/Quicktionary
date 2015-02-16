@@ -151,7 +151,7 @@ public class Test {
 	}
 
 	public void header() {
-		TextFragment wanted, header;
+		TextFragment wanted;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		newNode(wanted, "test", TextFragment.HEADER_TYPE);
 
@@ -159,7 +159,7 @@ public class Test {
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void headerWithSpace() {
-		TextFragment wanted, header;
+		TextFragment wanted;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		newNode(wanted, "test", TextFragment.HEADER_TYPE);
 
@@ -167,7 +167,7 @@ public class Test {
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void headerAndParagraph() {
-		TextFragment wanted, header;
+		TextFragment wanted;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		newNode(wanted, "test", TextFragment.HEADER_TYPE);
 		newNode(wanted, "hello", TextFragment.PARAGRAPH_TYPE);
@@ -176,7 +176,7 @@ public class Test {
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void headerAndtwoParagraphs() {
-		TextFragment wanted, node;
+		TextFragment wanted;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		newNode(wanted, "hello", TextFragment.HEADER_TYPE);
 		newNode(wanted, "test hello", TextFragment.PARAGRAPH_TYPE);
@@ -435,7 +435,7 @@ public class Test {
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void multpleValidLinksAndTemplates() {
-		TextFragment wanted, paragraph, template;
+		TextFragment wanted, paragraph;
 		wanted = newNode(null, TextFragment.ROOT_TYPE);
 		paragraph = newNode(wanted, TextFragment.PARAGRAPH_TYPE);
 
