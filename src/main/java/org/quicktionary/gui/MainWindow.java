@@ -45,7 +45,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	/* main components */
 	private JScrollPane mainPane;
 	private SearchResults searchResults;
-	private JTextArea pageArea;
+	private PageArea pageArea;
 	private JTextField searchBox;
 
 	/* history buttons */
@@ -168,8 +168,8 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* create components for the main view */
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults(this);
-		pageArea = new JTextArea();
-		pageArea.setText("Read database and write something to the search box.");
+
+		pageArea = new PageArea();
 		mainPane.setViewportView(pageArea);
 
 		/* add event listeners for the history buttons */
