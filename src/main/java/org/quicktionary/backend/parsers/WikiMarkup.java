@@ -539,7 +539,6 @@ public class WikiMarkup extends Parser {
 			if(currentChar == '\n') {
 				/* handle the last markup of the line */
 				handlePreviousMarkup();
-
 				getNext();
 
 				/* return if there isn't any multiline markup */
@@ -567,12 +566,13 @@ public class WikiMarkup extends Parser {
 			}
 		} while(getNext());
 
-		/* handle the last markup */
+		/* handle the last markup of the line */
 		handlePreviousMarkup();
 	}
 
 	private MarkupStart appendMarkupStart(SymbolType symbol) {
 		MarkupStart start = new MarkupStart();
+
 		start.location = lineBuffer.length() - 1;
 		start.sourceLocation = getAddress();
 		start.symbol = symbol;
@@ -580,6 +580,7 @@ public class WikiMarkup extends Parser {
 		start.length = -1;
 		start.type = MarkupStart.MarkupType.NONE;
 		lineMarkup.add(start);
+
 		return start;
 	}
 
@@ -663,10 +664,8 @@ public class WikiMarkup extends Parser {
 
 			/* get the current location in source file for debug messages */
 			String sourceLocation = getSourceLocation();
-			/* consume the list character */
+			/* consume the list symbol */
 			getNext();
-
-			/*TODO: simplify the following mess */
 
 			/* check if this is already in the parent list */
 			if(i < parentList.size()) {
@@ -910,13 +909,10 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 
-		System.out.println("Inline whitespace restored.");
 		inlineWhitespaceConsumed = false;
-		System.out.println("Text ends with \'" + lineBuffer.charAt(endIndex - 1) + "\'.");
 
 		/* consume whitespace if the test ends with space */
 		if(endIndex > 0 && isWhitespace(lineBuffer.charAt(endIndex - 1))) {
-			System.out.println("Inline whitespace consumed.");
 			inlineWhitespaceConsumed = true;
 		}
 
