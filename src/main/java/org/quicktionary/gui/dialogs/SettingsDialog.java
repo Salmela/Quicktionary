@@ -46,7 +46,7 @@ public class SettingsDialog extends JDialog implements ActionListener {
 	private JTextField filenameField;
 
 	public SettingsDialog(Frame frame, ActionListener listener) {
-		super(frame, "Read a database", true);
+		super(frame, "Settings", true);
 		this.filename = new String();
 
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

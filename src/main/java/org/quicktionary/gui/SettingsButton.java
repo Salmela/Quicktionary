@@ -84,7 +84,7 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 
 		menu.addSeparator();
 
-		menuItem = new JMenuItem("Preferences");
+		menuItem = new JMenuItem("Settings");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand(PREFERENCES_ITEM_EVENT);
 		menu.add(menuItem);
