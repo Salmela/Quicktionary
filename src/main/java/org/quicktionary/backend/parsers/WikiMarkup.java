@@ -726,15 +726,8 @@ public class WikiMarkup extends Parser {
 	private TextFragment createList(String parameter) {
 		TextFragment list, parent;
 
-		/*TODO: replace this with getCurrentFragment */
-		if(parentList.size() == 0) {
-			parent = getRoot();
-		} else {
-			parent = parentList.get(parentList.size() - 1);
-		}
-
 		list = new TextFragment(TextFragment.LIST_TYPE, parameter);
-		parent.appendChild(list);
+		getCurrentFragment().appendChild(list);
 		parentList.add(list);
 
 		return list;
@@ -746,12 +739,10 @@ public class WikiMarkup extends Parser {
 	private void createListItem() {
 		TextFragment item, list;
 
-		/*TODO: use getCurrentFragment */
-		list = parentList.get(parentList.size() - 1);
+		list = getCurrentFragment();
 		if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
 			itemListTruncate(parentList.size() - 1);
-			/*TODO: use getCurrentFragment */
-			list = parentList.get(parentList.size() - 1);
+			list = getCurrentFragment();
 		}
 
 		if(list.getType() != TextFragment.LIST_TYPE) {
@@ -928,7 +919,7 @@ public class WikiMarkup extends Parser {
 		System.out.println("Text start: " + startIndex + ", " + endIndex + " " + getSourceLocation());
 
 		/* create the node for text content */
-		parent = parentList.get(parentList.size() - 1);
+		parent = getCurrentFragment();
 		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
 		fragment.setContent(lineBuffer.substring(startIndex, endIndex));
 
