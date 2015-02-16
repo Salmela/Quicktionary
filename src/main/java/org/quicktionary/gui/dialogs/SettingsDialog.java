@@ -65,13 +65,37 @@ public class SettingsDialog extends JDialog implements ActionListener {
 
 	private void makeComponents() {
 		JTabbedPane pane;
-		JPanel basicsPanel;
+		JButton button;
+		JPanel vbox, basicsPanel, buttonBox;
+
+		vbox = new JPanel();
+		vbox.setLayout(new BoxLayout(vbox, BoxLayout.Y_AXIS));
+		add(vbox);
 
 		pane = new JTabbedPane();
-		this.add(pane);
+		vbox.add(pane);
 
 		basicsPanel = createBasicsPanel();
 		pane.addTab("Basics", null, basicsPanel, "Basic settings");
+
+		buttonBox = new JPanel();
+		buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
+		vbox.add(buttonBox);
+
+		button = new JButton("Ok");
+		button.addActionListener(this);
+		button.setActionCommand(OK_BUTTON_EVENT);
+		buttonBox.add(button);
+
+		button = new JButton("Apply");
+		button.addActionListener(this);
+		button.setActionCommand(APPLY_BUTTON_EVENT);
+		buttonBox.add(button);
+
+		button = new JButton("Cancel");
+		button.addActionListener(this);
+		button.setActionCommand(CANCEL_BUTTON_EVENT);
+		buttonBox.add(button);
 
 		pack();
 		setVisible(true);
