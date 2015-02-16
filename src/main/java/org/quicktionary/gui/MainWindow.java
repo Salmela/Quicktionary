@@ -145,9 +145,9 @@ public class MainWindow extends JFrame implements ActionListener {
 	private TextFragment generateStartPage() {
 		TextFragment root, paragraph, header;
 
-		root = new TextFragment(null, TextFragment.ROOT_TYPE);
-		header = new TextFragment(root, TextFragment.HEADER_TYPE);
-		paragraph = new TextFragment(root, TextFragment.PARAGRAPH_TYPE);
+		root = new TextFragment(TextFragment.ROOT_TYPE);
+		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
+		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
 
 		header.setContent("Welcome!");
 		paragraph.setContent("Read database and write something to the search box.");
@@ -228,9 +228,9 @@ public class MainWindow extends JFrame implements ActionListener {
 	public void openPage(String title, String text) {
 		TextFragment root, header, paragraph;
 
-		root = new TextFragment(null, TextFragment.ROOT_TYPE);
-		header = new TextFragment(root, TextFragment.HEADER_TYPE);
-		paragraph = new TextFragment(root, TextFragment.PARAGRAPH_TYPE);
+		root = new TextFragment(TextFragment.ROOT_TYPE);
+		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
+		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
 
 		header.setContent(title);
 		paragraph.setContent(text);
