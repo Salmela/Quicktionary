@@ -365,6 +365,7 @@ public class WikiMarkup extends Parser {
 		/* end all open nodes */
 		itemListTruncate(1);
 
+		parentList.get(0).print(2);
 		return true;
 	}
 
