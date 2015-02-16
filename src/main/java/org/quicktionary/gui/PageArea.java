@@ -33,6 +33,7 @@ public class PageArea extends JPanel {
 		if(Main.useHTML) {
 			pane = new JEditorPane();
 			pane.setContentType("text/html");
+			pane.setEditable(false);
 			add(pane, BorderLayout.CENTER);
 		} else {
 			area = new JTextArea();
