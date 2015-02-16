@@ -771,13 +771,21 @@ public class WikiMarkup extends Parser {
 		itemList.add(paragraphNode);
 	}
 
-	private MarkupStart getMarkupSymbol(SymbolType symbol) {
-		int i;
-		for(i = lineMarkup.size() - 2; i >= 0; i--) {
+	private int getNextMarkupSymbolIndex(SymbolType symbol, int startIndex) {
+		for(int i = startIndex - 1; i >= 0; i--) {
 			MarkupStart start = lineMarkup.get(i);
 
-			if(start.symbol == symbol) return start;
+			if(start.symbol == symbol) return i;
 			if(start.symbol.priority > symbol.priority) break;
+		}
+		return -1;
+	}
+
+	private MarkupStart getMarkupSymbol(SymbolType symbol) {
+		int index = getNextMarkupSymbolIndex(symbol, lineMarkup.size() - 1);
+
+		if(index != -1) {
+			return lineMarkup.get(index);
 		}
 		return null;
 	}
