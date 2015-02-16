@@ -63,6 +63,10 @@ public class PageArea extends JPanel {
 			return "<h1>";
 		case TextFragment.PARAGRAPH_TYPE:
 			return "<p>";
+		case TextFragment.STRONG_TYPE:
+			return "<strong>";
+		case TextFragment.EM_TYPE:
+			return "<em>";
 		default:
 			return "";
 		}
@@ -76,6 +80,10 @@ public class PageArea extends JPanel {
 			return "</h1>";
 		case TextFragment.PARAGRAPH_TYPE:
 			return "</p>";
+		case TextFragment.STRONG_TYPE:
+			return "</strong>";
+		case TextFragment.EM_TYPE:
+			return "</em>";
 		default:
 			return "";
 		}
