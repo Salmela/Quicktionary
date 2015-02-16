@@ -48,6 +48,9 @@ public class PageArea extends JPanel {
 		if(Main.useHTML) {
 			generateHTML(root, source);
 			pane.setText(source.toString());
+		} else {
+			generateMarkdown(root, source);
+			area.setText(source.toString());
 		}
 	}
 
@@ -87,5 +90,52 @@ public class PageArea extends JPanel {
 			}
 		}
 		src.append(getEndTag(root));
+	}
+
+	private String generateSubMarkdown(TextFragment fragment) {
+		String markdown, content;
+
+		content = markdown = "";
+		if(fragment.getContent() != null) {
+			content += fragment.getContent();
+		} else {
+			for(TextFragment child : fragment.getChildren()) {
+				content += generateSubMarkdown(child);
+			}
+		}
+
+		switch(fragment.getType()) {
+		case TextFragment.STRONG_TYPE:
+			markdown = "**" + content + "**";
+			break;
+		case TextFragment.EM_TYPE:
+			markdown = "*" + content + "*";
+			break;
+		case TextFragment.LINK_TYPE:
+			markdown = "[" + content + "](" + content + ")";
+			break;
+		default:
+			markdown = content;
+		}
+
+		return markdown;
+	}
+
+	private void generateMarkdown(TextFragment root, StringBuilder src) {
+		for(TextFragment child : root.getChildren()) {
+			String md = generateSubMarkdown(child);
+
+			if(child.getType() == TextFragment.HEADER_TYPE) {
+				src.append(md + "\n");
+				for(char a : md.toCharArray()) {
+					src.append("=");
+				}
+				src.append("\n");
+			} else if(child.getType() == TextFragment.PARAGRAPH_TYPE) {
+				src.append("\n" + md + "\n");
+			} else {
+				src.append(md);
+			}
+		}
 	}
 }
