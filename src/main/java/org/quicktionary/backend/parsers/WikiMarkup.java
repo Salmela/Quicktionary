@@ -1095,22 +1095,30 @@ public class WikiMarkup extends Parser {
 
 	private void createTemplateMarkup(MarkupStart end) {
 		MarkupStart start, prevLink;
+		int markupIndex;
 
 		/* there must be atleast two brackets */
 		if(end.count == 1) {
 			return;
 		}
 		openTemplates--;
+		markupIndex = lineMarkup.size() - 1;
 
-		start = getMarkupSymbol(symbolLut['{']);
-		if(start == null) return;
-		if(start.type == MarkupStart.MarkupType.START) {
-			throw new Error("We should try to find earlier starting markup");
-		}
+		/* find the start markup */
+		while(true) {
+			markupIndex = getNextMarkupSymbolIndex(symbolLut['{'], markupIndex);
+			if(markupIndex == -1) return;
 
-		/* there must be atleast two brackets */
-		if(start.count == 1) {
-			throw new Error("We should try to find earlier starting markup");
+			start = lineMarkup.get(markupIndex);
+			if(start.type == MarkupStart.MarkupType.START) {
+				continue;
+			}
+
+			/* there must be atleast two brackets */
+			if(start.count == 1) {
+				continue;
+			}
+			break;
 		}
 
 		prevLink = getMarkupSymbol(symbolLut['[']);
