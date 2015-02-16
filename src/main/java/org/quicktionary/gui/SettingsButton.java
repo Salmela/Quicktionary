@@ -22,6 +22,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import org.quicktionary.gui.dialogs.ReadDatabaseDialog;
+import org.quicktionary.gui.theme.HeaderButton;
 
 /**
  * The MainWindow is only class that communicates with the backend.
@@ -39,10 +41,10 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 	static final String PREFERENCES_ITEM_EVENT   = "preferences-item-event";
 
 	/* events send to the parent class */
-	static final String NEW_WORD_EVENT      = "new-word-event";
-	static final String REMOVE_WORD_EVENT   = "remove-word-event";
-	static final String READ_DATABASE_EVENT = "read-database-event";
-	static final String PREFERENCES_EVENT   = "preferences-event";
+	static final String ASK_NEW_WORD_EVENT     = "new-word-event";
+	static final String ASK_REMOVE_WORD_EVENT  = "remove-word-event";
+	static final String READ_DATABASE_EVENT    = "read-database-event";
+	static final String OPEN_PREFERENCES_EVENT = "open-preferences-event";
 
 	private ActionListener listener;
 	private JPopupMenu menu;
@@ -82,7 +84,7 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 
 		menu.addSeparator();
 
-		menuItem = new JMenuItem("Preferences");
+		menuItem = new JMenuItem("Settings");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand(PREFERENCES_ITEM_EVENT);
 		menu.add(menuItem);
@@ -109,8 +111,10 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		dialog = ReadDatabaseDialog.createDialog(this, listener);
 		filename = dialog.getFilename();
 
-		event = new ReadDatabaseEvent(this, filename);
-		listener.actionPerformed((ActionEvent)event);
+		if(filename != null) {
+				event = new ReadDatabaseEvent(this, filename);
+				listener.actionPerformed((ActionEvent)event);
+		}
 	}
 
 	public class ReadDatabaseEvent extends ActionEvent {
@@ -158,6 +162,22 @@ public class SettingsButton extends HeaderButton implements ActionListener, Popu
 		/* handle events from menu items */
 		if(event.getActionCommand().equals(READ_DATABASE_ITEM_EVENT)) {
 			openReadDatabaseDialog();
+		/* create new word */
+		} else if(event.getActionCommand().equals(NEW_WORD_ITEM_EVENT)) {
+			ActionEvent newEvent;
+			newEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ASK_NEW_WORD_EVENT);
+			listener.actionPerformed(newEvent);
+		/* remove a word */
+		} else if(event.getActionCommand().equals(REMOVE_WORD_ITEM_EVENT)) {
+			ActionEvent newEvent;
+			newEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, ASK_REMOVE_WORD_EVENT);
+			listener.actionPerformed(newEvent);
+		/* open settings dialog */
+		} else if(event.getActionCommand().equals(PREFERENCES_ITEM_EVENT)) {
+			ActionEvent newEvent;
+			newEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, OPEN_PREFERENCES_EVENT);
+			listener.actionPerformed(newEvent);
+		/* unknown option */
 		} else {
 			System.out.println("setting button: unknown event (" +
 			                   event.getActionCommand() + ")");

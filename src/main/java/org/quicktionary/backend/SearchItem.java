@@ -17,7 +17,9 @@
 package org.quicktionary.backend;
 
 /**
- * Search item object that is passed to the gui.
+ * Container for all search item related data.
+ * SearchItem objects are created in Searcher class and
+ * send to the gui.
  */
 public class SearchItem {
 	private String word, description;

@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Arrays;
 import java.lang.StringBuilder;
 
 /**
@@ -52,7 +51,6 @@ public class XMLParser extends Parser {
 	 */
 	private int  currentDepth;
 	private boolean parsingError;
-	private boolean parsingErrorHappened;
 	private boolean saveTextContent;
 	private boolean preserveWhitespaces;
 	private boolean verbose;
@@ -96,30 +94,21 @@ public class XMLParser extends Parser {
 		attributeBuilder = new StringBuilder(64);
 		textContent  = new StringBuilder(4096);
 		verbose = false;
-		parsingErrorHappened = false;
 	}
 
 	/**
 	 * The method for starting the parser.
 	 *
-	 * @param stream The input stream which will be readed
+	 * @param reader The input data
+	 * @return True if the file isn't empty
 	 * @throws IOException
 	 */
 	public boolean parseFile(Reader reader) throws IOException {
 		currentDepth = 0;
 		preserveWhitespaces  = false;
 		saveTextContent      = false;
-		parsingErrorHappened = false;
 
 		return super.parse(reader);
-	}
-
-	public boolean isInitialized() {
-		return currentChar != 0;
-	}
-
-	public boolean parsingErrorHappened() {
-		return parsingErrorHappened;
 	}
 
 	/**
@@ -182,6 +171,7 @@ public class XMLParser extends Parser {
 	/**
 	 * Go to the root element. The root element must be first element in
 	 * the document and there should not be textNodes before it.
+	 * @return True if the root node was found
 	 */
 	public boolean getRoot() {
 		if(verbose) {
@@ -204,6 +194,7 @@ public class XMLParser extends Parser {
 	/**
 	 * Get the next node. This method is just user friendlier name for
 	 * parseNode.
+	 * @return True if the node was successfully parsed
 	 */
 	public boolean getNextNode() {
 		return parseNode();
@@ -211,6 +202,8 @@ public class XMLParser extends Parser {
 
 	/**
 	 * Go to the first element with the tagNameId.
+	 * @param tagNameId The tag id of the searched element
+	 * @return True if the element was found
 	 */
 	public boolean findElement(int tagNameId) {
 		while(getNextNode()) {
@@ -226,6 +219,8 @@ public class XMLParser extends Parser {
 
 	/**
 	 * Go to the first element with the tagName.
+	 * @param tagName The name of wanted element
+	 * @return True, if the element was parsed correctly
 	 */
 	public boolean findElement(String tagName) {
 		return findElement(getTagNameId(tagName));
@@ -259,6 +254,7 @@ public class XMLParser extends Parser {
 
 	/**
 	 * Go to the end of the parent node.
+	 * @return True if the parent was found
 	 */
 	public boolean getParent() {
 		return goToDepth(currentDepth - 1);
@@ -307,6 +303,8 @@ public class XMLParser extends Parser {
 
 	/**
 	 * Get the value of specific attribute at current element.
+	 * @param attributeName Name of the attribute
+	 * @return The value of the attribute
 	 */
 	public String getAttribute(String attributeName) {
 		for(XMLAttribute attribute : attributes) {
@@ -319,6 +317,7 @@ public class XMLParser extends Parser {
 
 	/**
 	 * Get the node type of the current node.
+	 * @return The node type
 	 */
 	public NodeType getNodeType() {
 		return nodeType;
@@ -327,6 +326,7 @@ public class XMLParser extends Parser {
 	/**
 	 * Get the tag name of current element. If current node isn't element, then
 	 * return null.
+	 * @return The tag name of the element
 	 */
 	public String getElementName() {
 		return tagName.toString();
@@ -335,27 +335,21 @@ public class XMLParser extends Parser {
 	/**
 	 * Get the tag name id of current element. If current node isn't element, then
 	 * return -1.
+	 * @return The tag id of the element
 	 */
 	public int getElementNameId() {
 		return tagNameId;
 	}
 
 	/**
-	 * Get next attribute at the current element. If any attributes haven't been
-	 * parsed then the first one is given.
-	 */
-	public String getNextAttribute() {
-		throw new Error("Not implemented");
-	}
-
-	/**
-	 * Change the default of ignoring whitespaces.
+	 * Change the default of ignoring whitespace.
+	 * @param preserveWhitespaces The option for preserving whitespace
 	 */
 	public void setWhitespacePreserving(boolean preserveWhitespaces) {
 		this.preserveWhitespaces = preserveWhitespaces;
 	}
 
-	public void setTextContentStoring(boolean storeTextContent) {
+	public void setTextContentStoring(boolean saveTextContent) {
 		this.saveTextContent = saveTextContent;
 	}
 
@@ -669,7 +663,6 @@ public class XMLParser extends Parser {
 			textContent.append(currentChar);
 			getNext();
 		}
-		return;
 	}
 
 	/**

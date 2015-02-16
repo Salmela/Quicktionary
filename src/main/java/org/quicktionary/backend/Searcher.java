@@ -17,8 +17,8 @@
 package org.quicktionary.backend;
 
 /**
- * The Searcher class parses the search queries from gui and
- * sends results back to gui.
+ * The Searcher class parses the search queries from WordDatabase and
+ * sends results to the gui.
  */
 public class Searcher {
 	private Quicktionary dictionary;
@@ -39,6 +39,7 @@ public class Searcher {
 	 * Search words from WordDatabase that are similar
 	 * to search query. This method is called for all
 	 * search events coming from gui.
+	 * @param query The search query
 	 */
 	public void search(String query) {
 		parseSearchQuery(query);
@@ -65,46 +66,81 @@ public class Searcher {
 	/**
 	 * Set the SearchResultListener. All future search results
 	 * are given to the listener.
+	 * @param listener The search result listener
 	 */
 	public void setResultListener(SearchResultListener listener) {
 		resultListener = listener;
+	}
+
+	private boolean isSearchResultDuplicate(WordDatabase.WordEntry entry) {
+		int size = resultListener.getSize();
+		int i;
+
+		for(i = 0;  i < size; i++) {
+			SearchItem item;
+			item = resultListener.getSearchItemAt(i);
+			if(item != null && item.getInternal() == entry) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * Fetch the words from WordDatabase that fit the search term
 	 * and send them to SearchResultListener. This method also
 	 * will possibly reorder the search results.
+	 * @param offset First search result that is wanted
+	 * @param count  The number of search results
+	 * @return True if the request was successful
 	 */
 	public boolean requestSearchResults(int offset, int count) {
 		WordDatabase.WordEntry[] entries;
-		int i;
+		int resultCount, requestCount, i;
 
 		if(resultListener == null) {
 			searchRunning = false;
 			return false;
 		}
 
-		count = offset + count - processedEntries;
-		if(count <= 0) {
+		resultCount = 0;
+		requestCount = offset + count - processedEntries;
+
+		if(requestCount <= 0) {
 			searchRunning = false;
+			System.out.println("ERROR: Invalid search result request");
 			return false;
 		}
 
-		entries = new WordDatabase.WordEntry[count];
-		count = database.fetchResults(entries, count);
+		entries = new WordDatabase.WordEntry[requestCount];
 
-		for(i = 0; i < count; i++) {
-			resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
+		while(resultCount < requestCount) {
+				/* check if we didn't get any words then exit */
+				if(database.fetchResults(entries, requestCount) == 0) {
+					/* inform the gui that there isn't more search results */
+					resultListener.appendSearchResult(null);
+					break;
+				}
+
+				/* go through all words that datbase gave to us */
+				for(i = 0; i < requestCount && entries[i] != null; i++) {
+					/* remove duplicates */
+					if(isSearchResultDuplicate(entries[i])) continue;
+
+					/* give the new item to gui */
+					resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
+					resultCount++;
+				}
 		}
-		processedEntries += count;
 
+		processedEntries += resultCount;
 		searchRunning = false;
 		return true;
 	}
 
 	/**
 	 * Split the search query to parts. Currently the
-	 * method is just nop.
+	 * method does nothing.
 	 */
 	private String parseSearchQuery(String query) {
 		return query;

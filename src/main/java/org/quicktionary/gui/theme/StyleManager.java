@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.gui;
+package org.quicktionary.gui.theme;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -26,6 +26,9 @@ import java.awt.geom.Point2D;
 
 import java.lang.IllegalStateException;
 
+/**
+ * This class provides an easy way to color the custom widgets.
+ */
 public class StyleManager {
 	static HashMap<String, Object> styles;
 	static ArrayList<StyleListener> listeners;
@@ -111,11 +114,11 @@ public class StyleManager {
 		graphics2d.setPaint(source);
 	}
 
-	static Object getStyle(String styleId) {
+	public static Object getStyle(String styleId) {
 		return styles.get(styleId);
 	}
 
-	static Color getColor(String colorId) {
+	public static Color getColor(String colorId) {
 		Object color;
 		color = getStyle(colorId);
 		/* use default color if a color is not selected */
@@ -128,7 +131,7 @@ public class StyleManager {
 		return (Color)color;
 	}
 
-	static void setStyleListener(StyleListener listener) {
+	public static void setStyleListener(StyleListener listener) {
 		listeners.add(listener);
 	}
 

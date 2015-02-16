@@ -16,7 +16,6 @@
  */
 package org.quicktionary.backend;
 
-import java.lang.UnsupportedOperationException;
 import java.util.TreeMap;
 import java.util.Map;
 
@@ -56,7 +55,6 @@ public class WordDatabase {
 	}
 
 	public String fetchPage(SearchItem item) {
-		Map.Entry<String, WordEntry> entry;
 		WordEntry wordEntry;
 
 		wordEntry = (WordEntry)item.getInternal();
@@ -90,6 +88,11 @@ public class WordDatabase {
 
 			entries[i] = currentEntry.getValue();
 			currentEntry = map.higherEntry(currentEntry.getKey());
+		}
+
+		/* append null terminator to the list */
+		if(i < count) {
+			entries[i] = null;
 		}
 
 		return i;

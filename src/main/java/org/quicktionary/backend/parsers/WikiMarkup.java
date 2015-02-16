@@ -21,8 +21,14 @@ import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.lang.StringBuilder;
 
+/**
+ * The WikiMarkup class parses the wiki markup.
+ * This class is developed at another git branch.
+ * TODO: Rename to WikiMarkupReader
+ */
 public class WikiMarkup extends Parser {
 	private final StringBuilder lineBuffer;
 	//private final StringBuilder content;
@@ -41,7 +47,7 @@ public class WikiMarkup extends Parser {
 	 *
 	 * TODO: Rename to TextNode and move to own file.
 	 */
-	public class TextFragment {
+	public static class TextFragment {
 		private TextFragment parent;
 		private int type;
 		private String content;
@@ -235,6 +241,10 @@ public class WikiMarkup extends Parser {
 
 		public ArrayList<TextFragment> getChildren() {
 			return childs;
+		}
+
+		public String getContent() {
+			return content;
 		}
 
 		public String getTextContent() {

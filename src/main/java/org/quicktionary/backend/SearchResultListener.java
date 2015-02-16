@@ -23,6 +23,7 @@ package org.quicktionary.backend;
 public interface SearchResultListener {
 	/**
 	 * Appends a search result to the gui's search result list.
+	 * @param item The search result item to be appended
 	 */
 	void appendSearchResult(SearchItem item);
 	/**
@@ -31,4 +32,7 @@ public interface SearchResultListener {
 	 */
 	void resetSearchResults();
 	void setStatistics(int totalCount, int time);
+
+	int getSize();
+	SearchItem getSearchItemAt(int index);
 }

@@ -22,7 +22,11 @@ if [[ "x$1" == "xcreate" ]]; then
 	#cp Quicktionary/docs/manual docs/Manual.md
 
 	pit_folder=`ls -t Quicktionary/target/pit-reports/ | head -1`
+	rm -r docs/pit
 	cp -r Quicktionary/target/pit-reports/$pit_folder docs/pit
+
+	rm -r javadoc
+	cp -r Quicktionary/target/site/apidocs javadoc
 
 	class_diagram=`ls -t Quicktionary/.docs/class_diagram_*.png | head -1`
 	class_diagram=`basename $class_diagram`

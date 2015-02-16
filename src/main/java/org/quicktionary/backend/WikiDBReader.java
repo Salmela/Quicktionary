@@ -26,8 +26,7 @@ import org.quicktionary.backend.parsers.XMLParser;
 import org.quicktionary.backend.parsers.WikiMarkup;
 
 /**
- * WikiDBReader goes through a wikimedia database dump.
- * TODO: Remove Parser from name.
+ * WikiDBReader extracts the wiki pages from a wikimedia database dump.
  */
 public class WikiDBReader implements Runnable {
 	private XMLParser parser;
@@ -73,7 +72,7 @@ public class WikiDBReader implements Runnable {
 		return true;
 	}
 
-	public void readPage() {
+	private void readPage() {
 		String text, title, ns;
 		ns = null;
 		title = null;

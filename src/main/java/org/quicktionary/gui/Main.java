@@ -20,13 +20,13 @@ import java.io.IOException;
 import org.quicktionary.backend.Quicktionary;
 
 /**
- * The Main class parses the command line arguments and starts the main window.
+ * The Main class parses the command line arguments and starts the application.
  */
 public class Main {
-	static boolean useNativeFileDialog;
-	static boolean useHTML;
-	static String databasePath;
-	static String themeName;
+	public static boolean useNativeFileDialog;
+	public static boolean useHTML;
+	public static String databasePath;
+	public static String themeName;
 
 	public static void init() {
 		useNativeFileDialog = false;
@@ -54,7 +54,7 @@ public class Main {
 			          option.equals("-t")) {
 				themeName = args[++i];
 
-			} else if(option.equals("--nohtml") ||
+			} else if(option.equals("--no-html") ||
 			          option.equals("-h")) {
 				useHTML = false;
 
@@ -74,7 +74,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Quicktionary quicktionary;
-		MainWindow window;
+		Application application;
 
 		//Test test = new Test();
 
@@ -82,9 +82,6 @@ public class Main {
 		Main.parseCommandlineArgs(args);
 
 		quicktionary = new Quicktionary();
-		window = new MainWindow(quicktionary);
-
-		window.setVisible(true);
-		System.out.println("Hello world!");
+		application = new Application(quicktionary);
 	}
 }

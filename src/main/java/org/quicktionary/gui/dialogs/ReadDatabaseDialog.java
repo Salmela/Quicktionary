@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.gui;
+package org.quicktionary.gui.dialogs;
 
 import java.io.File;
 
@@ -34,6 +34,12 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.quicktionary.gui.Main;
+
+/**
+ * This dialog asks the filename of the wiki database dump.
+ * TODO: Give some feedback to user if the file is not valid.
+ */
 public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	static final long serialVersionUID = 1L;
 
@@ -42,7 +48,6 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	static final String CANCEL_EVENT = "cancel-button";
 
 	private String filename;
-	private JDialog dialog;
 	private JTextField filenameField;
 
 	public ReadDatabaseDialog(Frame frame, ActionListener listener) {
@@ -100,9 +105,6 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 
 		Container pane;
 		pane = getContentPane();
-		//pane = new JPanel();
-		//getContentPane().add(pane);
-		//pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 		pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
 		pane.add(new JLabel(descString));
 		pane.add(fileSelectorBox);

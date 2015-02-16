@@ -22,42 +22,56 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.quicktionary.backend.Quicktionary;
+
+
+import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+import org.quicktionary.backend.SearchResultListener;
+import org.quicktionary.gui.theme.HeaderButton;
+import org.quicktionary.gui.theme.StyleManager;
 
 /**
- * The MainWindow is only class that communicates with the backend.
+ * The MainWindow initializes the window components
+ * and updates them as neaded.
  */
 public class MainWindow extends JFrame implements ActionListener {
 	static final long serialVersionUID = 1L;
+	static final String GO_NEXT_EVENT = "go-next-event";
+	static final String GO_BACK_EVENT = "go-back-event";
 
-	private Quicktionary dictionary;
-	private boolean showSearchResults;
+	private final String appTitle;
+	private String pageTitle;
+
+	private final Application app;
 	private StyleManager styleManager;
 
+	/* main components */
 	private JScrollPane mainPane;
 	private SearchResults searchResults;
-	private JTextArea pageArea;
+	private PageArea pageArea;
 	private JTextField searchBox;
 
-	public MainWindow(Quicktionary dictionary) {
-		this.dictionary = dictionary;
-		this.showSearchResults = false;
+	/* history buttons */
+	private JButton backButton, nextButton;
 
-		setTitle("Quicktionary");
+	public MainWindow(Application app) {
+		this.app = app;
+
+		appTitle = "Quicktionary";
+		pageTitle = null;
+
+		setTitle(appTitle);
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		dictionary.newWord("hello");
-		dictionary.newWord("hey");
-		dictionary.newWord("he");
-		dictionary.newWord("hi");
-		dictionary.newWord("howdy");
-
 		styleManager = new StyleManager();
 		styleManager.changeStyle(Main.themeName);
+
 		makeComponents();
+		updateHistoryButtons("next", null);
+		updateHistoryButtons("back", null);
 	}
 
+	/*TODO: remove/move somewhere else */
 	private void makeRoundedBorders(JComponent component, boolean top, boolean right,
 	                                boolean bottom, boolean left) {
 		CompoundBorder compoundBorder;
@@ -128,9 +142,25 @@ public class MainWindow extends JFrame implements ActionListener {
 		return headerBar;
 	}
 
+	private TextFragment generateStartPage() {
+		TextFragment root, paragraph, header;
+
+		root = new TextFragment(null, TextFragment.ROOT_TYPE);
+		header = new TextFragment(root, TextFragment.HEADER_TYPE);
+		paragraph = new TextFragment(root, TextFragment.PARAGRAPH_TYPE);
+
+		header.setContent("Welcome!");
+		paragraph.setContent("Read database and write something to the search box.");
+
+		return root;
+	}
+
+	/**
+	 * Create the child components.
+	 */
 	private void makeComponents() {
 		JPanel     headerBar;
-		JButton    backButton, nextButton, settingsButton;
+		JButton    settingsButton;
 
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -138,7 +168,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		backButton = new HeaderButton("Back");
 		nextButton = new HeaderButton("Next");
 		searchBox  = new SearchBox(this);
-		settingsButton = new SettingsButton(this);
+		settingsButton = new SettingsButton(app);
 
 		/*TODO: gui is currently not high priority, but this
 		        should be cleaned up */
@@ -153,66 +183,102 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* create components for the main view */
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults(this);
-		pageArea = new JTextArea();
-		pageArea.setText("Read database and write something to the search box.");
+
+		pageArea = new PageArea();
+		pageArea.setPage(generateStartPage());
 		mainPane.setViewportView(pageArea);
+
+		/* add event listeners for the history buttons */
+		nextButton.addActionListener(app);
+		nextButton.setActionCommand(GO_NEXT_EVENT);
+		backButton.addActionListener(app);
+		backButton.setActionCommand(GO_BACK_EVENT);
 
 		this.add(headerBar);
 		this.add(mainPane);
 
 		searchResults.inLayout();
-		dictionary.setSearchResultListener(searchResults.getSearchResultListener());
 	}
 
-	private void changeView(boolean changeToSearchResults) {
-		showSearchResults = changeToSearchResults;
+	/**
+	 * Get the search result listener from searchResults.
+	 */
+	public SearchResultListener getSearchResultListener() {
+		return searchResults.getSearchResultListener();
+	}
 
+	/**
+	 * Change the content of the main area.
+	 */
+	private void changeView(boolean changeToSearchResults) {
+		/* swap to search results */
 		if(changeToSearchResults) {
 			mainPane.setViewportView(searchResults);
+			setTitle(appTitle + " \u2014 Search results");
+		/* swap to page area */
 		} else {
 			mainPane.setViewportView(pageArea);
+			setTitle(appTitle + " \u2014 " + pageTitle);
 		}
 	}
 
-	public void actionPerformed(ActionEvent event) {
-		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
-			SearchBox searchBox = (SearchBox)event.getSource();
-			System.out.println("main window: search event " + searchBox.getText());
+	/**
+	 * Set the fetched page, given by Application class.
+	 */
+	public void openPage(String title, String text) {
+		TextFragment root, header, paragraph;
 
-			changeView(true);
-			dictionary.search(searchBox.getText());
-			dictionary.requestSearchResults(0, searchResults.getVisibleRowCount());
+		root = new TextFragment(null, TextFragment.ROOT_TYPE);
+		header = new TextFragment(root, TextFragment.HEADER_TYPE);
+		paragraph = new TextFragment(root, TextFragment.PARAGRAPH_TYPE);
 
-		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
-			System.out.println("main window: search event " + searchBox.getText());
+		header.setContent(title);
+		paragraph.setContent(text);
 
-			//dictionary.search(searchBox.getText());
-			//show the first item's page
+		pageArea.setPage(root);
+		pageTitle = title;
+		changeView(false);
+	}
 
-		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
-			SearchResults.PageLoadEvent pageEvent;
-			String text;
+	/**
+	 * Disable or enable one of the history buttons.
+	 */
+	public void updateHistoryButtons(String buttonString, Object view) {
+		JButton button;
 
-			pageEvent = (SearchResults.PageLoadEvent)event;
-			text = dictionary.getPageContent(pageEvent.getSearchItem(), searchBox.getText());
-			pageArea.setText(text);
-			changeView(false);
-
-		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
-			SearchResults.RequestSearchResultEvent requestEvent;
-
-			requestEvent = (SearchResults.RequestSearchResultEvent)event;
-			dictionary.requestSearchResults(requestEvent.getStart(), requestEvent.getEnd());
-
-		} else if(event.getActionCommand() == SettingsButton.READ_DATABASE_EVENT) {
-			SettingsButton.ReadDatabaseEvent dataEvent;
-
-			dataEvent = (SettingsButton.ReadDatabaseEvent) event;
-			dictionary.readDatabase(dataEvent.getFilename());
-
+		if("next".equals(buttonString)) {
+			button = nextButton;
+		} else if("back".equals(buttonString)) {
+			button = backButton;
 		} else {
-			System.out.println("main window: unknown event (" +
-			                   event.getActionCommand() + ")");
+			return;
+		}
+
+		button.setEnabled(view != null);
+	}
+
+	/**
+	 * Listen events from the searchBox. The method sets the
+	 * wanted search result count and passes the event to the app.
+	 */
+	public void actionPerformed(ActionEvent event) {
+		/* set the search result count for SearchEvents */
+		if(event.getActionCommand() == SearchBox.SEARCH_EVENT ||
+		   event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
+			SearchBox.SearchEvent e = (SearchBox.SearchEvent)event;
+			e.setSearchResultCount(searchResults.getVisibleRowCount());
+			changeView(true);
+			app.actionPerformed(event);
+
+		/* set the search query for PageLoadEvents */
+		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
+			SearchResults.PageLoadEvent e = (SearchResults.PageLoadEvent)event;
+			e.setSearchQuery(searchBox.getText());
+			app.actionPerformed(event);
+
+		/* do nothing special for search result requests */
+		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
+			app.actionPerformed(event);
 		}
 	}
 }

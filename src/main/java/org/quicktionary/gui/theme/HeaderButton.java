@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.gui;
+package org.quicktionary.gui.theme;
 
 import javax.swing.JButton;
 import javax.swing.event.ChangeEvent;
@@ -23,6 +23,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 
+/**
+ * This is custom button component.
+ * TODO: This should be removed or replaced with more elegant code.
+ */
 public class HeaderButton extends JButton implements ChangeListener {
 	final static long serialVersionUID = 1L;
 	private boolean pressed;
