@@ -21,7 +21,10 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import javax.swing.text.html.StyleSheet;
 import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 
@@ -37,6 +40,7 @@ public class PageArea extends JPanel {
 			pane = new JEditorPane();
 			pane.setEditorKit(htmlEditor);
 			pane.setEditable(false);
+			pane.addHyperlinkListener(new LinkListener());
 			generetaStyleSheet(htmlEditor);
 			add(pane, BorderLayout.CENTER);
 		} else {
@@ -44,6 +48,14 @@ public class PageArea extends JPanel {
 			area.setLineWrap(true);
 			add(area, BorderLayout.CENTER);
 		}
+	}
+
+	class LinkListener implements HyperlinkListener {
+         public void hyperlinkUpdate(HyperlinkEvent event) {
+             if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				System.out.println("link " + event.getDescription());
+             }
+         }
 	}
 
 	private StyleSheet generateStyleSheet(HTMLEditorKit kit) {
