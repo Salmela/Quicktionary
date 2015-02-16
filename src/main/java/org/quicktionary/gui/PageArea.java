@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 
 public class PageArea extends JPanel {
@@ -31,15 +33,24 @@ public class PageArea extends JPanel {
 		super(new BorderLayout());
 
 		if(Main.useHTML) {
+			HTMLEditorKit htmlEditor = new HTMLEditorKit();
 			pane = new JEditorPane();
-			pane.setContentType("text/html");
+			pane.setEditorKit(htmlEditor);
 			pane.setEditable(false);
+			generetaStyleSheet(htmlEditor);
 			add(pane, BorderLayout.CENTER);
 		} else {
 			area = new JTextArea();
 			area.setLineWrap(true);
 			add(area, BorderLayout.CENTER);
 		}
+	}
+
+	private StyleSheet generateStyleSheet(HTMLEditorKit kit) {
+		StyleSheet styleSheet = kit.getStyleSheet();
+		styleSheet.addRule("body {font-family: Cantarell;}");
+		styleSheet.addRule("h1 {border-bottom: 1px solid #444444; padding-bottom: 5px}");
+		return styleSheet;
 	}
 
 	public void setPage(TextFragment root) {
