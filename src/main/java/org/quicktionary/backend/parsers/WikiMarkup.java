@@ -465,12 +465,10 @@ public class WikiMarkup extends Parser {
 				fragment = new TextFragment(TextFragment.PLAIN_TYPE);
 				fragment.setContent(" ");
 				getCurrentFragment().appendChild(fragment);
-				inlineWhitespaceConsumed = true;
-				return;
 			}
 			break;
 		}
-		inlineWhitespaceConsumed = false;
+		inlineWhitespaceConsumed = true;
 		inlineFragmentIndex = itemList.size();
 	}
 
