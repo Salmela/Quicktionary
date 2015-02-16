@@ -940,12 +940,14 @@ public class WikiMarkup extends Parser {
 		MarkupStart start;
 		int i;
 
+		start = appendMarkupStart(symbolLut['=']);
+		start.location = 0;
+
 		for(i = 0; i < 6; i++) {
 			if(currentChar != '=') break;
 			lineBuffer.append(currentChar);
 			getNext();
 		}
-		start = appendMarkupStart(symbolLut['=']);
 		start.count = i;
 		System.out.println("Header parsed " + i + ".");
 	}
