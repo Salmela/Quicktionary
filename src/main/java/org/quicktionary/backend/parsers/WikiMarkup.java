@@ -409,7 +409,7 @@ public class WikiMarkup extends Parser {
 				continue;
 			}
 
-			finalizeMarkup(markupStart, previousMarkup);
+			handleMarkup(markupStart, previousMarkup);
 
 			previousMarkup = markupStart;
 		}
@@ -829,28 +829,28 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
-	private void finalizeMarkup(MarkupStart markup, MarkupStart previousMarkup) {
+	private void handleMarkup(MarkupStart markup, MarkupStart previousMarkup) {
 		/* append the text content to previous TextFragment */
 		createTextNode(markup, previousMarkup);
 
 		/* create TextFragment for the markup */
 		switch(markup.symbol.character) {
 		case '\'':
-			finalizeTextStyleMarkup(markup);
+			handleTextStyleMarkup(markup);
 			break;
 
 		case '[':
-			finalizeLinkMarkup(markup);
+			createLinkNode(markup);
 			break;
 		case ']':
-			finalizeLinkMarkupEnd(markup);
+			endLinkNode(markup);
 			break;
 
 		case '{':
-			finalizeTemplateMarkup(markup);
+			createTemplateNode(markup);
 			break;
 		case '}':
-			finalizeTemplateMarkupEnd(markup);
+			endTemplateNode(markup);
 			break;
 
 		case '<':
@@ -1002,7 +1002,7 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Generate TextFragment for the text style markup.
 	 */
-	private void finalizeTextStyleMarkup(MarkupStart markup) {
+	private void handleTextStyleMarkup(MarkupStart markup) {
 		int quotes = markup.count;
 
 		/* return if this end markup */
@@ -1076,11 +1076,11 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
-	private void finalizeLinkMarkup(MarkupStart start) {
+	private void createLinkNode(MarkupStart start) {
 		appendInlineTextFragment(TextFragment.LINK_TYPE);
 	}
 
-	private void finalizeLinkMarkupEnd(MarkupStart end) {
+	private void endLinkNode(MarkupStart end) {
 		TextFragment current = getCurrentFragment();
 		while(current.getType() != TextFragment.LINK_TYPE) {
 			current = current.getParent();
@@ -1139,11 +1139,11 @@ public class WikiMarkup extends Parser {
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
-	private void finalizeTemplateMarkup(MarkupStart start) {
+	private void createTemplateNode(MarkupStart start) {
 		appendInlineTextFragment(TextFragment.TEMPLATE_TYPE);
 	}
 
-	private void finalizeTemplateMarkupEnd(MarkupStart end) {
+	private void endTemplateNode(MarkupStart end) {
 		TextFragment current = getCurrentFragment();
 		while(current.getType() != TextFragment.TEMPLATE_TYPE) {
 			current = current.getParent();
