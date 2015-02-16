@@ -30,6 +30,8 @@ import java.awt.Container;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 
 /**
  * Dialog contains list of tabs that enables the user to
@@ -102,9 +104,20 @@ public class SettingsDialog extends JDialog implements ActionListener {
 	}
 
 	private JPanel createBasicsPanel() {
-		JPanel panel;
+		JPanel panel, themePanel;
 		panel = new JPanel();
-		panel.add(new JLabel("Test"));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+		themePanel = new JPanel();
+		themePanel.setBorder(BorderFactory.createTitledBorder("Theme"));
+		themePanel.add(new JLabel("Test"));
+		panel.add(themePanel);
+
+		themePanel = new JPanel();
+		themePanel.setBorder(BorderFactory.createTitledBorder("Others"));
+		themePanel.add(new JCheckBox("Advanced options"));
+		panel.add(themePanel);
+
 		return panel;
 	}
 
