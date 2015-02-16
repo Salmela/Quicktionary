@@ -117,13 +117,13 @@ public class Test {
 	private TextFragment newNode(TextFragment parent, String text, int type, String parameter) {
 		TextFragment node;
 		if(parent == null) {
-			node = parserWiki.new TextFragment(type, parameter);
+			node = new TextFragment(type, parameter);
 		} else {
-			node = parent.appendChild(parserWiki.new TextFragment(type, parameter));
+			node = parent.appendChild(new TextFragment(type, parameter));
 		}
 		if(text != null) {
 			TextFragment textNode;
-			textNode = parserWiki.new TextFragment(TextFragment.PLAIN_TYPE);
+			textNode = new TextFragment(TextFragment.PLAIN_TYPE);
 			node.appendChild(textNode);
 			textNode.setContent(text);
 		}
@@ -145,7 +145,7 @@ public class Test {
 			throw new Error("Parent must be set");
 		}
 
-		textNode = parserWiki.new TextFragment(TextFragment.PLAIN_TYPE);
+		textNode = new TextFragment(TextFragment.PLAIN_TYPE);
 		parent.appendChild(textNode);
 		textNode.setContent(text);
 	}
@@ -455,12 +455,12 @@ public class Test {
 	public void listMarkupWithoutSpace() {
 		TextFragment wanted, list, item;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
 		item = newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
 		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
@@ -470,12 +470,12 @@ public class Test {
 	public void doubleUnorderedListMarkupWithoutSpace() {
 		TextFragment wanted, list, item;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ul");
 		item = newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 
-		list = item.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ul"));
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
 		newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
@@ -502,9 +502,9 @@ public class Test {
 	public void listWithNoOwnItems() {
 		TextFragment wanted, list, item;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
 
-		list = wanted.appendChild(parserWiki.new TextFragment(TextFragment.LIST_TYPE, "ol"));
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
 		item = newNode(list, "hello", TextFragment.LIST_ITEM_TYPE);
 
@@ -521,7 +521,7 @@ public class Test {
 	public void listWithSublistAtMiddle() {
 		TextFragment wanted, list, item;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ol");
 		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
@@ -537,7 +537,7 @@ public class Test {
 	public void listTypeChangeAtMiddle() {
 		TextFragment wanted, list;
 
-		wanted = parserWiki.new TextFragment(TextFragment.ROOT_TYPE);
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
 
 		list = newNode(wanted, TextFragment.LIST_TYPE, "ul");
 		newNode(list, "howdy", TextFragment.LIST_ITEM_TYPE);
