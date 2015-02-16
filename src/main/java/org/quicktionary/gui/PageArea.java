@@ -32,6 +32,7 @@ public class PageArea extends JPanel {
 
 		if(Main.useHTML) {
 			pane = new JEditorPane();
+			pane.setContentType("text/html");
 			add(pane, BorderLayout.CENTER);
 		} else {
 			area = new JTextArea();
@@ -41,5 +42,50 @@ public class PageArea extends JPanel {
 	}
 
 	public void setPage(TextFragment root) {
+		StringBuilder source;
+		source = new StringBuilder();
+
+		if(Main.useHTML) {
+			generateHTML(root, source);
+			pane.setText(source.toString());
+		}
+	}
+
+	private String getStartTag(TextFragment fragment) {
+		switch(fragment.getType()) {
+		case TextFragment.ROOT_TYPE:
+			return "<html><body>";
+		case TextFragment.HEADER_TYPE:
+			return "<h1>";
+		case TextFragment.PARAGRAPH_TYPE:
+			return "<p>";
+		default:
+			return "";
+		}
+	}
+
+	private String getEndTag(TextFragment fragment) {
+		switch(fragment.getType()) {
+		case TextFragment.ROOT_TYPE:
+			return "</body></html>";
+		case TextFragment.HEADER_TYPE:
+			return "</h1>";
+		case TextFragment.PARAGRAPH_TYPE:
+			return "</p>";
+		default:
+			return "";
+		}
+	}
+
+	private void generateHTML(TextFragment root, StringBuilder src) {
+		src.append(getStartTag(root));
+		if(root.getContent() != null) {
+			src.append(root.getContent());
+		} else {
+			for(TextFragment child : root.getChildren()) {
+				generateHTML(child, src);
+			}
+		}
+		src.append(getEndTag(root));
 	}
 }
