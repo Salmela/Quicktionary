@@ -388,7 +388,7 @@ public class WikiMarkup extends Parser {
 		parseInlineMarkup();
 
 		/* check if the line is valid header */
-		headerMarkup = finalizeHeader();
+		headerMarkup = createHeaderNode();
 
 		/* generate the text content for the parsed markup (or the TextFragment) */
 		previousMarkup = headerMarkup;
@@ -414,7 +414,7 @@ public class WikiMarkup extends Parser {
 			previousMarkup = markupStart;
 		}
 
-		finalizeText(null, previousMarkup);
+		createTextNode(null, previousMarkup);
 	}
 
 	/**
@@ -482,7 +482,7 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Try to match the header markup for the line and create the TextFragment for it.
 	 */
-	private MarkupStart finalizeHeader() {
+	private MarkupStart createHeaderNode() {
 		TextFragment fragment;
 		MarkupStart start, end;
 		int i;
@@ -831,7 +831,7 @@ public class WikiMarkup extends Parser {
 
 	private void finalizeMarkup(MarkupStart markup, MarkupStart previousMarkup) {
 		/* append the text content to previous TextFragment */
-		finalizeText(markup, previousMarkup);
+		createTextNode(markup, previousMarkup);
 
 		/* create TextFragment for the markup */
 		switch(markup.symbol.character) {
@@ -870,7 +870,7 @@ public class WikiMarkup extends Parser {
 		}
 	}
 
-	private void finalizeText(MarkupStart markup, MarkupStart previousMarkup) {
+	private void createTextNode(MarkupStart markup, MarkupStart previousMarkup) {
 		TextFragment fragment, parent;
 		int startIndex, endIndex;
 
