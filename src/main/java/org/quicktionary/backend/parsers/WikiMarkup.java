@@ -43,11 +43,12 @@ public class WikiMarkup extends Parser {
 		private ArrayList<TextFragment> childs;
 
 		public final static int ROOT_TYPE = 0;
-		public final static int HEADER_TYPE = 1;
-		public final static int PARAGRAPH_TYPE = 2;
-		public final static int STRONG_TYPE = 3;
-		public final static int EM_TYPE = 4;
-		public final static int LINK_TYPE = 5;
+		public final static int PLAIN_TYPE = 1;
+		public final static int HEADER_TYPE = 2;
+		public final static int PARAGRAPH_TYPE = 3;
+		public final static int STRONG_TYPE = 4;
+		public final static int EM_TYPE = 5;
+		public final static int LINK_TYPE = 6;
 
 		public TextFragment(TextFragment parent, int type) {
 			this.parent = parent;
