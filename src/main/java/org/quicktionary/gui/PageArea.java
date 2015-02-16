@@ -41,7 +41,7 @@ public class PageArea extends JPanel {
 			pane.setEditorKit(htmlEditor);
 			pane.setEditable(false);
 			pane.addHyperlinkListener(new LinkListener());
-			generetaStyleSheet(htmlEditor);
+			generateStyleSheet(htmlEditor);
 			add(pane, BorderLayout.CENTER);
 		} else {
 			area = new JTextArea();
