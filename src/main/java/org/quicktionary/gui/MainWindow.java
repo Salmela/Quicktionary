@@ -23,6 +23,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.gui.theme.HeaderButton;
 import org.quicktionary.gui.theme.StyleManager;
@@ -45,7 +47,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	/* main components */
 	private JScrollPane mainPane;
 	private SearchResults searchResults;
-	private JTextArea pageArea;
+	private PageArea pageArea;
 	private JTextField searchBox;
 
 	/* history buttons */
@@ -140,6 +142,19 @@ public class MainWindow extends JFrame implements ActionListener {
 		return headerBar;
 	}
 
+	private TextFragment generateStartPage() {
+		TextFragment root, paragraph, header;
+
+		root = new TextFragment(null, TextFragment.ROOT_TYPE);
+		header = new TextFragment(root, TextFragment.HEADER_TYPE);
+		paragraph = new TextFragment(root, TextFragment.PARAGRAPH_TYPE);
+
+		header.setContent("Welcome!");
+		paragraph.setContent("Read database and write something to the search box.");
+
+		return root;
+	}
+
 	/**
 	 * Create the child components.
 	 */
@@ -168,8 +183,9 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* create components for the main view */
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults(this);
-		pageArea = new JTextArea();
-		pageArea.setText("Read database and write something to the search box.");
+
+		pageArea = new PageArea();
+		pageArea.setPage(generateStartPage());
 		mainPane.setViewportView(pageArea);
 
 		/* add event listeners for the history buttons */
@@ -210,7 +226,16 @@ public class MainWindow extends JFrame implements ActionListener {
 	 * Set the fetched page, given by Application class.
 	 */
 	public void openPage(String title, String text) {
-		pageArea.setText(text);
+		TextFragment root, header, paragraph;
+
+		root = new TextFragment(null, TextFragment.ROOT_TYPE);
+		header = new TextFragment(root, TextFragment.HEADER_TYPE);
+		paragraph = new TextFragment(root, TextFragment.PARAGRAPH_TYPE);
+
+		header.setContent(title);
+		paragraph.setContent(text);
+
+		pageArea.setPage(root);
 		pageTitle = title;
 		changeView(false);
 	}
