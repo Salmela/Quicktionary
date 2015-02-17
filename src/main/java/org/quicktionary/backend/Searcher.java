@@ -72,7 +72,7 @@ public class Searcher {
 		resultListener = listener;
 	}
 
-	private boolean isSearchResultDuplicate(WordDatabase.WordEntry entry) {
+	private boolean isSearchResultDuplicate(WordEntry entry) {
 		int size = resultListener.getSize();
 		int i;
 
@@ -95,7 +95,7 @@ public class Searcher {
 	 * @return True if the request was successful
 	 */
 	public boolean requestSearchResults(int offset, int count) {
-		WordDatabase.WordEntry[] entries;
+		WordEntry[] entries;
 		int resultCount, requestCount, i;
 
 		if(resultListener == null) {
@@ -112,7 +112,7 @@ public class Searcher {
 			return false;
 		}
 
-		entries = new WordDatabase.WordEntry[requestCount];
+		entries = new WordEntry[requestCount];
 
 		while(resultCount < requestCount) {
 				/* check if we didn't get any words then exit */

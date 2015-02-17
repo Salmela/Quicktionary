@@ -97,28 +97,4 @@ public class WordDatabase {
 
 		return i;
 	}
-
-	/**
-	 * This class contains all information about particular word.
-	 */
-	public class WordEntry {
-		private String word, page;
-
-		public WordEntry(String word, String page) {
-			this.word = word;
-			this.page = page;
-		}
-
-		public void setPage(String page) {
-			this.page = page;
-		}
-
-		public String getWord() {
-			return word;
-		}
-
-		public String getPage() {
-			return page;
-		}
-	}
 }
