@@ -72,6 +72,27 @@ public class WikiDBReader implements Runnable {
 		return true;
 	}
 
+	private void createPage(String text, String title, String ns) {
+		/*TODO: check that title and text is set */
+		if(!"0".equals(ns)) {
+			return;
+		}
+
+		WikiMarkup.TextFragment fragment;
+		WordEntry entry;
+
+		System.out.println(text);
+		try {
+			wikiParser.parse(new StringReader(text));
+		} catch(IOException exception) {
+			return;
+		}
+
+		entry = database.newWord(title);
+		entry.addSource(text);
+		entry.setPage(wikiParser.getRoot());
+	}
+
 	private void readPage() {
 		String text, title, ns;
 		ns = null;
@@ -106,22 +127,7 @@ public class WikiDBReader implements Runnable {
 			}
 		} while(parser.getNextSibling());
 
-		/*TODO: check that title and text is set */
-		if("0".equals(ns)) {
-			WikiMarkup.TextFragment fragment;
-			WordEntry entry;
-
-			System.out.println(text);
-			try {
-				wikiParser.parse(new StringReader(text));
-			} catch(IOException exception) {
-				return;
-			}
-
-			entry = database.newWord(title);
-			entry.addSource(text);
-			entry.setPage(wikiParser.getRoot());
-		}
+		createPage(text, title, ns);
 	}
 
 	public void run() {
