@@ -115,22 +115,22 @@ public class Searcher {
 		entries = new WordEntry[requestCount];
 
 		while(resultCount < requestCount) {
-				/* check if we didn't get any words then exit */
-				if(database.fetchResults(entries, requestCount) == 0) {
-					/* inform the gui that there isn't more search results */
-					resultListener.appendSearchResult(null);
-					break;
-				}
+			/* check if we didn't get any words then exit */
+			if(database.fetchResults(entries, requestCount) == 0) {
+				/* inform the gui that there isn't more search results */
+				resultListener.appendSearchResult(null);
+				break;
+			}
 
-				/* go through all words that datbase gave to us */
-				for(i = 0; i < requestCount && entries[i] != null; i++) {
-					/* remove duplicates */
-					if(isSearchResultDuplicate(entries[i])) continue;
+			/* go through all words that datbase gave to us */
+			for(i = 0; i < requestCount && entries[i] != null; i++) {
+				/* remove duplicates */
+				if(isSearchResultDuplicate(entries[i])) continue;
 
-					/* give the new item to gui */
-					resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
-					resultCount++;
-				}
+				/* give the new item to gui */
+				resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
+				resultCount++;
+			}
 		}
 
 		processedEntries += resultCount;
