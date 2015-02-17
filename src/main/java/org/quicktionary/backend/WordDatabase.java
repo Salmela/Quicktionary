@@ -34,20 +34,8 @@ public class WordDatabase {
 		this.map = new TreeMap<String, WordEntry>();
 	}
 
-	public void newWord(String word) {
-		map.put(word, new WordEntry(word, null));
-	}
-
-	/* temporary */
-	public void newPage(String word, String page) {
-		WordEntry entry;
-
-		if(map.containsKey(word)) {
-			entry = map.get(word);
-			entry.setPage(page);
-		} else {
-			entry = map.put(word, new WordEntry(word, page));
-		}
+	public WordEntry newWord(String word) {
+		return map.put(word, new WordEntry(word, null));
 	}
 
 	public void removeWord(String word) {

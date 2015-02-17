@@ -109,6 +109,7 @@ public class WikiDBReader implements Runnable {
 		/*TODO: check that title and text is set */
 		if("0".equals(ns)) {
 			WikiMarkup.TextFragment fragment;
+			WordEntry entry;
 
 			System.out.println(text);
 			try {
@@ -116,8 +117,9 @@ public class WikiDBReader implements Runnable {
 			} catch(IOException exception) {
 				return;
 			}
-			database.newWord(title);
-			database.newPage(title, text + "\n" + wikiParser.getRoot().print(2));
+
+			entry = database.newWord(title);
+			entry.setPage(text + "\n" + wikiParser.getRoot().print(2));
 		}
 	}
 
