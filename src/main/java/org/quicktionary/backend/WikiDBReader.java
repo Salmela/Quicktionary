@@ -119,7 +119,8 @@ public class WikiDBReader implements Runnable {
 			}
 
 			entry = database.newWord(title);
-			entry.setPage(text + "\n" + wikiParser.getRoot().print(2));
+			entry.addSource(text);
+			entry.setPage(wikiParser.getRoot());
 		}
 	}
 

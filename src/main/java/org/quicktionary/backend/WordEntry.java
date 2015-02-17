@@ -16,18 +16,30 @@
  */
 package org.quicktionary.backend;
 
+import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+
 /**
  * This class contains all information about particular word.
  */
 public class WordEntry {
-	private String word, page;
+	private String word, source;
+	private TextFragment page;
 
-	public WordEntry(String word, String page) {
+	public WordEntry(String word, String source, TextFragment page) {
 		this.word = word;
+		this.source = source;
 		this.page = page;
 	}
 
-	public void setPage(String page) {
+	public WordEntry(String word) {
+		this(word, null, null);
+	}
+
+	public void addSource(String source) {
+		this.source = source;
+	}
+
+	public void setPage(TextFragment page) {
 		this.page = page;
 	}
 
@@ -35,7 +47,11 @@ public class WordEntry {
 		return word;
 	}
 
-	public String getPage() {
+	public TextFragment getPage() {
 		return page;
+	}
+
+	public String getSource() {
+		return source;
 	}
 }

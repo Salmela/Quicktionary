@@ -34,20 +34,32 @@ public class WordDatabase {
 		this.map = new TreeMap<String, WordEntry>();
 	}
 
+	/**
+	 * Add new word to the database.
+	 */
 	public WordEntry newWord(String word) {
-		return map.put(word, new WordEntry(word, null));
+		WordEntry entry = new WordEntry(word);
+		map.put(word, entry);
+		return entry;
 	}
 
+	/**
+	 * Remove a word from the database.
+	 */
 	public void removeWord(String word) {
 		map.remove(word);
 	}
 
+	/**
+	 * Get the data for the word.
+	 * TODO: return WordEntry
+	 */
 	public String fetchPage(SearchItem item) {
 		WordEntry wordEntry;
 
 		wordEntry = (WordEntry)item.getInternal();
 
-		return wordEntry.getPage();
+		return wordEntry.getSource();
 	}
 
 	/**
