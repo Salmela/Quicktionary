@@ -211,16 +211,16 @@ public class MainWindow extends JFrame implements ActionListener {
 	/**
 	 * Change the content of the main area.
 	 */
-	private void changeView(boolean changeToSearchResults) {
+	private void changeToSearchResultView() {
 		/* swap to search results */
-		if(changeToSearchResults) {
-			mainPane.setViewportView(searchResults);
-			setTitle(appTitle + " \u2014 Search results");
+		mainPane.setViewportView(searchResults);
+		setTitle(appTitle + " \u2014 Search results");
+	}
+
+	private void changeToPageView() {
 		/* swap to page area */
-		} else {
-			mainPane.setViewportView(pageArea);
-			setTitle(appTitle + " \u2014 " + pageTitle);
-		}
+		mainPane.setViewportView(pageArea);
+		setTitle(appTitle + " \u2014 " + pageTitle);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		pageArea.setPage(entry.getContent());
 		pageTitle = title;
-		changeView(false);
+		changeToPageView();
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		   event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
 			SearchBox.SearchEvent e = (SearchBox.SearchEvent)event;
 			e.setSearchResultCount(searchResults.getVisibleRowCount());
-			changeView(true);
+			changeToSearchResultView();
 			app.actionPerformed(event);
 
 		/* set the search query for PageLoadEvents */
