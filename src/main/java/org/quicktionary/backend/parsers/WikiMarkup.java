@@ -97,7 +97,7 @@ public class WikiMarkup extends Parser {
 		/**
 		 * Add child to the TextFragment.
 		 * The method returns added fragment, so that the unit tests can
-		 * be writen more compactly.
+		 * be written more compactly.
 		 *
 		 * @param fragment The new child for the fragment
 		 * @return The added fragment
@@ -434,6 +434,10 @@ public class WikiMarkup extends Parser {
 
 			if(markupStart.type == MarkupStart.MarkupType.NONE) {
 				System.out.println("Discarded the symbol");
+				continue;
+			}
+
+			if(markupStart.symbol == symbolLut['=']) {
 				continue;
 			}
 
