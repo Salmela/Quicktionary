@@ -314,8 +314,8 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void itemListTruncate(int newSize) {
-		if(parentList.size() == newSize) return;
-		if(parentList.size() < newSize) {
+		if(newSize == parentList.size()) return;
+		if(newSize > parentList.size()) {
 			throw new Error("The new size must be less than the current size.");
 		}
 
@@ -396,6 +396,11 @@ public class WikiMarkup extends Parser {
 
 		/* parse the line */
 		parseLineStartMarkup();
+		if(currentChar == '\n') {
+			getNext();
+			return;
+		}
+
 		parseInlineMarkup();
 
 		/* check if the line is valid header */
@@ -436,6 +441,11 @@ public class WikiMarkup extends Parser {
 		do {
 			if(currentChar == '\n' || !isWhitespace(currentChar)) break;
 		} while(getNext());
+
+		if(currentChar == '\n') {
+			itemListTruncate(1);
+			return;
+		}
 
 		/* remove inline nodes from the parent list */
 		if(parentList.size() > inlineFragmentIndex) {
