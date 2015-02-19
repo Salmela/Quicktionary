@@ -24,6 +24,7 @@ public class Test {
 		parserWiki = new WikiMarkup();
 
 		xmlParserTest();
+		wikiParserTest();
 
 		whitespaceAtStart();
 		whitespaceAtEnd();
@@ -44,7 +45,7 @@ public class Test {
 		headerAndtwoParagraphs();
 		headerWithEmAndParagraph();
 		headerAndTemplate();
-		horizontalLineAndHeader()
+		horizontalLineAndHeader();
 
 		templateMarkup();
 		linkMarkup();
