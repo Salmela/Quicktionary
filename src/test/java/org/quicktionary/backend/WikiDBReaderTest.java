@@ -46,7 +46,7 @@ public class WikiDBReaderTest {
 		reader.check("src/test/java/org/quicktionary/backend/test_pages.xml");
 		reader.run();
 
-		WordDatabase.WordEntry[] entries = new WordDatabase.WordEntry[5];
+		WordEntry[] entries = new WordEntry[5];
 
 		db.requestResults("");
 		Assert.assertEquals(1, db.fetchResults(entries, 5));
@@ -57,10 +57,10 @@ public class WikiDBReaderTest {
 		reader.check("src/test/java/org/quicktionary/backend/test_pages.xml");
 		reader.run();
 
-		WordDatabase.WordEntry[] entries = new WordDatabase.WordEntry[5];
+		WordEntry[] entries = new WordEntry[5];
 
 		db.requestResults("");
 		db.fetchResults(entries, 5);
-		Assert.assertEquals("Test page 2", db.fetchPage(new SearchItem("", "", entries[0])));
+		Assert.assertEquals("Test page 2", entries[0].getSource());
 	}
 }

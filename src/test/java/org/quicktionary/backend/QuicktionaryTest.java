@@ -74,7 +74,7 @@ public class QuicktionaryTest implements SearchResultListener {
 		quicktionary.search("Some");
 		quicktionary.requestSearchResults(0, 1);
 		assertEquals(firstSearchItem.getWord(), "Some word");
-		assertEquals(quicktionary.getPageContent(firstSearchItem, ""), "Test page 2");
+		assertEquals(quicktionary.getPageContent(firstSearchItem, "").getSource(), "Test page 2");
 	}
 
 	@Test
