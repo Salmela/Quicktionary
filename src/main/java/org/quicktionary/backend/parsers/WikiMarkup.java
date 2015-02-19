@@ -544,8 +544,7 @@ public class WikiMarkup extends Parser {
 		}
 
 		/* there must be only whitespace after the header */
-		for(i = end.location + end.count + 1; i < lineBuffer.length(); i++) {
-			System.out.println("TEXT " + lineBuffer.charAt(i));
+		for(i = end.location + end.count; i < lineBuffer.length(); i++) {
 			if(!isWhitespace(lineBuffer.charAt(i))) {
 				createParagraphIfNeaded();
 				return null;
@@ -734,12 +733,10 @@ public class WikiMarkup extends Parser {
 					if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
 						i++;
 					} else {
-						System.out.println("ERROR ERROR impossible happened " + sourceLocation);
-						return;
+						throw new Error("Should have been list item");
 					}
 				} else {
-					System.out.println("ERROR ERROR impossible happened " + sourceLocation);
-					return;
+					throw new Error("Should have been list.");
 				}
 				continue;
 			}
