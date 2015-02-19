@@ -44,6 +44,7 @@ public class Test {
 		headerAndParagraph();
 		headerAndtwoParagraphs();
 		headerWithEmAndParagraph();
+		headerAndTemplate();
 
 		templateMarkup();
 		linkMarkup();
@@ -196,6 +197,16 @@ public class Test {
 		addText(header, "er");
 
 		fragment = parse("== t'''est'''er == \nhello");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void headerAndTemplate() {
+		TextFragment wanted;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, "Hello", TextFragment.PARAGRAPH_TYPE);
+		newNode(wanted, "Test", TextFragment.HEADER_TYPE);
+		newNode(wanted, "en-noun", TextFragment.TEMPLATE_TYPE);
+
+		fragment = parse("Hello\n\n====Test====\n{{en-noun}}\n");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 
