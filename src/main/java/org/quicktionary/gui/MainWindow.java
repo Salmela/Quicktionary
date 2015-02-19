@@ -185,7 +185,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		mainPane = new JScrollPane();
 		searchResults = new SearchResults(this);
 
-		pageArea = new PageArea();
+		pageArea = new PageArea(app);
 		pageArea.setPage(generateStartPage());
 		mainPane.setViewportView(pageArea);
 

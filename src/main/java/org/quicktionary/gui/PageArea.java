@@ -19,6 +19,7 @@ package org.quicktionary.gui;
 import java.lang.StringBuilder;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
@@ -26,14 +27,19 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import javax.swing.text.html.StyleSheet;
+
 import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+import org.quicktionary.backend.WordEntry;
 
 public class PageArea extends JPanel {
+	public static final String PAGE_CHANGE_EVENT = "page-change-event";
+	private Application app;
 	private JEditorPane pane;
 	private JTextArea area;
 
-	public PageArea() {
+	public PageArea(Application app) {
 		super(new BorderLayout());
+		this.app = app;
 
 		if(Main.useHTML) {
 			HTMLEditorKit htmlEditor = new HTMLEditorKit();
@@ -47,6 +53,20 @@ public class PageArea extends JPanel {
 			area = new JTextArea();
 			area.setLineWrap(true);
 			add(area, BorderLayout.CENTER);
+		}
+	}
+
+	class PageChangeEvent extends ActionEvent {
+		final static long serialVersionUID = 1L;
+		private WordEntry entry;
+
+		public PageChangeEvent(WordEntry entry) {
+			super(PageArea.this, ActionEvent.ACTION_PERFORMED, PageArea.PAGE_CHANGE_EVENT);
+			this.entry = entry;
+		}
+
+		public WordEntry getWordEntry() {
+			return entry;
 		}
 	}
 
