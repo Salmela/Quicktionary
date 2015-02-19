@@ -101,8 +101,14 @@ public class PageArea extends JPanel {
 			return "<em>" + content + "</em>";
 		case TextFragment.LINK_TYPE:
 			return "<a href=\'" + content + "\'>" + content + "</a>";
-		default:
+		case TextFragment.LIST_TYPE:
+			return "<ul>" + content + "</ul>";
+		case TextFragment.LIST_ITEM_TYPE:
+			return "<li>" + content + "</li>";
+		case TextFragment.PLAIN_TYPE:
 			return content.toString();
+		default:
+			return "<u>" + content.toString() + "</u>";
 		}
 	}
 
