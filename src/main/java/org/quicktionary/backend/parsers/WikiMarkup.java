@@ -743,8 +743,7 @@ public class WikiMarkup extends Parser {
 			}
 
 			/* create new list and it's first item */
-			System.out.println("New level list " + sourceLocation);
-			list = createList(parameter);
+			createList(parameter);
 			i++;
 
 			createListItem();
@@ -762,14 +761,12 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Helper method for creating a list TextFragment.
 	 */
-	private TextFragment createList(String parameter) {
+	private void createList(String parameter) {
 		TextFragment list, parent;
 
 		list = new TextFragment(TextFragment.LIST_TYPE, parameter);
 		getCurrentFragment().appendChild(list);
 		parentList.add(list);
-
-		return list;
 	}
 
 	/**
