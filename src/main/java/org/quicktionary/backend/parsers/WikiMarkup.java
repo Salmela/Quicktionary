@@ -525,8 +525,8 @@ public class WikiMarkup extends Parser {
 		MarkupStart start, end;
 		int i;
 
-		/* if there is no change that this is header then return */
-		if(lineMarkup.size() < 2) {
+		/* check that the lineMarkup list isn't empty */
+		if(lineMarkup.size() == 0) {
 			return null;
 		}
 
@@ -539,6 +539,7 @@ public class WikiMarkup extends Parser {
 		/* header must end with equal symbol */
 		end = start.matchingMarkup;
 		if(end == null || end != lineMarkup.get(lineMarkup.size() - 1)) {
+			createParagraphIfNeaded();
 			return null;
 		}
 
@@ -546,6 +547,7 @@ public class WikiMarkup extends Parser {
 		for(i = end.location + end.count + 1; i < lineBuffer.length(); i++) {
 			System.out.println("TEXT " + lineBuffer.charAt(i));
 			if(!isWhitespace(lineBuffer.charAt(i))) {
+				createParagraphIfNeaded();
 				return null;
 			}
 		}
