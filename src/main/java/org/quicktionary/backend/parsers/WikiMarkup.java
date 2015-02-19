@@ -278,8 +278,6 @@ public class WikiMarkup extends Parser {
 		public int location;
 		public int count;
 
-		/*TODO: remove */
-		public int length;
 		public MarkupStart matchingMarkup;
 		public MarkupType type;
 	}
@@ -424,7 +422,7 @@ public class WikiMarkup extends Parser {
 			MarkupStart markupStart;
 
 			markupStart = lineMarkup.get(i);
-			if(markupStart.length > 0) {
+			if(markupStart.type == MarkupStart.MarkupType.START) {
 				System.out.print("START ");
 			}
 
@@ -551,7 +549,6 @@ public class WikiMarkup extends Parser {
 				return null;
 			}
 		}
-		System.out.println("length of the header " + start.length);
 
 		fragment = new TextFragment(TextFragment.HEADER_TYPE);
 		getRoot().appendChild(fragment);
@@ -617,7 +614,6 @@ public class WikiMarkup extends Parser {
 		start.sourceLocation = getAddress();
 		start.symbol = symbol;
 		start.count = 1;
-		start.length = -1;
 		start.type = MarkupStart.MarkupType.NONE;
 		lineMarkup.add(start);
 
@@ -1029,7 +1025,6 @@ public class WikiMarkup extends Parser {
 			end.count = quotes;
 		}
 
-		start.length = end.location - start.location;
 		createMarkupStart(start, end);
 
 		System.out.println("Inline range " + start.location + ", " + end.location + "  " +
@@ -1092,7 +1087,7 @@ public class WikiMarkup extends Parser {
 
 		start = getMarkupSymbol(symbolLut['[']);
 		if(start == null) return;
-		if(start.length > 0) return;
+		if(start.matchingMarkup != null) return;
 
 		brackets = (end.count < start.count) ? end.count : start.count;
 		if(brackets > 2) {
@@ -1106,7 +1101,6 @@ public class WikiMarkup extends Parser {
 			end.count = brackets;
 		}
 
-		start.length = end.location - start.location;
 		createMarkupStart(start, end);
 
 		System.out.println("Link range " + start.location + ", " + end.location + "  " +
@@ -1169,7 +1163,6 @@ public class WikiMarkup extends Parser {
 			end.count = 2;
 		}
 
-		start.length = end.location - start.location;
 		createMarkupStart(start, end);
 
 		System.out.println("Template range " + start.location + ", " + end.location + "  " +
@@ -1197,7 +1190,6 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 
-		start.length = end.location - start.location + start.count;
 		createMarkupStart(start, end);
 	}
 }
