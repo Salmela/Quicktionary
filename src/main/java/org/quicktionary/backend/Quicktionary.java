@@ -142,9 +142,8 @@ public class Quicktionary {
 	 * @param searchQuery Search query used to find the page
 	 * @return The data for the page
 	 */
-	public WordEntry getPageContent(SearchItem item, String searchQuery) {
+	public WordEntry getPageContent(SearchItem item) {
 		WordEntry entry;
-		history.saveEvent("search", searchQuery);
 		history.saveEvent("page", "" + item.getWord());
 
 		entry = item.getWordEntry();

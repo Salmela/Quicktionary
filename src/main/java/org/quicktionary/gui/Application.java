@@ -122,8 +122,8 @@ public class Application implements ActionListener {
 		String pageTitle;
 
 		pageEvent = (SearchResults.PageLoadEvent)event;
-		page = dictionary.getPageContent(pageEvent.getSearchItem(), pageEvent.getSearchQuery());
-		pageTitle = capitalizeWord(pageEvent.getSearchItem().getWord());
+		page = dictionary.getPageContent(pageEvent.getSearchItem());
+		pageTitle = capitalizeWord(page.getWord());
 
 		mainWindow.openPage(pageTitle, page);
 	}
