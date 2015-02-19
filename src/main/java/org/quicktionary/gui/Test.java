@@ -33,8 +33,7 @@ public class Test {
 
 		unendingTextStyle();
 
-		/* verify */
-		//mergeTextStyleMarkups();
+		mergeTextStyleMarkups();
 		quoteAtStartAtTextStyleMarkup();
 		oneExtraQuoteAtTextStyleMarkup();
 		threeExtraQuoteAtTextStyleMarkup();
@@ -45,6 +44,7 @@ public class Test {
 		headerAndtwoParagraphs();
 		headerWithEmAndParagraph();
 		headerAndTemplate();
+		horizontalLineAndHeader()
 
 		templateMarkup();
 		linkMarkup();
@@ -59,6 +59,7 @@ public class Test {
 
 		multiLineTemplate();
 		multiLineTemplate2();
+		multiLineTemplate3();
 		invalidMultiLineTemplate();
 
 		listMarkupWithoutSpace();
@@ -209,6 +210,15 @@ public class Test {
 		fragment = parse("Hello\n\n====Test====\n{{en-noun}}\n");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
+	public void horizontalLineAndHeader() {
+		TextFragment wanted;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		newNode(wanted, TextFragment.PARAGRAPH_TYPE);
+		newNode(wanted, "test", TextFragment.HEADER_TYPE);
+
+		fragment = parse("----\n== test ==");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
 
 	public void whitespaceAtStart() {
 		TextFragment wanted, paragraph;
@@ -347,6 +357,25 @@ public class Test {
 		newNode(paragraph, "so cool", TextFragment.TEMPLATE_TYPE, "smallcaps");
 
 		fragment = parse("This is {{smallcaps\n|\nso cool\n\n}}");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void multiLineTemplate3() {
+		TextFragment wanted, paragraph, parentTemplate;
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		paragraph = newNode(wanted, "hello", TextFragment.PARAGRAPH_TYPE);
+		paragraph = newNode(wanted, "Derived terms", TextFragment.HEADER_TYPE);
+
+		addText(paragraph, "This is ");
+		parentTemplate = newNode(wanted, TextFragment.TEMPLATE_TYPE, "der3");
+		newNode(parentTemplate, TextFragment.TEMPLATE_TYPE, "l||catckin");
+		newNode(parentTemplate, TextFragment.TEMPLATE_TYPE, "l||heat (in a cat)");
+		newNode(parentTemplate, TextFragment.TEMPLATE_TYPE, "l||pine marten");
+
+		fragment = parse("hello\n\n====Derived terms====\n{{der3\n" +
+			"|{{l||catkin}}\n" +
+			"|{{l||heat (in a cat)}}\n" +
+			"|{{l||pine marten}}\n" +
+			"}}");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void invalidMultiLineTemplate() {
