@@ -163,7 +163,19 @@ public class WikiMarkup extends Parser {
 		 *
 		 * @return True if the fragments are equal
 		 */
-		public boolean equals(TextFragment fragment) {
+		public boolean equals(Object object) {
+			TextFragment fragment;
+
+			if(object == null) {
+				return false;
+			}
+
+			if(!(object instanceof TextFragment)) {
+				return false;
+			}
+
+			fragment = (TextFragment)object;
+
 			if(fragment.type != type) {
 				return false;
 			}
