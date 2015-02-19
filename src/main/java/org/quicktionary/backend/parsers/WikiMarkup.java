@@ -493,20 +493,23 @@ public class WikiMarkup extends Parser {
 			parseTable();
 			break;
 		default:
-			/* create new paragraph if neaded */
-			if(getCurrentFragment().getType() != TextFragment.PARAGRAPH_TYPE) {
-				createParagraph();
-			} else if(!inlineWhitespaceConsumed) {
-				TextFragment fragment;
-				/* add extra whitespace */
-				fragment = new TextFragment(TextFragment.PLAIN_TYPE);
-				fragment.setContent(" ");
-				getCurrentFragment().appendChild(fragment);
-			}
+			createParagraphIfNeaded();
 			break;
 		}
 		inlineWhitespaceConsumed = true;
 		inlineFragmentIndex = parentList.size();
+	}
+
+	private void createParagraphIfNeaded() {
+		if(getCurrentFragment().getType() != TextFragment.PARAGRAPH_TYPE) {
+			createParagraph();
+		} else if(!inlineWhitespaceConsumed) {
+			TextFragment fragment;
+			/* add extra whitespace */
+			fragment = new TextFragment(TextFragment.PLAIN_TYPE);
+			fragment.setContent(" ");
+			getCurrentFragment().appendChild(fragment);
+		}
 	}
 
 	private void parseTable() {
