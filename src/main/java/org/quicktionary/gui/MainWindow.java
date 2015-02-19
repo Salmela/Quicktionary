@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 
 import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 import org.quicktionary.backend.SearchResultListener;
+import org.quicktionary.backend.WordEntry;
 import org.quicktionary.gui.theme.HeaderButton;
 import org.quicktionary.gui.theme.StyleManager;
 
@@ -225,17 +226,12 @@ public class MainWindow extends JFrame implements ActionListener {
 	/**
 	 * Set the fetched page, given by Application class.
 	 */
-	public void openPage(String title, String text) {
-		TextFragment root, header, paragraph;
+	public void openPage(String title, WordEntry entry) {
+		System.out.println("\nPrint out:");
+		entry.getContent().print(2);
+		System.out.println("\nPrint out end\n");
 
-		root = new TextFragment(TextFragment.ROOT_TYPE);
-		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
-		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
-
-		header.setContent(title);
-		paragraph.setContent(text);
-
-		pageArea.setPage(root);
+		pageArea.setPage(entry.getContent());
 		pageTitle = title;
 		changeView(false);
 	}

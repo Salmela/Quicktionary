@@ -79,7 +79,7 @@ public class Searcher {
 		for(i = 0;  i < size; i++) {
 			SearchItem item;
 			item = resultListener.getSearchItemAt(i);
-			if(item != null && item.getInternal() == entry) {
+			if(item != null && item.getWordEntry() == entry) {
 				return true;
 			}
 		}

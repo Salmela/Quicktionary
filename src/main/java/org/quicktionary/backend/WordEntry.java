@@ -23,12 +23,12 @@ import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
  */
 public class WordEntry {
 	private String word, source;
-	private TextFragment page;
+	private TextFragment content;
 
-	public WordEntry(String word, String source, TextFragment page) {
+	public WordEntry(String word, String source, TextFragment content) {
 		this.word = word;
 		this.source = source;
-		this.page = page;
+		this.content = content;
 	}
 
 	public WordEntry(String word) {
@@ -39,19 +39,23 @@ public class WordEntry {
 		this.source = source;
 	}
 
-	public void setPage(TextFragment page) {
-		this.page = page;
+	public void setContent(TextFragment content) {
+		this.content = content;
 	}
 
 	public String getWord() {
 		return word;
 	}
 
-	public TextFragment getPage() {
-		return page;
+	public TextFragment getContent() {
+		return content;
 	}
 
 	public String getSource() {
 		return source;
+	}
+
+	public boolean isLoaded() {
+		return content != null;
 	}
 }

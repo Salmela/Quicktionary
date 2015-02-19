@@ -51,14 +51,17 @@ public class WordDatabase {
 	}
 
 	/**
-	 * Get the data for the word.
-	 * TODO: return WordEntry
+	 * Get a page for the word.
 	 */
-	public String fetchPage(SearchItem item) {
-		WordEntry wordEntry;
+	public WordEntry fetchWord(String word) {
+		return map.get(word);
+	}
 
-		wordEntry = (WordEntry)item.getInternal();
-
+	/**
+	 * Get the data for the word.
+	 * TODO: remove
+	 */
+	public String fetchPage(WordEntry wordEntry) {
 		return wordEntry.getSource();
 	}
 

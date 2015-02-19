@@ -23,12 +23,12 @@ package org.quicktionary.backend;
  */
 public class SearchItem {
 	private String word, description;
-	private Object internal;
+	private WordEntry entry;
 
-	public SearchItem(String word, String description, Object internal) {
+	public SearchItem(String word, String description, WordEntry entry) {
 		this.word = word;
 		this.description = description;
-		this.internal = internal;
+		this.entry = entry;
 	}
 
 	public String getWord() {
@@ -39,7 +39,7 @@ public class SearchItem {
 		return description;
 	}
 
-	public Object getInternal() {
-		return internal;
+	public WordEntry getWordEntry() {
+		return entry;
 	}
 }

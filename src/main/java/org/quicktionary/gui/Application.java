@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.Quicktionary;
+import org.quicktionary.backend.WordEntry;
 import org.quicktionary.gui.dialogs.SettingsDialog;
 
 /**
@@ -117,13 +118,14 @@ public class Application implements ActionListener {
 
 	private void handlePageLoadRequest(ActionEvent event) {
 		SearchResults.PageLoadEvent pageEvent;
-		String pageTitle, text;
+		WordEntry page;
+		String pageTitle;
 
 		pageEvent = (SearchResults.PageLoadEvent)event;
-		text = dictionary.getPageContent(pageEvent.getSearchItem(), pageEvent.getSearchQuery());
+		page = dictionary.getPageContent(pageEvent.getSearchItem(), pageEvent.getSearchQuery());
 		pageTitle = capitalizeWord(pageEvent.getSearchItem().getWord());
 
-		mainWindow.openPage(pageTitle, text);
+		mainWindow.openPage(pageTitle, page);
 	}
 
 	private void handleSearchResultRequest(ActionEvent event) {

@@ -90,7 +90,7 @@ public class WikiDBReader implements Runnable {
 
 		entry = database.newWord(title);
 		entry.addSource(text);
-		entry.setPage(wikiParser.getRoot());
+		entry.setContent(wikiParser.getRoot());
 	}
 
 	private void readPage() {

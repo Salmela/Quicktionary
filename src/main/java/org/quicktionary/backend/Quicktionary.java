@@ -142,10 +142,16 @@ public class Quicktionary {
 	 * @param searchQuery Search query used to find the page
 	 * @return The data for the page
 	 */
-	public String getPageContent(SearchItem item, String searchQuery) {
+	public WordEntry getPageContent(SearchItem item, String searchQuery) {
+		WordEntry entry;
 		history.saveEvent("search", searchQuery);
 		history.saveEvent("page", "" + item.getWord());
-		return database.fetchPage(item);
+
+		entry = item.getWordEntry();
+		if(entry.isLoaded()) {
+			database.fetchPage(entry);
+		}
+		return entry;
 	}
 
 	/**
