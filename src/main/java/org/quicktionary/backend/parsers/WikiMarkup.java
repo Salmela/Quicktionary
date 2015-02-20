@@ -274,7 +274,7 @@ public class WikiMarkup extends Parser {
 
 		public SymbolType symbol;
 
-		public long sourceLocation;
+		public String sourceLocation;
 		public int location;
 		public int count;
 
@@ -634,7 +634,7 @@ public class WikiMarkup extends Parser {
 		MarkupStart start = new MarkupStart();
 
 		start.location = lineBuffer.length() - 1;
-		start.sourceLocation = getAddress();
+		start.sourceLocation = getSourceLocation();
 		start.symbol = symbol;
 		start.count = 1;
 		start.type = MarkupStart.MarkupType.NONE;
@@ -665,7 +665,7 @@ public class WikiMarkup extends Parser {
 		/* create new markup start for the symbol */
 		start = appendMarkupStart(symbol);
 
-		System.out.println("Symbol: " + currentChar + " location: " + start.location);
+		System.out.println("Symbol: " + currentChar + " location: " + start.sourceLocation);
 	}
 
 	private void parseListItem() {
