@@ -146,14 +146,29 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private TextFragment generateStartPage() {
-		TextFragment root, paragraph, header;
+		TextFragment root, paragraph, header, link, text;
 
 		root = new TextFragment(TextFragment.ROOT_TYPE);
 		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
 		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
 
 		header.setContent("Welcome!");
-		paragraph.setContent("Read database and write something to the search box.");
+
+		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text.setContent("Read database and write something to the search box.");
+
+		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
+
+		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text.setContent("Go to Settings > Read database and select the enwiktionarycat.xml " +
+			"from the root folder of the repository. You can open the readed page about ");
+
+		link = paragraph.appendChild(new TextFragment(TextFragment.LINK_TYPE));
+		text = link.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text.setContent("cat");
+
+		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text.setContent(" or you can search it.");
 
 		return root;
 	}
