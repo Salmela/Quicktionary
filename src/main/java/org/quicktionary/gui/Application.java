@@ -103,7 +103,6 @@ public class Application implements ActionListener {
 		SearchBox.SearchEvent searchEvent;
 
 		searchEvent = (SearchBox.SearchEvent)event;
-		System.out.println("main window: search event " + searchBox.getText());
 
 		dictionary.search(searchEvent.getSearchQuery());
 		dictionary.requestSearchResults(0, searchEvent.getSearchResultCount());
