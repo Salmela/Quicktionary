@@ -144,9 +144,22 @@ public class Quicktionary {
 	 */
 	public WordEntry getPageContent(SearchItem item) {
 		WordEntry entry;
-		history.saveEvent("page", "" + item.getWord());
 
 		entry = item.getWordEntry();
+		history.saveEvent("page", "" + entry.getWord());
+
+		if(entry.isLoaded()) {
+			database.fetchPage(entry);
+		}
+		return entry;
+	}
+
+	public WordEntry getPageContent(String word) {
+		WordEntry entry;
+
+		entry = database.fetchWordEntry(word);
+		history.saveEvent("page", "" + entry.getWord());
+
 		if(entry.isLoaded()) {
 			database.fetchPage(entry);
 		}

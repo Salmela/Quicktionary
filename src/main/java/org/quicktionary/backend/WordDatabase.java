@@ -53,7 +53,7 @@ public class WordDatabase {
 	/**
 	 * Get a page for the word.
 	 */
-	public WordEntry fetchWord(String word) {
+	public WordEntry fetchWordEntry(String word) {
 		return map.get(word);
 	}
 

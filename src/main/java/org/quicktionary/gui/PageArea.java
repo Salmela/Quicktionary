@@ -58,24 +58,25 @@ public class PageArea extends JPanel {
 
 	class PageChangeEvent extends ActionEvent {
 		final static long serialVersionUID = 1L;
-		private WordEntry entry;
+		private String word;
 
-		public PageChangeEvent(WordEntry entry) {
+		public PageChangeEvent(String word) {
 			super(PageArea.this, ActionEvent.ACTION_PERFORMED, PageArea.PAGE_CHANGE_EVENT);
-			this.entry = entry;
+			this.word = word;
 		}
 
-		public WordEntry getWordEntry() {
-			return entry;
+		public String getWord() {
+			return word;
 		}
 	}
 
 	class LinkListener implements HyperlinkListener {
-         public void hyperlinkUpdate(HyperlinkEvent event) {
-             if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+		public void hyperlinkUpdate(HyperlinkEvent event) {
+			if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 				System.out.println("link " + event.getDescription());
-             }
-         }
+				app.actionPerformed(new PageChangeEvent(event.getDescription()));
+			}
+		}
 	}
 
 	private StyleSheet generateStyleSheet(HTMLEditorKit kit) {
