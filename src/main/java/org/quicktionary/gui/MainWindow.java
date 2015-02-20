@@ -230,7 +230,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Set the fetched page, given by Application class.
+	 * Update the gui after the page is fetched.
 	 */
 	public void openPage(String title, WordEntry entry) {
 		System.out.println("\nPrint out:");
@@ -290,10 +290,8 @@ public class MainWindow extends JFrame implements ActionListener {
 			changeToSearchResultView();
 			app.actionPerformed(event);
 
-		/* set the search query for PageLoadEvents */
+		/* do nothing special for page load requests */
 		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
-			SearchResults.PageLoadEvent e = (SearchResults.PageLoadEvent)event;
-			e.setSearchQuery(searchBox.getText());
 			app.actionPerformed(event);
 
 		/* do nothing special for search result requests */
