@@ -34,6 +34,7 @@ import java.awt.event.MouseAdapter;
 
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
+import org.quicktionary.backend.WordEntry;
 
 /**
  * It seems that the JList UI doesn't update the setVisibileRowCount in Classpath runtime.
@@ -91,6 +92,20 @@ public class SearchResults extends JList {
 
 	public SearchResultListener getSearchResultListener() {
 		return model;
+	}
+
+	public WordEntry[] getSelectedEntries() {
+		int[] selectedIndices;
+		WordEntry[] results;
+
+		selectedIndices = getSelectedIndices();
+		results = new WordEntry[selectedIndices.length];
+
+		for(int i = 0; i < selectedIndices.length; i++) {
+			int index = selectedIndices[i];
+			results[i] = model.getSearchItemAt(index).getWordEntry();
+		}
+		return results;
 	}
 
 	/**

@@ -165,12 +165,15 @@ public class Application implements ActionListener {
 	}
 
 	private void handleAskRemoveWordRequest(ActionEvent event) {
-		String word = null;
-		int res = JOptionPane.showConfirmDialog(mainWindow,
-		          "Are you sure that you wan't to remove word " + word + "?",
-		          "Remove a word", JOptionPane.YES_NO_OPTION);
-		if(res == JOptionPane.YES_OPTION) {
-			dictionary.removeWord(word);
+		WordEntry[] results = mainWindow.getSelected();
+		for(WordEntry item : results) {
+			String word = item.getWord();
+			int res = JOptionPane.showConfirmDialog(mainWindow,
+				  "Are you sure that you wan't to remove word " + word + "?",
+				  "Remove a word", JOptionPane.YES_NO_OPTION);
+			if(res == JOptionPane.YES_OPTION) {
+				dictionary.removeWord(word);
+			}
 		}
 	}
 }

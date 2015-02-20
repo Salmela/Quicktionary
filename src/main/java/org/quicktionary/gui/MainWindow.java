@@ -261,6 +261,23 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	/**
+	 * Get the selected word entries.
+	 * This method is used in Application class for removing
+	 * selected words.
+	 */
+	public WordEntry[] getSelected() {
+		if(searchMode) {
+			/* give selected search results */
+			return searchResults.getSelectedEntries();
+		} else {
+			/* give current page */
+			WordEntry[] entries = new WordEntry[1];
+			entries[0] = pageEntry;
+			return entries;
+		}
+	}
+
+	/**
 	 * Listen events from the searchBox. The method sets the
 	 * wanted search result count and passes the event to the app.
 	 */
