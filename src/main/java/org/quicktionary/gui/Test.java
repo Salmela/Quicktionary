@@ -372,11 +372,12 @@ public class Test {
 		newNode(parentTemplate, TextFragment.TEMPLATE_TYPE, "l||heat (in a cat)");
 		newNode(parentTemplate, TextFragment.TEMPLATE_TYPE, "l||pine marten");
 
-		fragment = parse("hello\n\n====Derived terms====\n{{der3\n" +
-			"|{{l||catkin}}\n" +
-			"|{{l||heat (in a cat)}}\n" +
-			"|{{l||pine marten}}\n" +
-			"}}");
+		fragment = parse("{{g\n" +
+			"|{{a}}\n" +
+			"|{{b}}\n" +
+			"|{{c}}\n" +
+			"|{{d}}\n" +
+			"}}\n==hello==");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 	public void invalidMultiLineTemplate() {
