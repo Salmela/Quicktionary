@@ -55,17 +55,16 @@ public class Quicktionary {
 
 	/**
 	 * Add new word to the WordDatabase.
-	 * TODO: improve the api.
 	 *
 	 * @param word The word to be added
 	 */
-	public void newWord(String word) {
-		database.newWord(word);
+	public WordEntry newWord(String word) {
+		return database.newWord(word);
 	}
 
 	/**
 	 * Remove old word from the word database.
-	 * TODO: improve the api.
+	 * TODO: change param to WordEntry
 	 *
 	 * @param word The word to be removed
 	 */
