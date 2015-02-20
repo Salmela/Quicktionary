@@ -58,9 +58,9 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 		private String searchQuery;
 		private int searchResultCount;
 
-		public SearchEvent(SearchBox searchBox, String command) {
-			super(searchBox, ActionEvent.ACTION_PERFORMED, command);
-			this.searchQuery = searchBox.getText();
+		public SearchEvent(String command) {
+			super(SearchBox.this, ActionEvent.ACTION_PERFORMED, command);
+			this.searchQuery = SearchBox.this.getText();
 			searchResultCount = 0;
 		}
 
@@ -101,7 +101,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 			if(hasPlaceHolder) {
 				return;
 			}
-			event = new SearchEvent(searchBox, SEARCH_EVENT);
+			event = new SearchEvent(SEARCH_EVENT);
 			listener.actionPerformed(event);
 		}
 		public void changedUpdate(DocumentEvent event) {
@@ -132,7 +132,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 	}
 	public void actionPerformed(ActionEvent e) {
 		ActionEvent event;
-		event = new SearchEvent(this, SEARCH_ENTER_EVENT);
+		event = new SearchEvent(SEARCH_ENTER_EVENT);
 		searchListener.actionPerformed(event);
 	}
 }
