@@ -473,7 +473,7 @@ public class WikiMarkup extends Parser {
 			break;
 		/* ruler */
 		case '-':
-			//parseRuler();
+			parseRuler();
 			break;
 		/* bullet list */
 		case '*':
@@ -512,6 +512,28 @@ public class WikiMarkup extends Parser {
 			fragment.setContent(" ");
 			getCurrentFragment().appendChild(fragment);
 		}
+	}
+
+	private void parseRuler() {
+		TextFragment ruler;
+		int i;
+
+		for(i = 0; i < 4; i++) {
+			if(currentChar != '-') break;
+			lineBuffer.append(currentChar);
+			getNext();
+		}
+		/*TODO: check the whitespaces */
+		if(i != 4) {
+			return;
+		}
+
+		System.out.println("Ruler parsed.");
+
+		itemListTruncate(1);
+
+		ruler = new TextFragment(TextFragment.RULER_TYPE, null);
+		getCurrentFragment().appendChild(ruler);
 	}
 
 	private void parseTable() {
