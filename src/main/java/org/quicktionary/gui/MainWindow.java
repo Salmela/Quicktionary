@@ -41,6 +41,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
 	private final String appTitle;
 	private String pageTitle;
+	private boolean searchMode;
+	private WordEntry pageEntry;
 
 	private final Application app;
 	private StyleManager styleManager;
@@ -59,6 +61,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		appTitle = "Quicktionary";
 		pageTitle = null;
+		searchMode = false;
 
 		setTitle(appTitle);
 		setSize(600, 400);
@@ -215,12 +218,15 @@ public class MainWindow extends JFrame implements ActionListener {
 		/* swap to search results */
 		mainPane.setViewportView(searchResults);
 		setTitle(appTitle + " \u2014 Search results");
+		searchMode = true;
+		pageEntry =  null;
 	}
 
 	private void changeToPageView() {
 		/* swap to page area */
 		mainPane.setViewportView(pageArea);
 		setTitle(appTitle + " \u2014 " + pageTitle);
+		searchMode = false;
 	}
 
 	/**
@@ -233,6 +239,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		pageArea.setPage(entry.getContent());
 		pageTitle = title;
+		pageEntry = entry;
 		changeToPageView();
 	}
 
