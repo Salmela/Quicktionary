@@ -38,6 +38,7 @@ public class WikiMarkup extends Parser {
 	private int inlineFragmentIndex;
 	private boolean inlineWhitespaceConsumed;
 	private int openTemplates;
+	private MarkupStart previousMarkup;
 
 	private SymbolType[] symbolLut;
 
@@ -403,6 +404,7 @@ public class WikiMarkup extends Parser {
 		lineBuffer.setLength(0);
 		lineMarkup.clear();
 		openTemplates = 0;
+		previousMarkup = null;
 
 		/* parse the line */
 		parseLineStartMarkup();
@@ -638,6 +640,7 @@ public class WikiMarkup extends Parser {
 		start.symbol = symbol;
 		start.count = 1;
 		start.type = MarkupStart.MarkupType.NONE;
+		previousMarkup = start;
 		lineMarkup.add(start);
 
 		return start;
@@ -646,11 +649,8 @@ public class WikiMarkup extends Parser {
 	private void handleInlineMarkup(SymbolType symbol) {
 		MarkupStart start;
 
-		if(lineMarkup.size() > 0) {
-			MarkupStart previousMarkup;
+		if(previousMarkup != null) {
 			int lastMarkupIndex = lineMarkup.size() - 1;
-
-			previousMarkup = lineMarkup.get(lastMarkupIndex);
 
 			/* extend the previous markup if the symbol type allows it */
 			if(previousChar == currentChar && symbol.multiple) {
@@ -848,14 +848,14 @@ public class WikiMarkup extends Parser {
 		MarkupStart start, markup;
 		int lastMarkupIndex = lineMarkup.size() - 1;
 
-		if(lineMarkup.size() == 0) {
+		if(previousMarkup == null) {
 			return;
 		}
 
 		markup = lineMarkup.get(lastMarkupIndex);
 
 		/* handle the markup ending */
-		switch(markup.symbol.character) {
+		switch(previousMarkup.symbol.character) {
 		case '\'':
 			createTextStyleMarkup(markup);
 			break;
@@ -872,7 +872,7 @@ public class WikiMarkup extends Parser {
 			break;
 		case '>':
 			start = getMarkupSymbol(symbolLut['<']);
-			if(start == null) return;
+			if(start == null) break;
 			System.out.println("HTML range " + start.location + ", " + markup.location);
 			break;
 		case '=':
@@ -881,6 +881,8 @@ public class WikiMarkup extends Parser {
 		default:
 			break;
 		}
+
+		previousMarkup = null;
 	}
 
 	private void handleMarkup(MarkupStart markup, MarkupStart previousMarkup) {
@@ -1022,6 +1024,7 @@ public class WikiMarkup extends Parser {
 		MarkupStart start;
 		int quotes;
 
+		/* find the start markup */
 		start = getMarkupSymbol(end.symbol);
 		if(start == null) return;
 		if(start.matchingMarkup != null) return;
