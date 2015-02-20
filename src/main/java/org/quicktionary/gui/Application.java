@@ -162,6 +162,7 @@ public class Application implements ActionListener {
 		if(name != null) {
 			dictionary.newWord(name);
 		}
+		/*TODO update the search results */
 	}
 
 	private void handleAskRemoveWordRequest(ActionEvent event) {
@@ -175,5 +176,6 @@ public class Application implements ActionListener {
 				dictionary.removeWord(word);
 			}
 		}
+		/*TODO update the gui */
 	}
 }
