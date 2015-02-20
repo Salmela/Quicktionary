@@ -23,7 +23,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.WordEntry;
@@ -159,6 +158,21 @@ public class MainWindow extends JFrame implements ActionListener {
 		return root;
 	}
 
+	private TextFragment generateNotFound(String string) {
+		TextFragment root, paragraph, header, link, text;
+
+		root = new TextFragment(TextFragment.ROOT_TYPE);
+		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
+		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
+
+		header.setContent("Sorry!");
+
+		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text.setContent("We couldn't find the page for the word " + string +".");
+
+		return root;
+	}
+
 	/**
 	 * Create the child components.
 	 */
@@ -233,11 +247,15 @@ public class MainWindow extends JFrame implements ActionListener {
 	 * Update the gui after the page is fetched.
 	 */
 	public void openPage(String title, WordEntry entry) {
-		System.out.println("\nPrint out:");
-		entry.getContent().print(2);
-		System.out.println("\nPrint out end\n");
+		if(entry.getContent() == null) {
+			pageArea.setPage(generateNotFound(title));
+		} else {
+			System.out.println("\nPrint out:");
+			entry.getContent().print(2);
+			System.out.println("\nPrint out end\n");
 
-		pageArea.setPage(entry.getContent());
+			pageArea.setPage(entry.getContent());
+		}
 		pageTitle = title;
 		pageEntry = entry;
 		changeToPageView();
