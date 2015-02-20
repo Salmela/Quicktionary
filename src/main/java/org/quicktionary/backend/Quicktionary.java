@@ -91,33 +91,20 @@ public class Quicktionary {
 	 * @param filename The filename for the database
 	 */
 	public void readDatabase(String filename, boolean wait) {
-		/* should we create file description here,
-		 * so that testing would be easier?
-		 */
 		/* TODO: Implement some way to gui check if
 		 * the file is valid database file, before
 		 * parsing the whole file.
 		 */
-		WikiDBReader parser;
-		Thread thread;
-		parser = new WikiDBReader(database);
-		thread = new Thread(parser);
+		WikiDBReader reader;
+		reader = new WikiDBReader(database);
 
-		if(! parser.check(filename)) {
+		if(! reader.check(filename)) {
 			/* send this info to the gui */
 			System.out.println("The file couldn't be opened.");
 			return;
 		}
-		thread.start();
 
-		if(!wait) {
-			return;
-		}
-
-		try {
-			thread.join();
-		} catch (InterruptedException ex) {
-		}
+		reader.readDatabase(filename, wait);
 	}
 
 	public void readDatabase(String filename) {

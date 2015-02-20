@@ -139,4 +139,23 @@ public class WikiDBReader implements Runnable {
 			readPage();
 		}
 	}
+
+	/**
+	 * Start the parsing thread for WikDBReader.
+	 */
+	public void readDatabase(String filename, boolean wait) {
+		Thread thread;
+
+		thread = new Thread(this);
+		thread.start();
+
+		if(!wait) {
+			return;
+		}
+
+		try {
+			thread.join();
+		} catch (InterruptedException ex) {
+		}
+	}
 }
