@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * user to go forward and back in history.
  * TODO: somehow compress many search events into one.
  */
-public class History {
+class History {
 	private ArrayList<Event> events;
 	private int currentIndex;
 

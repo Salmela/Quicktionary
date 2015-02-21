@@ -20,16 +20,14 @@ package org.quicktionary.backend;
  * The Searcher class parses the search queries from WordDatabase and
  * sends results to the gui.
  */
-public class Searcher {
-	private Quicktionary dictionary;
+class Searcher {
 	private WordDatabase database;
 	private int processedEntries;
 	private boolean searchRunning;
 
 	private SearchResultListener resultListener;
 
-	public Searcher(Quicktionary dictionary, WordDatabase database) {
-		this.dictionary = dictionary;
+	public Searcher(WordDatabase database) {
 		this.database = database;
 		this.processedEntries = 0;
 		this.searchRunning = false;

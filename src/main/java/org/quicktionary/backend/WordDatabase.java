@@ -22,15 +22,13 @@ import java.util.Map;
 /**
  * The database class for the quicktionary.
  */
-public class WordDatabase {
-	private Quicktionary dictionary;
+class WordDatabase {
 	private TreeMap<String, WordEntry> map;
 
 	private String searchWord;
 	private Map.Entry<String, WordEntry> currentEntry;
 
-	public WordDatabase(Quicktionary dictionary) {
-		this.dictionary = dictionary;
+	public WordDatabase() {
 		this.map = new TreeMap<String, WordEntry>();
 	}
 

@@ -25,8 +25,8 @@ public class Quicktionary {
 	private History      history;
 
 	public Quicktionary() {
-		database = new WordDatabase(this);
-		searcher = new Searcher(this, database);
+		database = new WordDatabase();
+		searcher = new Searcher(database);
 		history = new History();
 
 		//searchThread = new Thread(searcher);
