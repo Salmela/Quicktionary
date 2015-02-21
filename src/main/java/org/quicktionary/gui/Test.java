@@ -72,6 +72,10 @@ public class Test {
 		listTypeChangeAtMiddle();
 		listTypeChangeAtMiddleInsideList();
 
+		simpleDefinitionList();
+		definitionListWithNormalList();
+		definitionListAndNormalListMix();
+
 		System.out.println("\n\nresults " + testSuccess + " / " + testTotal);
 	}
 
@@ -608,6 +612,48 @@ public class Test {
 		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
 
 		fragment = parse("# test\n# * howdy\n# * hello\n# # test\n# # cool");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void simpleDefinitionList() {
+		TextFragment wanted, mainList, list, item;
+
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		list = newNode(wanted, TextFragment.LIST_TYPE, "dl");
+
+		newNode(list, "test", TextFragment.DEFINITION_LABEL_TYPE);
+		newNode(list, "cool", TextFragment.DEFINITION_ITEM_TYPE);
+
+		fragment = parse("; test\n: cool");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void definitionListWithNormalList() {
+		TextFragment wanted, mainList, list, item;
+
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		list = newNode(wanted, TextFragment.LIST_TYPE, "dl");
+		item = newNode(list, TextFragment.DEFINITION_ITEM_TYPE);
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
+
+		fragment = parse(":* test\n:* cool");
+		System.out.println("Result: " + result(fragment.equals(wanted)));
+	}
+	public void definitionListAndNormalListMix() {
+		TextFragment wanted, mainList, list, item;
+
+		wanted = newNode(null, TextFragment.ROOT_TYPE);
+		list = newNode(wanted, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "test", TextFragment.LIST_ITEM_TYPE);
+
+		list = newNode(wanted, TextFragment.LIST_TYPE, "dl");
+		item = newNode(list, TextFragment.DEFINITION_ITEM_TYPE);
+		list = newNode(item, TextFragment.LIST_TYPE, "ul");
+		newNode(list, "cool", TextFragment.LIST_ITEM_TYPE);
+
+		System.out.println("");
+		fragment = parse("* test\n:* cool");
 		System.out.println("Result: " + result(fragment.equals(wanted)));
 	}
 }
