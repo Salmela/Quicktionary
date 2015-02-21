@@ -669,6 +669,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseListItem() {
+		int itemType = TextFragment.LIST_ITEM_TYPE;
 		boolean itemCreated = false;
 		/* skip the root node */
 		int i = 1;
@@ -690,16 +691,20 @@ public class WikiMarkup extends Parser {
 			switch(currentChar) {
 			case '*':
 				parameter = "ul";
+				itemType = TextFragment.LIST_ITEM_TYPE;
 				break;
 			case '#':
 				parameter = "ol";
+				itemType = TextFragment.LIST_ITEM_TYPE;
 				break;
 			/*FIXME: following cases are not translated properly */
 			case ';':
-				parameter = "dt";
+				parameter = "dl";
+				itemType = TextFragment.DEFINITION_LABEL_TYPE;
 				break;
 			case ':':
-				parameter = "dd";
+				parameter = "dl";
+				itemType = TextFragment.DEFINITION_ITEM_TYPE;
 				break;
 			case '\n':
 				/*FIXME: this method shouldn't create anything if there is no text at the line */
@@ -735,12 +740,13 @@ public class WikiMarkup extends Parser {
 					/* if the list doesn't have same type,
 					   then end the previous list and create new one */
 					if(!parameter.equals(list.getParameter())) {
-						System.out.println("New list " + sourceLocation);
+						System.out.println("New list, index: " + i + "/" + (parentList.size() - 1) + ", location" + sourceLocation);
 
 						itemListTruncate(i);
 						createList(parameter);
+						i++;
 
-						createListItem();
+						createListItem(itemType);
 						itemCreated = true;
 						i++;
 
@@ -752,13 +758,18 @@ public class WikiMarkup extends Parser {
 					itemCreated = false;
 
 					/* just skip the list items */
-					if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
+					if(parameter.equals("dl") && (list.getType() == TextFragment.DEFINITION_LABEL_TYPE ||
+					   list.getType() == TextFragment.DEFINITION_ITEM_TYPE)) {
+						i++;
+					} else if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
 						i++;
 					} else {
+						getRoot().print(2);
 						throw new Error("Should have been list item");
 					}
 				} else {
-					throw new Error("Should have been list.");
+					getRoot().print(2);
+					throw new Error("Should have been list. " + list.getType());
 				}
 				continue;
 			}
@@ -767,7 +778,7 @@ public class WikiMarkup extends Parser {
 			createList(parameter);
 			i++;
 
-			createListItem();
+			createListItem(itemType);
 			itemCreated = true;
 			i++;
 		} while(true);
@@ -775,7 +786,7 @@ public class WikiMarkup extends Parser {
 		/* append new list item after the previous list item */
 		if(!itemCreated) {
 			itemListTruncate(i);
-			createListItem();
+			createListItem(itemType);
 		}
 	}
 
@@ -793,11 +804,13 @@ public class WikiMarkup extends Parser {
 	/**
 	 * Helper method for creating a list item TextFragment.
 	 */
-	private void createListItem() {
+	private void createListItem(int type) {
 		TextFragment item, list;
 
 		list = getCurrentFragment();
-		if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
+		if(list.getType() == TextFragment.LIST_ITEM_TYPE ||
+		   list.getType() == TextFragment.DEFINITION_ITEM_TYPE ||
+		   list.getType() == TextFragment.DEFINITION_LABEL_TYPE) {
 			closePreviousFragment();
 			list = getCurrentFragment();
 		}
@@ -807,7 +820,7 @@ public class WikiMarkup extends Parser {
 		}
 
 		System.out.println("New list item " + getSourceLocation());
-		item = new TextFragment(TextFragment.LIST_ITEM_TYPE);
+		item = new TextFragment(type);
 		list.appendChild(item);
 		parentList.add(item);
 	}
