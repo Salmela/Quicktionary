@@ -39,8 +39,9 @@ import java.lang.UnsupportedOperationException;
 import org.quicktionary.backend.WordEntry;
 
 class IndexIO {
+	private final static byte[] INDEX_HEADER_SIGNATURE = {'I', 'D', 'B', 0};
+
 	private DataStoreIO io;
-	private RandomAccessFile dataStore;
 	private File indexFile;
 
 	private final class SortedArray<K, V> extends AbstractMap<K, V> implements SortedMap<K, V> {
@@ -118,6 +119,7 @@ class IndexIO {
 	 * Read the index of the database.
 	 */
 	public TreeMap<String, WordEntryIO> readIndex() throws IOException {
+		byte[] signature = new byte[INDEX_HEADER_SIGNATURE.length];
 		DataInputStream stream;
 		TreeMap<String, WordEntryIO> map;
 
@@ -130,12 +132,19 @@ class IndexIO {
 			return null;
 		}
 
+		map = null;
 		try {
+			/* check the file signature */
+			stream.read(signature);
+			if(INDEX_HEADER_SIGNATURE.equals(signature)) {
+				stream.close();
+				throw new Error("This file is not database index.");
+			}
+
+			/* read the data and put it into TreeMap */
 			map = new TreeMap<String, WordEntryIO>(readSortedList(stream));
 		} catch(UnsupportedEncodingException exception) {
-			map = null;
 		} catch(IOException exception) {
-			map = null;
 		}
 
 		stream.close();
@@ -149,6 +158,7 @@ class IndexIO {
 		DataOutputStream stream;
 		String filename, oldFilename;
 
+		/* create filename for the new index file */
 		oldFilename = indexFile.toString();
 		if(oldFilename.charAt(oldFilename.length() - 1) == '2') {
 			filename = oldFilename.substring(0, oldFilename.length() - 1);
@@ -157,13 +167,21 @@ class IndexIO {
 		}
 		System.out.println("DB: write temporary index at " + filename);
 
-		stream = new DataOutputStream(new FileOutputStream(filename, false));
+		stream = null;
 		try {
+			stream = new DataOutputStream(new FileOutputStream(filename, false));
+			/* write the file signature */
+			stream.write(INDEX_HEADER_SIGNATURE);
+
+			/* write the data from the TreeMap */
 			writeSortedList(stream, map);
 		} catch(UnsupportedEncodingException exception) {
+		} catch(IOException exception) {
 		}
 
-		stream.close();
+		if(stream != null) {
+			stream.close();
+		}
 		io.writeDataStoreHeader(filename);
 	}
 
@@ -178,6 +196,7 @@ class IndexIO {
 
 		System.out.println("DB: word count: " + size);
 
+		/* read sorted list of the words and their addresses */
 		for(int i = 0; i < size; i++) {
 			WordEntryIO entry;
 			int length;
