@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.backend;
+package org.quicktionary.backend.database;
 
 import java.lang.String;
 import java.io.File;
@@ -36,37 +36,19 @@ import java.util.Iterator;
 import java.util.Collections;
 import java.io.UnsupportedEncodingException;
 
-public class WordDatabaseIO {
+import org.quicktionary.backend.WordEntry;
+
+class DataStoreIO {
 	private final static byte[] DATASTORE_HEADER_SIGNATURE = {'W', 'D', 'B', 0};
-	private WordDatabaseIndex index;
+
+	private IndexIO index;
 	private RandomAccessFile dataStore;
 	private File dataStoreFile;
 
 	private TreeMap<String, WordEntryIO> map;
 	private List<WordEntryIO> changedEntries;
 
-	protected static class WordEntryIO {
-		long address;
-		WordEntry data;
-		boolean dirty;
-
-		public WordEntryIO(WordEntry entry, long address) {
-			this.data = entry;
-			this.address = address;
-
-			entry.setIO(this);
-		}
-
-		public boolean isModified() {
-			return dirty;
-		}
-
-		public void setModified(boolean modified) {
-			this.dirty = modified;
-		}
-	}
-
-	public WordDatabaseIO(File dataStoreFile) {
+	public DataStoreIO(File dataStoreFile) {
 		changedEntries = Collections.synchronizedList(new LinkedList<WordEntryIO>());
 		System.out.println("DB: read new database at " + dataStoreFile);
 
@@ -127,7 +109,7 @@ public class WordDatabaseIO {
 
 		/* check if the index file is accidentally removed */
 		if(indexFile.exists()) {
-			index = new WordDatabaseIndex(this, indexFile);
+			index = new IndexIO(this, indexFile);
 			map = index.readIndex();
 		} else {
 			/*TODO: reconstruct the index */
@@ -205,7 +187,7 @@ public class WordDatabaseIO {
 
 		/* write new header */
 		writeDataStoreHeader(indexFilename);
-		index = new WordDatabaseIndex(this, new File(indexFilename));
+		index = new IndexIO(this, new File(indexFilename));
 	}
 
 	/**

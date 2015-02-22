@@ -1,4 +1,4 @@
-/* Quicktionary backend - Word translator app
+/* Quicktionary backend - The data structure for the word information
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.backend;
+package org.quicktionary.backend.database;
 
 import java.lang.String;
 import java.io.File;
@@ -39,10 +39,10 @@ import java.util.Comparator;
 import java.lang.UnsupportedOperationException;
 import java.io.UnsupportedEncodingException;
 
-import static org.quicktionary.backend.WordDatabaseIO.WordEntryIO;
+import org.quicktionary.backend.WordEntry;
 
-class WordDatabaseIndex {
-	private WordDatabaseIO io;
+class IndexIO {
+	private DataStoreIO io;
 	private RandomAccessFile dataStore;
 	private File indexFile;
 
@@ -54,7 +54,7 @@ class WordDatabaseIndex {
 		}
 
 		private final class SortedSet<E> extends AbstractSet<E>  {
-			private final class SortedIterator implements Iterator {
+			private final class SortedIterator implements Iterator<E> {
 				private int index;
 				public boolean hasNext() {
 					return index == entries.length - 1;
@@ -112,7 +112,7 @@ class WordDatabaseIndex {
 		}
 	}
 
-	public WordDatabaseIndex(WordDatabaseIO io, File indexFile) {
+	public IndexIO(DataStoreIO io, File indexFile) {
 		this.io = io;
 		this.indexFile = indexFile;
 	}

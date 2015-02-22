@@ -16,15 +16,17 @@
  */
 package org.quicktionary.backend;
 
-import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
-import static org.quicktionary.backend.WordDatabaseIO.WordEntryIO;
-
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
+
+import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+import org.quicktionary.backend.database.WordEntryIO;
 
 /**
  * This class contains all information about particular word.
@@ -68,40 +70,59 @@ public class WordEntry {
 		return content != null;
 	}
 
-	protected void setIO(WordEntryIO io) {
+	public void setIO(WordEntryIO io) {
 		this.io = io;
 	}
 
-	protected WordEntryIO getIO() {
+	public WordEntryIO getIO() {
 		return io;
 	}
 
-	protected void setData(byte[] buffer) {
+	public void setData(byte[] buffer) {
 		DataInputStream input;
-		byte[] buffer;
 		int length;
 
-		input = new DataInputStream(new ByteArrayInputStream(buffer));
+		try {
+			input = new DataInputStream(new ByteArrayInputStream(buffer));
 
-		length = input.readInt();
-		buffer = new byte[length];
-		word = new String(buffer, "UTF-8");
+			length = input.readInt();
+			buffer = new byte[length];
+			word = new String(buffer, "UTF-8");
 
-		length = input.readInt();
-		buffer = new byte[length];
-		source = new String(buffer, "UTF-8");
+			length = input.readInt();
+			buffer = new byte[length];
+			source = new String(buffer, "UTF-8");
+		} catch(UnsupportedEncodingException exception) {
+		} catch(IOException exception) {
+		}
 	}
 
-	protected byte[] getData() {
+	public byte[] getData() {
+		ByteArrayOutputStream stream;
 		DataOutputStream output;
-		output = new DataOutputStream(new ByteArrayOutputStream());
 
-		output.writeInt(word.length());
-		output.write(word.getBytes("UTF-8"));
+		try {
+			stream = new ByteArrayOutputStream();
+			output = new DataOutputStream(stream);
 
-		output.writeInt(source.length());
-		output.write(source.getBytes("UTF-8"));
+			if(word != null) {
+				output.writeInt(word.length());
+				output.write(word.getBytes("UTF-8"));
+			} else {
+				output.writeInt(0);
+			}
 
-		return output.toByteArray();
+			if(source != null) {
+				output.writeInt(source.length());
+				output.write(source.getBytes("UTF-8"));
+			} else {
+				output.writeInt(0);
+			}
+
+			return stream.toByteArray();
+		} catch(UnsupportedEncodingException exception) {
+		} catch(IOException exception) {
+		}
+		return new byte[0];
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.quicktionary.backend;
 
+import org.quicktionary.backend.database.WordDatabase;
+
 /**
  * The Searcher class parses the search queries from WordDatabase and
  * sends results to the gui.

@@ -1,4 +1,4 @@
-/* Quicktionary backend - Word translator app
+/* Quicktionary backend - The data structure for the word information
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,27 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quicktionary.backend;
+package org.quicktionary.backend.database;
 
 import java.util.TreeMap;
 import java.util.Map;
-
 import java.io.File;
 
-import static org.quicktionary.backend.WordDatabaseIO.WordEntryIO;
+import org.quicktionary.backend.WordEntry;
 
 /**
  * The database class for the quicktionary.
  */
-class WordDatabase {
-	private WordDatabaseIO io;
+public class WordDatabase {
+	private DataStoreIO io;
 	private TreeMap<String, WordEntryIO> map;
 
 	private String searchWord;
 	private Map.Entry<String, WordEntryIO> currentEntry;
 
 	public WordDatabase() {
-		io = new WordDatabaseIO(new File("tmp/test.db"));
+		io = new DataStoreIO(new File("tmp/test.db"));
 		map = this.io.getIndex();
 
 		if(map == null) {

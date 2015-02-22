@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.quicktionary.backend.parsers.XMLParser;
 import org.quicktionary.backend.parsers.WikiMarkup;
+import org.quicktionary.backend.database.WordDatabase;
 
 /**
  * WikiDBReader extracts the wiki pages from a wikimedia database dump.

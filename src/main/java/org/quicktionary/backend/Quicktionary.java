@@ -16,6 +16,8 @@
  */
 package org.quicktionary.backend;
 
+import org.quicktionary.backend.database.WordDatabase;
+
 /**
  * The backend class for the Quicktionary.
  */
