@@ -89,6 +89,10 @@ public class WikiMarkup extends Parser {
 		createSymbolLut();
 	}
 
+	private void printDebug(String str) {
+		//System.out.println(str);
+	}
+
 	/**
 	 * Get the highest node.
 	 */
@@ -207,12 +211,12 @@ public class WikiMarkup extends Parser {
 				System.out.print("START ");
 			}
 
-			System.out.println("PROCESS markupStart " + markupStart.sourceLocation +
+			printDebug("PROCESS markupStart " + markupStart.sourceLocation +
 				", symbol: " + markupStart.symbol.character +
 				", count: " + markupStart.count);
 
 			if(markupStart.type == MarkupStart.MarkupType.NONE) {
-				System.out.println("Discarded the symbol");
+				printDebug("Discarded the symbol");
 				continue;
 			}
 
@@ -309,7 +313,7 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 
-		System.out.println("Ruler parsed.");
+		printDebug("Ruler parsed.");
 
 		itemListTruncate(1);
 
@@ -444,7 +448,7 @@ public class WikiMarkup extends Parser {
 		/* create new markup start for the symbol */
 		start = appendMarkupStart(symbol);
 
-		System.out.println("Symbol: " + currentChar + " location: " + start.sourceLocation);
+		printDebug("Symbol: " + currentChar + " location: " + start.sourceLocation);
 	}
 
 	private void parseListItem() {
@@ -455,7 +459,7 @@ public class WikiMarkup extends Parser {
 
 		/* close the previous nodes */
 		if(parentList.size() > i && parentList.get(i).getType() != TextNode.LIST_TYPE) {
-			System.out.println("Truncate, not list item " + parentList.get(i).getType() + " " + getSourceLocation());
+			printDebug("Truncate, not list item " + parentList.get(i).getType() + " " + getSourceLocation());
 			itemListTruncate(i);
 		}
 
@@ -519,7 +523,7 @@ public class WikiMarkup extends Parser {
 					/* if the list doesn't have same type,
 					   then end the previous list and create new one */
 					if(!parameter.equals(list.getParameter())) {
-						System.out.println("New list, index: " + i + "/" + (parentList.size() - 1) + ", location" + sourceLocation);
+						printDebug("New list, index: " + i + "/" + (parentList.size() - 1) + ", location" + sourceLocation);
 
 						itemListTruncate(i);
 						createList(parameter);
@@ -595,10 +599,10 @@ public class WikiMarkup extends Parser {
 		}
 
 		if(list.getType() != TextNode.LIST_TYPE) {
-			System.out.println("ERROR: must be list");
+			printDebug("ERROR: must be list");
 		}
 
-		System.out.println("New list item " + getSourceLocation());
+		printDebug("New list item " + getSourceLocation());
 		item = new TextNode(type);
 		list.appendChild(item);
 		parentList.add(item);
@@ -606,7 +610,7 @@ public class WikiMarkup extends Parser {
 
 	private void createParagraph() {
 		TextNode paragraphNode;
-		System.out.println("New paragraph" + getSourceLocation());
+		printDebug("New paragraph" + getSourceLocation());
 
 		paragraphNode = new TextNode(TextNode.PARAGRAPH_TYPE);
 		getRoot().appendChild(paragraphNode);
@@ -665,7 +669,7 @@ public class WikiMarkup extends Parser {
 		case '>':
 			start = getMarkupSymbol(symbolLut['<']);
 			if(start == null) break;
-			System.out.println("HTML range " + start.location + ", " + markup.location);
+			printDebug("HTML range " + start.location + ", " + markup.location);
 			break;
 		case '=':
 			createHeaderMarkup(markup);
@@ -707,7 +711,7 @@ public class WikiMarkup extends Parser {
 			MarkupStart start;
 			start = getMarkupSymbol(symbolLut['<']);
 			if(start == null) return;
-			System.out.println("HTML range " + start.location + ", " + markup.location);
+			printDebug("HTML range " + start.location + ", " + markup.location);
 			break;
 
 		case '=':
@@ -764,7 +768,7 @@ public class WikiMarkup extends Parser {
 			inlineWhitespaceConsumed = true;
 		}
 
-		System.out.println("Text start: " + startIndex + ", " + endIndex + " " + getSourceLocation());
+		printDebug("Text start: " + startIndex + ", " + endIndex + " " + getSourceLocation());
 
 		/* create the node for text content */
 		parent = getCurrentFragment();
@@ -791,7 +795,7 @@ public class WikiMarkup extends Parser {
 			getNext();
 		}
 		start.count = i;
-		System.out.println("Header parsed " + i + ".");
+		printDebug("Header parsed " + i + ".");
 	}
 
 	private void appendInlineTextNode(int type) {
@@ -843,7 +847,7 @@ public class WikiMarkup extends Parser {
 
 		createMarkupStart(start, end);
 
-		System.out.println("Inline range " + start.location + ", " + end.location + "  " +
+		printDebug("Inline range " + start.location + ", " + end.location + "  " +
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
@@ -855,7 +859,7 @@ public class WikiMarkup extends Parser {
 
 		/* return if this end markup */
 		if(markup.type == MarkupStart.MarkupType.END) {
-			System.out.println("End text style node");
+			printDebug("End text style node");
 			TextNode current = getCurrentFragment();
 			if(current.getType() == TextNode.PLAIN_TYPE) {
 				current = current.getParent();
@@ -919,7 +923,7 @@ public class WikiMarkup extends Parser {
 
 		createMarkupStart(start, end);
 
-		System.out.println("Link range " + start.location + ", " + end.location + "  " +
+		printDebug("Link range " + start.location + ", " + end.location + "  " +
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
@@ -966,7 +970,7 @@ public class WikiMarkup extends Parser {
 		prevLink = getMarkupSymbol(symbolLut['[']);
 		/* ignore the template if there is unfinished link */
 		if(prevLink != null && start.location < prevLink.location && prevLink.type == MarkupStart.MarkupType.NONE) {
-			System.out.println("Warning: the template contains unfinished link.");
+			printDebug("Warning: the template contains unfinished link.");
 			return;
 		}
 
@@ -981,7 +985,7 @@ public class WikiMarkup extends Parser {
 
 		createMarkupStart(start, end);
 
-		System.out.println("Template range " + start.location + ", " + end.location + "  " +
+		printDebug("Template range " + start.location + ", " + end.location + "  " +
 			lineBuffer.substring(start.location + start.count, end.location));
 	}
 
