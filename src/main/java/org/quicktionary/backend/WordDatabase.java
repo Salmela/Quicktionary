@@ -19,17 +19,32 @@ package org.quicktionary.backend;
 import java.util.TreeMap;
 import java.util.Map;
 
+import java.io.File;
+
+import static org.quicktionary.backend.WordDatabaseIO.WordEntryIO;
+
 /**
  * The database class for the quicktionary.
  */
 class WordDatabase {
-	private TreeMap<String, WordEntry> map;
+	private WordDatabaseIO io;
+	private TreeMap<String, WordEntryIO> map;
 
 	private String searchWord;
-	private Map.Entry<String, WordEntry> currentEntry;
+	private Map.Entry<String, WordEntryIO> currentEntry;
 
 	public WordDatabase() {
-		this.map = new TreeMap<String, WordEntry>();
+		io = new WordDatabaseIO(new File("tmp/test.db"));
+		map = this.io.getIndex();
+
+		if(map == null) {
+			map = new TreeMap<String, WordEntryIO>();
+		}
+
+		System.out.println("words:");
+		for(Map.Entry<String, WordEntryIO> entry : map.entrySet()) {
+			System.out.println("word: " + entry.getKey());
+		}
 	}
 
 	/**
@@ -37,7 +52,7 @@ class WordDatabase {
 	 */
 	public WordEntry newWord(String word) {
 		WordEntry entry = new WordEntry(word);
-		map.put(word, entry);
+		map.put(word, io.createNewEntry(entry));
 		return entry;
 	}
 
@@ -48,15 +63,19 @@ class WordDatabase {
 		map.remove(word);
 	}
 
+	public void updateWord(WordEntry entry) {
+		io.markAsChanged(entry.getIO());
+	}
+
 	/**
 	 * Get a page for the word.
 	 */
 	public WordEntry fetchWordEntry(String word) {
-		WordEntry entry = map.get(word);
+		WordEntryIO entry = map.get(word);
 		if(entry == null) {
-			entry = new WordEntry(word, null, null);
+			return new WordEntry(word, null, null);
 		}
-		return entry;
+		return entry.data;
 	}
 
 	/**
@@ -91,7 +110,7 @@ class WordDatabase {
 		for(i = 0; i < count && currentEntry != null; i++) {
 			if(!currentEntry.getKey().startsWith(searchWord)) break;
 
-			entries[i] = currentEntry.getValue();
+			entries[i] = currentEntry.getValue().data;
 			currentEntry = map.higherEntry(currentEntry.getKey());
 		}
 
@@ -104,6 +123,7 @@ class WordDatabase {
 	}
 
 	public void sync() {
+		io.syncFile(map);
 	}
 
 	public void close() {
