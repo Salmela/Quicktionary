@@ -25,19 +25,16 @@ import java.io.FileOutputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 
-import java.nio.channels.FileChannel;
-
 import java.util.Set;
 import java.util.AbstractSet;
-import java.util.Collection;
 import java.util.Map;
 import java.util.AbstractMap;
 import java.util.TreeMap;
 import java.util.SortedMap;
 import java.util.Iterator;
 import java.util.Comparator;
-import java.lang.UnsupportedOperationException;
 import java.io.UnsupportedEncodingException;
+import java.lang.UnsupportedOperationException;
 
 import org.quicktionary.backend.WordEntry;
 

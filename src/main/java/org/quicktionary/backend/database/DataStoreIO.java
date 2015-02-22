@@ -20,14 +20,6 @@ import java.lang.String;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import java.nio.channels.FileChannel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -49,8 +41,14 @@ class DataStoreIO {
 	private List<WordEntryIO> changedEntries;
 
 	public DataStoreIO(File dataStoreFile) {
+		boolean exists = true;
+
 		changedEntries = Collections.synchronizedList(new LinkedList<WordEntryIO>());
 		System.out.println("DB: read new database at " + dataStoreFile);
+
+		if(!dataStoreFile.exists()) {
+			exists = false;
+		}
 
 		try {
 			dataStore = new RandomAccessFile(dataStoreFile, "rw");
@@ -62,7 +60,7 @@ class DataStoreIO {
 		this.dataStoreFile = dataStoreFile;
 		this.map = null;
 		try {
-			readDataStoreHeader();
+			readDataStoreHeader(exists);
 		} catch(IOException exception) {
 		}
 	}
@@ -85,13 +83,12 @@ class DataStoreIO {
 		entry.setModified(true);
 	}
 
-	private void readDataStoreHeader() throws IOException {
+	private void readDataStoreHeader(boolean exists) throws IOException {
 		File indexFile;
 		String indexFilename;
 		byte[] signature = new byte[DATASTORE_HEADER_SIGNATURE.length];
-		FileChannel channel = dataStore.getChannel();
 
-		if(channel.size() == 0) {
+		if(!exists) {
 			initializeDatabase();
 			return;
 		}
