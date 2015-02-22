@@ -169,4 +169,8 @@ public class Quicktionary {
 	public Object getPreviousView(boolean go) {
 		return history.getPrevious(go);
 	}
+
+	public void close() {
+		database.close();
+	}
 }

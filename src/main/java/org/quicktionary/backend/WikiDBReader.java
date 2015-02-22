@@ -138,6 +138,7 @@ public class WikiDBReader implements Runnable {
 		while(parser.findElement(PAGE_TAG)) {
 			readPage();
 		}
+		database.sync();
 	}
 
 	/**

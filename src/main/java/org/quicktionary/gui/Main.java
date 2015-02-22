@@ -17,6 +17,7 @@
 package org.quicktionary.gui;
 
 import java.io.IOException;
+import java.lang.Runtime;
 import org.quicktionary.backend.Quicktionary;
 
 /**
@@ -83,5 +84,18 @@ public class Main {
 
 		quicktionary = new Quicktionary();
 		application = new Application(quicktionary);
+
+		/* write the changes to the database at exit */
+		Runtime.getRuntime().addShutdownHook(new ExitHook(quicktionary));
+	}
+
+	private static final class ExitHook extends Thread {
+		private Quicktionary quicktionary;
+		public ExitHook(Quicktionary quicktionary) {
+			this.quicktionary = quicktionary;
+		}
+		public void run() {
+			quicktionary.close();
+		}
 	}
 }

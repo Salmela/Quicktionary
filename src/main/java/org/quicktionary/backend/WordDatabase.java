@@ -102,4 +102,11 @@ class WordDatabase {
 
 		return i;
 	}
+
+	public void sync() {
+	}
+
+	public void close() {
+		sync();
+	}
 }
