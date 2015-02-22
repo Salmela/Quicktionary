@@ -51,20 +51,20 @@ class IndexIO {
 			this.entries = entries;
 		}
 
-		private final class SortedSet<E> extends AbstractSet<E>  {
-			private final class SortedIterator implements Iterator<E> {
+		private final class SortedSet extends AbstractSet<Map.Entry<K, V>>  {
+			private final class SortedIterator implements Iterator<Map.Entry<K, V>> {
 				private int index;
 				public boolean hasNext() {
 					return index == entries.length - 1;
 				}
-				public E next() {
-					return (E)entries[index++];
+				public Map.Entry<K, V> next() {
+					return entries[index++];
 				}
 				public void remove() {
 					throw new UnsupportedOperationException();
 				}
 			}
-			public boolean add(E e) {
+			public boolean add(Map.Entry<K, V> e) {
 				throw new UnsupportedOperationException();
 			}
 			public boolean contains(Object o) {
@@ -73,11 +73,8 @@ class IndexIO {
 			public boolean isEmpty() {
 				return SortedArray.this.isEmpty();
 			}
-			public Iterator<E> iterator() {
+			public Iterator<Map.Entry<K, V>> iterator() {
 				return new SortedIterator();
-			}
-			public boolean remove() {
-				throw new UnsupportedOperationException();
 			}
 			public Object[] toArray() {
 				return entries;
@@ -91,7 +88,7 @@ class IndexIO {
 			return null;
 		}
 		public Set<Map.Entry<K, V>> entrySet() {
-			return new SortedSet<Map.Entry<K, V>>();
+			return new SortedSet();
 		}
 		public K firstKey() {
 			return entries[0].getKey();
