@@ -39,11 +39,6 @@ public class WordDatabase {
 		if(map == null) {
 			map = new TreeMap<String, WordEntryIO>();
 		}
-
-		System.out.println("words:");
-		for(Map.Entry<String, WordEntryIO> entry : map.entrySet()) {
-			System.out.println("word: " + entry.getKey());
-		}
 	}
 
 	/**
