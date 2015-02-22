@@ -16,15 +16,6 @@
  */
 package org.quicktionary.backend;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.DataInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-
 import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
 import org.quicktionary.backend.database.WordEntryIO;
 
@@ -76,53 +67,5 @@ public class WordEntry {
 
 	public WordEntryIO getIO() {
 		return io;
-	}
-
-	public void setData(byte[] buffer) {
-		DataInputStream input;
-		int length;
-
-		try {
-			input = new DataInputStream(new ByteArrayInputStream(buffer));
-
-			length = input.readInt();
-			buffer = new byte[length];
-			word = new String(buffer, "UTF-8");
-
-			length = input.readInt();
-			buffer = new byte[length];
-			source = new String(buffer, "UTF-8");
-		} catch(UnsupportedEncodingException exception) {
-		} catch(IOException exception) {
-		}
-	}
-
-	public byte[] getData() {
-		ByteArrayOutputStream stream;
-		DataOutputStream output;
-
-		try {
-			stream = new ByteArrayOutputStream();
-			output = new DataOutputStream(stream);
-
-			if(word != null) {
-				output.writeInt(word.length());
-				output.write(word.getBytes("UTF-8"));
-			} else {
-				output.writeInt(0);
-			}
-
-			if(source != null) {
-				output.writeInt(source.length());
-				output.write(source.getBytes("UTF-8"));
-			} else {
-				output.writeInt(0);
-			}
-
-			return stream.toByteArray();
-		} catch(UnsupportedEncodingException exception) {
-		} catch(IOException exception) {
-		}
-		return new byte[0];
 	}
 }

@@ -16,18 +16,27 @@
  */
 package org.quicktionary.backend.database;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.io.DataOutputStream;
+import java.io.DataInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+
 import org.quicktionary.backend.WordEntry;
 
 public class WordEntryIO {
 	protected long address;
 	protected boolean modified;
-	WordEntry data;
+	protected WordEntry data;
 
 	protected WordEntryIO(WordEntry entry, long address) {
 		this.data = entry;
 		this.address = address;
 
-		entry.setIO(this);
+		if(entry != null) {
+			entry.setIO(this);
+		}
 	}
 
 	protected boolean isModified() {
@@ -36,5 +45,62 @@ public class WordEntryIO {
 
 	protected void setModified(boolean modified) {
 		this.modified = modified;
+	}
+
+	protected void setData(byte[] buffer) {
+		DataInputStream input;
+		String word, source;
+		int length;
+
+		word = source = null;
+
+		try {
+			input = new DataInputStream(new ByteArrayInputStream(buffer));
+
+			length = input.readInt();
+			buffer = new byte[length];
+			word = new String(buffer, "UTF-8");
+
+			length = input.readInt();
+			buffer = new byte[length];
+			source = new String(buffer, "UTF-8");
+		} catch(UnsupportedEncodingException exception) {
+		} catch(IOException exception) {
+		}
+
+		this.data = new WordEntry(word, source, null);
+	}
+
+	protected byte[] getData() {
+		ByteArrayOutputStream stream;
+		DataOutputStream output;
+		String word, source;
+
+		word = data.getWord();
+		source = data.getSource();
+
+		try {
+			stream = new ByteArrayOutputStream();
+			output = new DataOutputStream(stream);
+
+			if(word != null) {
+				output.writeInt(word.length());
+				output.write(word.getBytes("UTF-8"));
+			} else {
+				output.writeInt(0);
+			}
+
+			if(source != null) {
+				output.writeInt(source.length());
+				output.write(source.getBytes("UTF-8"));
+			} else {
+				output.writeInt(0);
+			}
+
+			return stream.toByteArray();
+		} catch(UnsupportedEncodingException exception) {
+		} catch(IOException exception) {
+		}
+		return new byte[0];
 	}
 }

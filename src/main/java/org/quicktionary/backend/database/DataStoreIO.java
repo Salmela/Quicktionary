@@ -207,7 +207,7 @@ class DataStoreIO {
 		buffer = new byte[size];
 
 		dataStore.readFully(buffer);
-		entry.data.setData(buffer);
+		entry.setData(buffer);
 	}
 
 	/**
@@ -252,7 +252,7 @@ class DataStoreIO {
 		System.out.println("DB: word " + entry.data.getWord());
 
 		/* get the data from the data structures */
-		buffer = entry.data.getData();
+		buffer = entry.getData();
 
 		/* save the new location of the word */
 		entry.address = dataStore.getFilePointer();
