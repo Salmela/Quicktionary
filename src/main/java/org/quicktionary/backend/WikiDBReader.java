@@ -79,7 +79,7 @@ public class WikiDBReader implements Runnable {
 			return;
 		}
 
-		WikiMarkup.TextFragment fragment;
+		TextNode node;
 		WordEntry entry;
 
 		System.out.println(text);

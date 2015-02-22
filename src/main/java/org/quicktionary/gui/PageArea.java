@@ -28,7 +28,7 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import javax.swing.text.html.StyleSheet;
 
-import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+import org.quicktionary.backend.TextNode;
 import org.quicktionary.backend.WordEntry;
 
 public class PageArea extends JPanel {
@@ -86,7 +86,7 @@ public class PageArea extends JPanel {
 		return styleSheet;
 	}
 
-	public void setPage(TextFragment root) {
+	public void setPage(TextNode root) {
 		String source;
 
 		if(Main.useHTML) {
@@ -99,47 +99,47 @@ public class PageArea extends JPanel {
 		System.out.println(source);
 	}
 
-	private String generateHTML(TextFragment fragment) {
+	private String generateHTML(TextNode node) {
 		StringBuilder content = new StringBuilder();
 
-		if(fragment.getContent() != null) {
-			content.append(fragment.getContent());
+		if(node.getContent() != null) {
+			content.append(node.getContent());
 		} else {
-			for(TextFragment child : fragment.getChildren()) {
+			for(TextNode child : node.getChildren()) {
 				content.append(generateHTML(child));
 			}
 		}
-		switch(fragment.getType()) {
-		case TextFragment.ROOT_TYPE:
+		switch(node.getType()) {
+		case TextNode.ROOT_TYPE:
 			return "<html><body>" + content + "</body></html>";
-		case TextFragment.HEADER_TYPE:
+		case TextNode.HEADER_TYPE:
 			return "<h1>" + content + "</h1>";
-		case TextFragment.PARAGRAPH_TYPE:
+		case TextNode.PARAGRAPH_TYPE:
 			return "<p>" + content + "</p>";
-		case TextFragment.STRONG_TYPE:
+		case TextNode.STRONG_TYPE:
 			return "<strong>" + content + "</strong>";
-		case TextFragment.EM_TYPE:
+		case TextNode.EM_TYPE:
 			return "<em>" + content + "</em>";
-		case TextFragment.LINK_TYPE:
+		case TextNode.LINK_TYPE:
 			return "<a href=\'" + content + "\'>" + content + "</a>";
-		case TextFragment.LIST_TYPE:
+		case TextNode.LIST_TYPE:
 			return "<ul>" + content + "</ul>";
-		case TextFragment.LIST_ITEM_TYPE:
+		case TextNode.LIST_ITEM_TYPE:
 			return "<li>" + content + "</li>";
-		case TextFragment.PLAIN_TYPE:
+		case TextNode.PLAIN_TYPE:
 			return content.toString();
 		default:
 			return "<u>" + content.toString() + "</u>";
 		}
 	}
 
-	private String generateMarkdown(TextFragment root) {
+	private String generateMarkdown(TextNode root) {
 		StringBuilder src = new StringBuilder();
 
-		for(TextFragment child : root.getChildren()) {
+		for(TextNode child : root.getChildren()) {
 			String md = generateSubMarkdown(child);
 
-			if(child.getType() == TextFragment.HEADER_TYPE) {
+			if(child.getType() == TextNode.HEADER_TYPE) {
 				src.append(md);
 				src.append("\n");
 
@@ -147,7 +147,7 @@ public class PageArea extends JPanel {
 					src.append("=");
 				}
 				src.append("\n");
-			} else if(child.getType() == TextFragment.PARAGRAPH_TYPE) {
+			} else if(child.getType() == TextNode.PARAGRAPH_TYPE) {
 				src.append("\n");
 				src.append(md);
 				src.append("\n");
@@ -158,26 +158,26 @@ public class PageArea extends JPanel {
 		return src.toString();
 	}
 
-	private String generateSubMarkdown(TextFragment fragment) {
+	private String generateSubMarkdown(TextNode node) {
 		String markdown, content;
 
 		content = markdown = "";
-		if(fragment.getContent() != null) {
-			content += fragment.getContent();
+		if(node.getContent() != null) {
+			content += node.getContent();
 		} else {
-			for(TextFragment child : fragment.getChildren()) {
+			for(TextNode child : node.getChildren()) {
 				content += generateSubMarkdown(child);
 			}
 		}
 
-		switch(fragment.getType()) {
-		case TextFragment.STRONG_TYPE:
+		switch(node.getType()) {
+		case TextNode.STRONG_TYPE:
 			markdown = "**" + content + "**";
 			break;
-		case TextFragment.EM_TYPE:
+		case TextNode.EM_TYPE:
 			markdown = "*" + content + "*";
 			break;
-		case TextFragment.LINK_TYPE:
+		case TextNode.LINK_TYPE:
 			markdown = "[" + content + "](" + content + ")";
 			break;
 		default:

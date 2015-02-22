@@ -1,4 +1,4 @@
-/* Quicktionary backend - Word translator app
+/* Quicktionary backend - Word dictionary app
  * Copyright (C) 2015  Aleksi Salmela <aleksi.salmela at helsinki.fi>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.StringBuilder;
 
+import org.quicktionary.backend.TextNode;
+
 /**
  * The WikiMarkup class parses the wiki markup.
  * This class is developed at another git branch.
@@ -34,236 +36,13 @@ public class WikiMarkup extends Parser {
 	//private final StringBuilder content;
 
 	private ArrayList<MarkupStart> lineMarkup;
-	private ArrayList<TextFragment> parentList;
+	private ArrayList<TextNode> parentList;
 	private int inlineFragmentIndex;
 	private boolean inlineWhitespaceConsumed;
 	private int openTemplates;
 	private MarkupStart previousMarkup;
 
 	private SymbolType[] symbolLut;
-
-	/**
-	 * Node in document tree. The node has type
-	 * and children or text content.
-	 *
-	 * TODO: Rename to TextNode and move to own file.
-	 */
-	public static class TextFragment {
-		private TextFragment parent;
-		private int type;
-		private String content;
-		private ArrayList<TextFragment> childs;
-		private String parameter;
-
-		public final static int ROOT_TYPE = 0;
-		public final static int PLAIN_TYPE = 1;
-		public final static int HEADER_TYPE = 2;
-		public final static int PARAGRAPH_TYPE = 3;
-		public final static int STRONG_TYPE = 4;
-		public final static int EM_TYPE = 5;
-		public final static int LINK_TYPE = 6;
-		public final static int RULER_TYPE = 7;
-		public final static int TEMPLATE_TYPE = 8;
-		public final static int LIST_TYPE = 9;
-		public final static int LIST_ITEM_TYPE = 10;
-		public final static int TABLE_TYPE = 11;
-		public final static int TABLE_ROW_TYPE = 12;
-		public final static int TABLE_CELL_TYPE = 13;
-		public final static int TABLE_HEADING_TYPE = 14;
-		public final static int TABLE_CAPTION_TYPE = 15;
-		public final static int DEFINITION_LABEL_TYPE = 16;
-		public final static int DEFINITION_ITEM_TYPE = 17;
-		public final static int MISC_TYPE = 100;
-
-		public TextFragment(int type, String parameter) {
-			this.parent = null;
-			this.type = type;
-			this.content = null;
-			this.childs = new ArrayList<TextFragment>();
-			this.parameter = parameter;
-		}
-
-		public TextFragment(int type) {
-			this(type, null);
-		}
-
-		/*TODO: rename to setTextContent */
-		public void setContent(String content) {
-			if(childs.size() != 0) {
-				throw new Error("TextFragment must have only child fragments or text content.");
-			}
-			this.content = content;
-		}
-
-		/**
-		 * Add child to the TextFragment.
-		 * The method returns added fragment, so that the unit tests can
-		 * be written more compactly.
-		 *
-		 * @param fragment The new child for the fragment
-		 * @return The added fragment
-		 */
-		public TextFragment appendChild(TextFragment fragment) {
-			if(content != null) {
-				throw new Error("TextFragment must have only child fragments or text content.");
-			}
-			this.childs.add(fragment);
-			fragment.parent = this;
-
-			return fragment;
-		}
-
-		public void removeChild(int index) {
-			this.childs.remove(index);
-		}
-
-		public boolean isEmpty() {
-			return (childs.size() == 0) && (content == null);
-		}
-
-		/**
-		 * Print the parsing tree recursively.
-		 *
-		 * @param indentation The padding added to start of each line.
-		 */
-		public String print(int indentation) {
-			StringBuilder treeString = new StringBuilder();
-			print(treeString, indentation);
-			System.out.print(treeString);
-			return treeString.toString();
-		}
-		private void print(StringBuilder treeString, int indentation) {
-			int i = indentation;
-
-			while(i-- > 0) treeString.append(" ");
-			treeString.append("Node type: " + type);
-
-			if(parameter != null) {
-				treeString.append(", parameter: " + parameter);
-			}
-			treeString.append("\n");
-
-			if(content != null) {
-				i = indentation + 2;
-				while(i-- > 0) treeString.append(" ");
-
-				treeString.append("Content: \"" + content + "\"\n");
-				return;
-			}
-
-			for(TextFragment child : childs) {
-				child.print(treeString, indentation + 2);
-			}
-
-			return;
-		}
-
-		/**
-		 * Check that fragments are equal.
-		 * This method should be only used in tests.
-		 *
-		 * @return True if the fragments are equal
-		 */
-		public boolean equals(Object object) {
-			TextFragment fragment;
-
-			if(object == null) {
-				return false;
-			}
-
-			if(!(object instanceof TextFragment)) {
-				return false;
-			}
-
-			fragment = (TextFragment)object;
-
-			if(fragment.type != type) {
-				return false;
-			}
-
-			if(parameter != null && !parameter.equals(fragment.parameter)) {
-				return false;
-			/* check if one of the parameters is null and other isn't */
-			} else if((parameter == null) != (fragment.parameter == null)) {
-				return false;
-			}
-
-			if(content != null) {
-				if(!content.equals(fragment.content)) {
-					return false;
-				}
-				if(childs.size() != 0) {
-					System.out.println("ERROR: the fragment has invalid content");
-					return false;
-				}
-			}
-
-			if(childs.size() != fragment.childs.size()) {
-				return false;
-			}
-
-			for(int i = 0; i < childs.size(); i++) {
-				if(!childs.get(i).equals(fragment.childs.get(i))) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		/**
-		 * The method combines neighbour text childs into one.
-		 */
-		public void normalize() {
-			StringBuilder normalizedText;
-			TextFragment firstText = null;
-
-			normalizedText = new StringBuilder();
-			for(int j = 0; j < childs.size(); j++) {
-				if(childs.get(j).getType() == TextFragment.PLAIN_TYPE) {
-					normalizedText.append(childs.get(j).getTextContent());
-					if(firstText != null) {
-						removeChild(j);
-						j--;
-					} else {
-						firstText = childs.get(j);
-					}
-				} else {
-					if(firstText != null) {
-						firstText.setContent(normalizedText.toString());
-					}
-					firstText = null;
-					normalizedText.setLength(0);
-				}
-			}
-			if(firstText != null) {
-				firstText.setContent(normalizedText.toString());
-			}
-		}
-
-		public TextFragment getParent() {
-			return parent;
-		}
-
-		public int getType() {
-			return type;
-		}
-
-		public String getParameter() {
-			return parameter;
-		}
-
-		public ArrayList<TextFragment> getChildren() {
-			return childs;
-		}
-
-		public String getContent() {
-			return content;
-		}
-
-		public String getTextContent() {
-			return content;
-		}
-	}
 
 	/*TODO: rename to MarkupSymbol */
 	private static class MarkupStart {
@@ -305,15 +84,15 @@ public class WikiMarkup extends Parser {
 		super();
 		lineBuffer = new StringBuilder(256);
 		lineMarkup = new ArrayList<MarkupStart>(16);
-		parentList = new ArrayList<TextFragment>();
+		parentList = new ArrayList<TextNode>();
 
 		createSymbolLut();
 	}
 
 	/**
-	 * Get the highest fragment.
+	 * Get the highest node.
 	 */
-	private TextFragment getCurrentFragment() {
+	private TextNode getCurrentFragment() {
 		if(parentList.size() == 0) {
 			return null;
 		}
@@ -374,7 +153,7 @@ public class WikiMarkup extends Parser {
 		parentList.clear();
 
 		/* add the root node */
-		parentList.add(new TextFragment(0));
+		parentList.add(new TextNode(0));
 		inlineFragmentIndex = parentList.size();
 		inlineWhitespaceConsumed = true;
 
@@ -390,7 +169,7 @@ public class WikiMarkup extends Parser {
 		return true;
 	}
 
-	public TextFragment getRoot() {
+	public TextNode getRoot() {
 		return parentList.get(0);
 	}
 
@@ -418,7 +197,7 @@ public class WikiMarkup extends Parser {
 		/* check if the line is valid header */
 		headerMarkup = createHeaderNode();
 
-		/* generate the text content for the parsed markup (or the TextFragment) */
+		/* generate the text content for the parsed markup (or the TextNode) */
 		previousMarkup = headerMarkup;
 		for(int i = 0; i < lineMarkup.size(); i++) {
 			MarkupStart markupStart;
@@ -505,19 +284,19 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void createParagraphIfNeaded() {
-		if(getCurrentFragment().getType() != TextFragment.PARAGRAPH_TYPE) {
+		if(getCurrentFragment().getType() != TextNode.PARAGRAPH_TYPE) {
 			createParagraph();
 		} else if(!inlineWhitespaceConsumed) {
-			TextFragment fragment;
+			TextNode node;
 			/* add extra whitespace */
-			fragment = new TextFragment(TextFragment.PLAIN_TYPE);
-			fragment.setContent(" ");
-			getCurrentFragment().appendChild(fragment);
+			node = new TextNode(TextNode.PLAIN_TYPE);
+			node.setContent(" ");
+			getCurrentFragment().appendChild(node);
 		}
 	}
 
 	private void parseRuler() {
-		TextFragment ruler;
+		TextNode ruler;
 		int i;
 
 		for(i = 0; i < 4; i++) {
@@ -534,7 +313,7 @@ public class WikiMarkup extends Parser {
 
 		itemListTruncate(1);
 
-		ruler = new TextFragment(TextFragment.RULER_TYPE, null);
+		ruler = new TextNode(TextNode.RULER_TYPE, null);
 		getCurrentFragment().appendChild(ruler);
 	}
 
@@ -542,10 +321,10 @@ public class WikiMarkup extends Parser {
 	}
 
 	/**
-	 * Try to match the header markup for the line and create the TextFragment for it.
+	 * Try to match the header markup for the line and create the TextNode for it.
 	 */
 	private MarkupStart createHeaderNode() {
-		TextFragment fragment;
+		TextNode node;
 		MarkupStart start, end;
 		int i;
 
@@ -575,10 +354,10 @@ public class WikiMarkup extends Parser {
 			}
 		}
 
-		fragment = new TextFragment(TextFragment.HEADER_TYPE);
-		getRoot().appendChild(fragment);
+		node = new TextNode(TextNode.HEADER_TYPE);
+		getRoot().appendChild(node);
 		itemListTruncate(1);
-		parentList.add(fragment);
+		parentList.add(node);
 
 		/* remove the header symbols from lineMarkup list */
 		lineMarkup.remove(0);
@@ -669,20 +448,20 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void parseListItem() {
-		int itemType = TextFragment.LIST_ITEM_TYPE;
+		int itemType = TextNode.LIST_ITEM_TYPE;
 		boolean itemCreated = false;
 		/* skip the root node */
 		int i = 1;
 
 		/* close the previous nodes */
-		if(parentList.size() > i && parentList.get(i).getType() != TextFragment.LIST_TYPE) {
+		if(parentList.size() > i && parentList.get(i).getType() != TextNode.LIST_TYPE) {
 			System.out.println("Truncate, not list item " + parentList.get(i).getType() + " " + getSourceLocation());
 			itemListTruncate(i);
 		}
 
 		do {
 			boolean listSymbol;
-			TextFragment list;
+			TextNode list;
 			String parameter;
 
 			listSymbol = true;
@@ -691,24 +470,24 @@ public class WikiMarkup extends Parser {
 			switch(currentChar) {
 			case '*':
 				parameter = "ul";
-				itemType = TextFragment.LIST_ITEM_TYPE;
+				itemType = TextNode.LIST_ITEM_TYPE;
 				break;
 			case '#':
 				parameter = "ol";
-				itemType = TextFragment.LIST_ITEM_TYPE;
+				itemType = TextNode.LIST_ITEM_TYPE;
 				break;
 			/*FIXME: following cases are not translated properly */
 			case ';':
 				parameter = "dl";
-				itemType = TextFragment.DEFINITION_LABEL_TYPE;
+				itemType = TextNode.DEFINITION_LABEL_TYPE;
 				break;
 			case ':':
 				parameter = "dl";
-				itemType = TextFragment.DEFINITION_ITEM_TYPE;
+				itemType = TextNode.DEFINITION_ITEM_TYPE;
 				break;
 			case '\n':
 				/*FIXME: this method shouldn't create anything if there is no text at the line */
-				/*TODO: write some code to remove the generated TextFragments */
+				/*TODO: write some code to remove the generated TextNodes */
 				return;
 			default:
 				listSymbol = false;
@@ -736,7 +515,7 @@ public class WikiMarkup extends Parser {
 				list = parentList.get(i);
 
 				/* previous sibling was list */
-				if(list.getType() == TextFragment.LIST_TYPE) {
+				if(list.getType() == TextNode.LIST_TYPE) {
 					/* if the list doesn't have same type,
 					   then end the previous list and create new one */
 					if(!parameter.equals(list.getParameter())) {
@@ -758,10 +537,10 @@ public class WikiMarkup extends Parser {
 					itemCreated = false;
 
 					/* just skip the list items */
-					if(parameter.equals("dl") && (list.getType() == TextFragment.DEFINITION_LABEL_TYPE ||
-					   list.getType() == TextFragment.DEFINITION_ITEM_TYPE)) {
+					if(parameter.equals("dl") && (list.getType() == TextNode.DEFINITION_LABEL_TYPE ||
+					   list.getType() == TextNode.DEFINITION_ITEM_TYPE)) {
 						i++;
-					} else if(list.getType() == TextFragment.LIST_ITEM_TYPE) {
+					} else if(list.getType() == TextNode.LIST_ITEM_TYPE) {
 						i++;
 					} else {
 						getRoot().print(2);
@@ -791,45 +570,45 @@ public class WikiMarkup extends Parser {
 	}
 
 	/**
-	 * Helper method for creating a list TextFragment.
+	 * Helper method for creating a list TextNode.
 	 */
 	private void createList(String parameter) {
-		TextFragment list, parent;
+		TextNode list, parent;
 
-		list = new TextFragment(TextFragment.LIST_TYPE, parameter);
+		list = new TextNode(TextNode.LIST_TYPE, parameter);
 		getCurrentFragment().appendChild(list);
 		parentList.add(list);
 	}
 
 	/**
-	 * Helper method for creating a list item TextFragment.
+	 * Helper method for creating a list item TextNode.
 	 */
 	private void createListItem(int type) {
-		TextFragment item, list;
+		TextNode item, list;
 
 		list = getCurrentFragment();
-		if(list.getType() == TextFragment.LIST_ITEM_TYPE ||
-		   list.getType() == TextFragment.DEFINITION_ITEM_TYPE ||
-		   list.getType() == TextFragment.DEFINITION_LABEL_TYPE) {
+		if(list.getType() == TextNode.LIST_ITEM_TYPE ||
+		   list.getType() == TextNode.DEFINITION_ITEM_TYPE ||
+		   list.getType() == TextNode.DEFINITION_LABEL_TYPE) {
 			closePreviousFragment();
 			list = getCurrentFragment();
 		}
 
-		if(list.getType() != TextFragment.LIST_TYPE) {
+		if(list.getType() != TextNode.LIST_TYPE) {
 			System.out.println("ERROR: must be list");
 		}
 
 		System.out.println("New list item " + getSourceLocation());
-		item = new TextFragment(type);
+		item = new TextNode(type);
 		list.appendChild(item);
 		parentList.add(item);
 	}
 
 	private void createParagraph() {
-		TextFragment paragraphNode;
+		TextNode paragraphNode;
 		System.out.println("New paragraph" + getSourceLocation());
 
-		paragraphNode = new TextFragment(TextFragment.PARAGRAPH_TYPE);
+		paragraphNode = new TextNode(TextNode.PARAGRAPH_TYPE);
 		getRoot().appendChild(paragraphNode);
 		itemListTruncate(1);
 		parentList.add(paragraphNode);
@@ -899,10 +678,10 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void handleMarkup(MarkupStart markup, MarkupStart previousMarkup) {
-		/* append the text content to previous TextFragment */
+		/* append the text content to previous TextNode */
 		createTextNode(markup, previousMarkup);
 
-		/* create TextFragment for the markup */
+		/* create TextNode for the markup */
 		switch(markup.symbol.character) {
 		case '\'':
 			handleTextStyleMarkup(markup);
@@ -940,7 +719,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void createTextNode(MarkupStart markup, MarkupStart previousMarkup) {
-		TextFragment fragment, parent;
+		TextNode node, parent;
 		int startIndex, endIndex;
 
 		/* check if the text is between last markup and line ending */
@@ -989,11 +768,11 @@ public class WikiMarkup extends Parser {
 
 		/* create the node for text content */
 		parent = getCurrentFragment();
-		fragment = new TextFragment(TextFragment.PLAIN_TYPE);
-		fragment.setContent(lineBuffer.substring(startIndex, endIndex));
+		node = new TextNode(TextNode.PLAIN_TYPE);
+		node.setContent(lineBuffer.substring(startIndex, endIndex));
 
 		/* append the text node into the parent */
-		getCurrentFragment().appendChild(fragment);
+		getCurrentFragment().appendChild(node);
 	}
 
 	/**
@@ -1015,12 +794,12 @@ public class WikiMarkup extends Parser {
 		System.out.println("Header parsed " + i + ".");
 	}
 
-	private void appendInlineTextFragment(int type) {
-		TextFragment fragment;
+	private void appendInlineTextNode(int type) {
+		TextNode node;
 
-		fragment = new TextFragment(type);
-		getCurrentFragment().appendChild(fragment);
-		parentList.add(fragment);
+		node = new TextNode(type);
+		getCurrentFragment().appendChild(node);
+		parentList.add(node);
 	}
 
 	private void createMarkupStart(MarkupStart start, MarkupStart end) {
@@ -1069,7 +848,7 @@ public class WikiMarkup extends Parser {
 	}
 
 	/**
-	 * Generate TextFragment for the text style markup.
+	 * Generate TextNode for the text style markup.
 	 */
 	private void handleTextStyleMarkup(MarkupStart markup) {
 		int quotes = markup.count;
@@ -1077,22 +856,22 @@ public class WikiMarkup extends Parser {
 		/* return if this end markup */
 		if(markup.type == MarkupStart.MarkupType.END) {
 			System.out.println("End text style node");
-			TextFragment current = getCurrentFragment();
-			if(current.getType() == TextFragment.PLAIN_TYPE) {
+			TextNode current = getCurrentFragment();
+			if(current.getType() == TextNode.PLAIN_TYPE) {
 				current = current.getParent();
 			}
 			if(quotes == 2) {
-				if(current.getType() == TextFragment.EM_TYPE) {
+				if(current.getType() == TextNode.EM_TYPE) {
 					closePreviousFragment();
 				}
 			} else if(quotes == 3) {
-				if(current.getType() == TextFragment.STRONG_TYPE) {
+				if(current.getType() == TextNode.STRONG_TYPE) {
 					closePreviousFragment();
 				}
 			} else if(quotes == 5) {
-				if(current.getType() == TextFragment.STRONG_TYPE) {
+				if(current.getType() == TextNode.STRONG_TYPE) {
 					current = current.getParent();
-					if(current.getType() == TextFragment.EM_TYPE) {
+					if(current.getType() == TextNode.EM_TYPE) {
 						closePreviousFragment();
 						closePreviousFragment();
 					}
@@ -1101,20 +880,20 @@ public class WikiMarkup extends Parser {
 			return;
 		}
 
-		/* put the quoted text into inline text fragment */
+		/* put the quoted text into inline text node */
 		if(quotes == 2) {
-			appendInlineTextFragment(TextFragment.EM_TYPE);
+			appendInlineTextNode(TextNode.EM_TYPE);
 		} else if(quotes == 3) {
-			appendInlineTextFragment(TextFragment.STRONG_TYPE);
+			appendInlineTextNode(TextNode.STRONG_TYPE);
 		} else if(quotes == 5) {
-			TextFragment parent, node;
+			TextNode parent, node;
 
 			parent = getCurrentFragment();
-			node = new TextFragment(TextFragment.EM_TYPE);
+			node = new TextNode(TextNode.EM_TYPE);
 			parent.appendChild(node);
 			parentList.add(node);
 
-			appendInlineTextFragment(TextFragment.STRONG_TYPE);
+			appendInlineTextNode(TextNode.STRONG_TYPE);
 		}
 	}
 
@@ -1145,12 +924,12 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void createLinkNode(MarkupStart start) {
-		appendInlineTextFragment(TextFragment.LINK_TYPE);
+		appendInlineTextNode(TextNode.LINK_TYPE);
 	}
 
 	private void endLinkNode(MarkupStart end) {
-		TextFragment current = getCurrentFragment();
-		while(current.getType() != TextFragment.LINK_TYPE) {
+		TextNode current = getCurrentFragment();
+		while(current.getType() != TextNode.LINK_TYPE) {
 			current = current.getParent();
 		}
 		closePreviousFragment();
@@ -1207,12 +986,12 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void createTemplateNode(MarkupStart start) {
-		appendInlineTextFragment(TextFragment.TEMPLATE_TYPE);
+		appendInlineTextNode(TextNode.TEMPLATE_TYPE);
 	}
 
 	private void endTemplateNode(MarkupStart end) {
-		TextFragment current = getCurrentFragment();
-		while(current.getType() != TextFragment.TEMPLATE_TYPE) {
+		TextNode current = getCurrentFragment();
+		while(current.getType() != TextNode.TEMPLATE_TYPE) {
 			current = current.getParent();
 		}
 		closePreviousFragment();

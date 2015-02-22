@@ -23,7 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+import org.quicktionary.backend.TextNode;
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.WordEntry;
 import org.quicktionary.gui.theme.HeaderButton;
@@ -145,44 +145,44 @@ public class MainWindow extends JFrame implements ActionListener {
 		return headerBar;
 	}
 
-	private TextFragment generateStartPage() {
-		TextFragment root, paragraph, header, link, text;
+	private TextNode generateStartPage() {
+		TextNode root, paragraph, header, link, text;
 
-		root = new TextFragment(TextFragment.ROOT_TYPE);
-		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
-		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
+		root = new TextNode(TextNode.ROOT_TYPE);
+		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));
+		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
 		header.setContent("Welcome!");
 
-		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
 		text.setContent("Read database and write something to the search box.");
 
-		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
+		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
-		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
 		text.setContent("Go to Settings > Read database and select the enwiktionarycat.xml " +
 			"from the root folder of the repository. You can open the readed page about ");
 
-		link = paragraph.appendChild(new TextFragment(TextFragment.LINK_TYPE));
-		text = link.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		link = paragraph.appendChild(new TextNode(TextNode.LINK_TYPE));
+		text = link.appendChild(new TextNode(TextNode.PLAIN_TYPE));
 		text.setContent("cat");
 
-		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
 		text.setContent(" or you can search it.");
 
 		return root;
 	}
 
-	private TextFragment generateNotFound(String string) {
-		TextFragment root, paragraph, header, link, text;
+	private TextNode generateNotFound(String string) {
+		TextNode root, paragraph, header, link, text;
 
-		root = new TextFragment(TextFragment.ROOT_TYPE);
-		header = root.appendChild(new TextFragment(TextFragment.HEADER_TYPE));
-		paragraph = root.appendChild(new TextFragment(TextFragment.PARAGRAPH_TYPE));
+		root = new TextNode(TextNode.ROOT_TYPE);
+		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));
+		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
 		header.setContent("Sorry!");
 
-		text = paragraph.appendChild(new TextFragment(TextFragment.PLAIN_TYPE));
+		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
 		text.setContent("We couldn't find the page for the word " + string +".");
 
 		return root;

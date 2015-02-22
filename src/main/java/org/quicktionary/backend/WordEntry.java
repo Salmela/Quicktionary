@@ -16,7 +16,7 @@
  */
 package org.quicktionary.backend;
 
-import static org.quicktionary.backend.parsers.WikiMarkup.TextFragment;
+import org.quicktionary.backend.TextNode;
 import org.quicktionary.backend.database.WordEntryIO;
 
 /**
@@ -24,10 +24,10 @@ import org.quicktionary.backend.database.WordEntryIO;
  */
 public class WordEntry {
 	private String word, source;
-	private TextFragment content;
+	private TextNode content;
 	private WordEntryIO io;
 
-	public WordEntry(String word, String source, TextFragment content) {
+	public WordEntry(String word, String source, TextNode content) {
 		this.word = word;
 		this.source = source;
 		this.content = content;
@@ -41,7 +41,7 @@ public class WordEntry {
 		this.source = source;
 	}
 
-	public void setContent(TextFragment content) {
+	public void setContent(TextNode content) {
 		this.content = content;
 	}
 
@@ -49,7 +49,7 @@ public class WordEntry {
 		return word;
 	}
 
-	public TextFragment getContent() {
+	public TextNode getContent() {
 		return content;
 	}
 
