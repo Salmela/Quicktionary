@@ -90,7 +90,15 @@ public class WikiMarkup extends Parser {
 	}
 
 	private void printDebug(String str) {
-		//System.out.println(str);
+		printDebug(str, true);
+	}
+
+	private void printDebug(String str, boolean newline) {
+		//if(newline) {
+		//	System.out.println(str);
+		//} else {
+		//	System.out.print(str);
+		//}
 	}
 
 	/**
@@ -169,7 +177,7 @@ public class WikiMarkup extends Parser {
 		/* end all open nodes */
 		itemListTruncate(1);
 
-		parentList.get(0).print(2);
+		//parentList.get(0).print(2);
 		return true;
 	}
 
@@ -208,7 +216,7 @@ public class WikiMarkup extends Parser {
 
 			markupStart = lineMarkup.get(i);
 			if(markupStart.type == MarkupStart.MarkupType.START) {
-				System.out.print("START ");
+				printDebug("START ", false);
 			}
 
 			printDebug("PROCESS markupStart " + markupStart.sourceLocation +

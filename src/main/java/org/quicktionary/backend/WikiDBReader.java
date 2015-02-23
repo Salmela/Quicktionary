@@ -82,7 +82,6 @@ public class WikiDBReader implements Runnable {
 		TextNode node;
 		WordEntry entry;
 
-		System.out.println(text);
 		try {
 			wikiParser.parse(new StringReader(text));
 		} catch(IOException exception) {
