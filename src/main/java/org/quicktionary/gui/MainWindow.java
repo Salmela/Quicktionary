@@ -215,6 +215,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		/* create components for the main view */
 		mainPane = new JScrollPane();
+		mainPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		searchResults = new SearchResults(this);
 
 		pageArea = new PageArea(app);
