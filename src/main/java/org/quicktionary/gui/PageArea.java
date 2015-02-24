@@ -31,6 +31,8 @@ import javax.swing.text.html.StyleSheet;
 import org.quicktionary.backend.TextNode;
 import org.quicktionary.backend.WordEntry;
 
+import org.quicktionary.backend.Configs;
+
 public class PageArea extends JPanel {
 	public static final String PAGE_CHANGE_EVENT = "page-change-event";
 	private Application app;
@@ -41,7 +43,7 @@ public class PageArea extends JPanel {
 		super(new BorderLayout());
 		this.app = app;
 
-		if(Main.useHTML) {
+		if((Boolean)Configs.getOptionBoolean("gui.useHTML")) {
 			HTMLEditorKit htmlEditor = new HTMLEditorKit();
 			pane = new JEditorPane();
 			pane.setEditorKit(htmlEditor);
@@ -89,7 +91,7 @@ public class PageArea extends JPanel {
 	public void setPage(TextNode root) {
 		String source;
 
-		if(Main.useHTML) {
+		if(Configs.getOptionBoolean("gui.useHTML")) {
 			source = generateHTML(root);
 			pane.setText(source);
 		} else {

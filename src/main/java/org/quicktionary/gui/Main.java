@@ -26,19 +26,9 @@ import java.util.Map;
  * The Main class parses the command line arguments and starts the application.
  */
 public class Main {
-	public static boolean useNativeFileDialog;
-	public static boolean useHTML;
-	public static String databasePath;
-	public static String themeName;
-
 	public static void init(Map<String, Object> options) {
-		useNativeFileDialog = false;
-		databasePath = null;
-		themeName = null;
-		useHTML = true;
-
 		options.put("gui.useNativeFileDialog", new Boolean(false));
-		options.put("gui.themeName", null);
+		options.put("gui.themeName", "native");
 		options.put("gui.useHTML", new Boolean(true));
 	}
 
@@ -55,17 +45,14 @@ public class Main {
 			String option = args[i];
 			if(option.equals("--native-file-chooser") ||
 			   option.equals("-n")) {
-				useNativeFileDialog = true;
 				options.put("gui.useNativeFileDialog", new Boolean(true));
 
 			} else if(option.equals("--theme") ||
 			          option.equals("-t")) {
-				themeName = args[++i];
-				options.put("gui.themeName", themeName);
+				options.put("gui.themeName", args[++i]);
 
 			} else if(option.equals("--no-html") ||
 			          option.equals("-h")) {
-				useHTML = false;
 				options.put("gui.useHTML", new Boolean(false));
 
 			} else if(option.equals("--help") ||
@@ -73,8 +60,7 @@ public class Main {
 				System.out.println("TODO!");
 
 			} else if(option.charAt(0) != '-') {
-				databasePath = args[++i];
-				options.put("databasePath", databasePath);
+				options.put("databasePath", args[++i]);
 			}
 		}
 	}

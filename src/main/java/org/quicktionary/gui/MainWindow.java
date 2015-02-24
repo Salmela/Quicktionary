@@ -29,6 +29,8 @@ import org.quicktionary.backend.WordEntry;
 import org.quicktionary.gui.theme.HeaderButton;
 import org.quicktionary.gui.theme.StyleManager;
 
+import org.quicktionary.backend.Configs;
+
 /**
  * The MainWindow initializes the window components
  * and updates them as neaded.
@@ -56,6 +58,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	private JButton backButton, nextButton;
 
 	public MainWindow(Application app) {
+		String themeName;
+
 		this.app = app;
 
 		appTitle = "Quicktionary";
@@ -66,8 +70,12 @@ public class MainWindow extends JFrame implements ActionListener {
 		setSize(600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+		/* setup the theming */
 		styleManager = new StyleManager();
-		styleManager.changeStyle(Main.themeName);
+		themeName = Configs.getOptionString("gui.themeName");
+		if(!themeName.equals("native")) {
+			styleManager.changeStyle(themeName);
+		}
 
 		makeComponents();
 		updateHistoryButtons("next", null);

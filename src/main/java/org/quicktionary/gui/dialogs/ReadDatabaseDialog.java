@@ -34,7 +34,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.quicktionary.gui.Main;
+import org.quicktionary.backend.Configs;
 
 /**
  * This dialog asks the filename of the wiki database dump.
@@ -123,7 +123,7 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	public void openFileChooser() {
 		String titleStr = "Select the database file";
 
-		if(Main.useNativeFileDialog) {
+		if(Configs.getOptionBoolean("useNativeFileDialog")) {
 			FileDialog dialog;
 
 			dialog = new FileDialog(this, titleStr, FileDialog.LOAD);

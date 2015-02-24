@@ -36,6 +36,8 @@ import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.backend.SearchItem;
 import org.quicktionary.backend.WordEntry;
 
+import org.quicktionary.backend.Configs;
+
 /**
  * It seems that the JList UI doesn't update the setVisibileRowCount in Classpath runtime.
  * setVisibleRowCount(getPreferredSize().height / size.height);
@@ -251,7 +253,7 @@ public class SearchResults extends JList {
 
 			item = (SearchItem)object;
 			/* ugly way to format the search items */
-			if(Main.useHTML) {
+			if(Configs.getOptionBoolean("gui.useHTML")) {
 				setText("<html><body><font size='+1'><b>" + item.getWord() + "</b></font>" +
 				        "<br>" + item.getDescription() + "</body></html>");
 			} else {
