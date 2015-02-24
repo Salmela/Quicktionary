@@ -16,9 +16,11 @@
  */
 package org.quicktionary.gui;
 
-import java.io.IOException;
 import java.lang.Runtime;
 import org.quicktionary.backend.Quicktionary;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Main class parses the command line arguments and starts the application.
@@ -29,11 +31,15 @@ public class Main {
 	public static String databasePath;
 	public static String themeName;
 
-	public static void init() {
+	public static void init(Map<String, Object> options) {
 		useNativeFileDialog = false;
 		databasePath = null;
 		themeName = null;
 		useHTML = true;
+
+		options.put("gui.useNativeFileDialog", new Boolean(false));
+		options.put("gui.themeName", null);
+		options.put("gui.useHTML", new Boolean(true));
 	}
 
 	/**
@@ -42,7 +48,7 @@ public class Main {
 	 * the arguments, then only the last one is used.
 	 * @param args the command line arguments
 	 */
-	public static void parseCommandlineArgs(String[] args) {
+	public static void parseCommandlineArgs(Map<String, Object> options, String[] args) {
 		int i;
 
 		for(i = 0; i < args.length; i++) {
@@ -50,14 +56,17 @@ public class Main {
 			if(option.equals("--native-file-chooser") ||
 			   option.equals("-n")) {
 				useNativeFileDialog = true;
+				options.put("gui.useNativeFileDialog", new Boolean(true));
 
 			} else if(option.equals("--theme") ||
 			          option.equals("-t")) {
 				themeName = args[++i];
+				options.put("gui.themeName", themeName);
 
 			} else if(option.equals("--no-html") ||
 			          option.equals("-h")) {
 				useHTML = false;
+				options.put("gui.useHTML", new Boolean(false));
 
 			} else if(option.equals("--help") ||
 			          option.equals("-h")) {
@@ -65,6 +74,7 @@ public class Main {
 
 			} else if(option.charAt(0) != '-') {
 				databasePath = args[++i];
+				options.put("databasePath", databasePath);
 			}
 		}
 	}
@@ -81,8 +91,8 @@ public class Main {
 		//Test test = new Test();
 
 		options = new HashMap<String, Object>();
-		Main.init();
-		Main.parseCommandlineArgs(args);
+		Main.init(options);
+		Main.parseCommandlineArgs(options, args);
 
 		quicktionary = new Quicktionary(options);
 		application = new Application(quicktionary);
