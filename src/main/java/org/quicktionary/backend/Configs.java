@@ -17,16 +17,23 @@
 package org.quicktionary.backend;
 
 import java.util.Scanner;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.HashMap;
 import java.util.AbstractMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * The config system that stores settings/options. The class
+ * can also write the options to file and read the options from a file.
+ */
 public class Configs {
 	private static HashMap<String, Object> options;
 	private File configFile;
@@ -35,10 +42,21 @@ public class Configs {
 		options = new HashMap<String, Object>();
 	}
 
+	/**
+	 * Set the value of a option. This will overwrite
+	 * the previous value.
+	 * @param key The name of the option
+	 * @param value The new value of the option
+	 */
 	protected void setOption(String key, Object value) {
 		options.put(key, value);
 	}
 
+	/**
+	 * Get the value of a option as Object type.
+	 * @param key The name of the option
+	 * @return Object of the option
+	 */
 	public static Object getOption(String key) {
 		Object obj = options.get(key);
 
@@ -48,6 +66,11 @@ public class Configs {
 		return obj;
 	}
 
+	/**
+	 * Get the value of a boolean option.
+	 * @param key The name of the option
+	 * @return Value of the option
+	 */
 	public static boolean getOptionBoolean(String key) {
 		Boolean bool = (Boolean)getOption(key);
 		if(!(bool instanceof Boolean)) {
@@ -56,6 +79,11 @@ public class Configs {
 		return bool.booleanValue();
 	}
 
+	/**
+	 * Get the value of a string option.
+	 * @param key The name of the option
+	 * @return Value of the option
+	 */
 	public static String getOptionString(String key) {
 		String str = (String)getOption(key);
 		if(!(str instanceof String)) {
@@ -64,6 +92,11 @@ public class Configs {
 		return str;
 	}
 
+	/**
+	 * Get the value of a integer option.
+	 * @param key The name of the option
+	 * @return Value of the option
+	 */
 	public static int getOptionInt(String key) {
 		Integer num = (Integer)getOption(key);
 		if(!(num instanceof Integer)) {
@@ -75,6 +108,7 @@ public class Configs {
 	/**
 	 * Parse the config file.
 	 * If the line starts with # then it is a comment.
+	 * @param file The config file
 	 */
 	protected void parseConfigFile(File file) {
 		Scanner scanner;
@@ -83,27 +117,33 @@ public class Configs {
 		try {
 			scanner = new Scanner(file);
 		} catch(FileNotFoundException e) {
-			writeConfigFile();
+			writeConfigFile(true);
 			return;
 		}
 
 		while(scanner.hasNextLine()) {
-			Map.Entry<String, Object> entry;
+			Map.Entry<String, Object> option;
 
-			entry = parseLine(scanner.nextLine());
-			if(entry == null) {
+			option = parseLine(scanner.nextLine());
+			if(option == null) {
 				continue;
 			}
-			options.put(entry.getKey(), entry.getValue());
+			options.put(option.getKey(), option.getValue());
 		}
 	}
 
 	/**
 	 * Parse single line of the config file.
+	 * @param line A line from config file
+	 * @return The option as key-value pair
 	 */
 	private Map.Entry<String, Object> parseLine(String line) {
 		String name, value;
 		int i;
+
+		if(line.length() == 0) {
+			return null;
+		}
 
 		/* ignore comment lines */
 		if(line.charAt(0) == '#') {
@@ -136,6 +176,8 @@ public class Configs {
 
 	/**
 	 * Parse the value of a property.
+	 * @param value The value from the file
+	 * @return Object for the value
 	 */
 	private Object parseValue(String value) {
 		/* try to parse the value as boolean */
@@ -143,6 +185,8 @@ public class Configs {
 			return new Boolean(true);
 		} else if(value.startsWith("false")) {
 			return new Boolean(false);
+		} else if(value.startsWith("null")) {
+			return null;
 		}
 
 		/* try to parse the value as string */
@@ -172,20 +216,14 @@ public class Configs {
 	 * writing the config file at the same time.
 	 */
 	public void writeConfigFile() {
-		FileOutputStream outStream;
+		writeConfigFile(false);
+	}
+	public void writeConfigFile(boolean created) {
 		Scanner scanner;
 		String text;
 		byte[] data;
 
-		try {
-			/* read the current state of the config file */
-			FileInputStream inStream = new FileInputStream(configFile);
-			data = new byte[(int)configFile.length()];
-			inStream.read(data);
-			inStream.close();
-
-			text = new String(data, "UTF-8");
-		} catch(Exception exception) {
+		if(!configFile.exists()) {
 			text = "";
 			/* create the file if the reading of the file fails */
 			try {
@@ -194,28 +232,116 @@ public class Configs {
 				/* failed to create new file */
 				return;
 			}
+		} else {
+			try {
+				/* read the current state of the config file */
+				FileInputStream inStream = new FileInputStream(configFile);
+				data = new byte[(int)configFile.length()];
+				inStream.read(data);
+				inStream.close();
+
+				text = new String(data, "UTF-8");
+			} catch(Exception exception) {
+				return;
+			}
 		}
 		scanner = new Scanner(text);
+		try {
+			overwriteConfigFile(scanner, created, null);
+		} catch(IOException exception) {
+		}
+	}
+
+	/**
+	 * Overwrite the config file after the writeConfigFile readed it.
+	 * @param scanner The line of the old file
+	 * @throws IOException
+	 */
+	private void overwriteConfigFile(Scanner scanner, boolean created, Set<String> mask) throws IOException {
+		FileOutputStream outStream;
+		OutputStreamWriter printer;
+		Set<String> writtenOptions = new HashSet<String>();
 
 		/* open the config file again, but now open if for writing */
-		try {
-			outStream = new FileOutputStream(configFile, false);
-		} catch(FileNotFoundException exception) {
-			return;
+		outStream = new FileOutputStream(configFile, false);
+		printer = new OutputStreamWriter(outStream, "UTF-8");
+
+		if(created) {
+			printer.write("# This file was generated automatically by Quicktionary\n\n");
 		}
 
 		/* write the new config file line by line */
 		while(scanner.hasNextLine()) {
-			Map.Entry<String, Object> entry;
+			Map.Entry<String, Object> option;
+			String line = scanner.nextLine();
 
-			entry = parseLine(scanner.nextLine());
+			/* parse line from the old config file */
+			option = parseLine(line);
 
-			/* write the line */
-			/*TODO*/
+			/* write the line as is if it doesn't contain option */
+			if(option == null) {
+				printer.write(line + "\n");
+				continue;
+			}
+
+			/* remove duplicates options */
+			if(writtenOptions.contains(option.getKey())) {
+				continue;
+			}
+
+			writtenOptions.add(option.getKey());
+
+			/* ignore every other line expect the masked options */
+			if(mask != null && !mask.contains(option.getKey())) {
+				printer.write(line + "\n");
+				continue;
+			}
+
+			/* write the unrecognised options as is back to the file */
+			if(!options.containsKey(option.getKey())) {
+				printer.write(line + "\n");
+				continue;
+			}
+
+			Object valueObj = options.get(option.getKey());
+			printer.write(option.getKey());
+			printer.write(" ");
+			printer.write(valueToString(valueObj));
+			printer.write("\n");
 		}
-		try {
-			outStream.close();
-		} catch(IOException exception) {
+
+		/* go through rest of the options that aren't written yet */
+		for(Map.Entry<String, Object> option : options.entrySet()) {
+			if(writtenOptions.contains(option.getKey())) {
+				continue;
+			}
+
+			printer.write(option.getKey());
+			printer.write(" ");
+			printer.write(valueToString(option.getValue()));
+			printer.write("\n");
 		}
+
+		printer.flush();
+		outStream.close();
+	}
+
+	/**
+	 * Create a string for option value.
+	 * @param obj The value of the option
+	 * @return The value as string
+	 */
+	private String valueToString(Object obj) {
+		if(obj instanceof Boolean) {
+			boolean b = ((Boolean)obj).booleanValue();
+			return b ? "true" : "false";
+		} else if(obj instanceof Integer) {
+			Integer i = (Integer)obj;
+			return i.toString();
+		} else if(obj instanceof String) {
+			String str = (String)obj;
+			return "\"" + str + "\"";
+		}
+		throw new Error("Unknown type for option");
 	}
 }
