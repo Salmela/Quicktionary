@@ -76,13 +76,15 @@ public class Main {
 	public static void main(String[] args) {
 		Quicktionary quicktionary;
 		Application application;
+		Map<String, Object> options;
 
 		//Test test = new Test();
 
+		options = new HashMap<String, Object>();
 		Main.init();
 		Main.parseCommandlineArgs(args);
 
-		quicktionary = new Quicktionary();
+		quicktionary = new Quicktionary(options);
 		application = new Application(quicktionary);
 
 		/* write the changes to the database at exit */

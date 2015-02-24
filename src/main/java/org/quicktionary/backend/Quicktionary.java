@@ -18,6 +18,9 @@ package org.quicktionary.backend;
 
 import org.quicktionary.backend.database.WordDatabase;
 
+import java.io.File;
+import java.util.Map;
+
 /**
  * The backend class for the Quicktionary.
  */
@@ -25,14 +28,41 @@ public class Quicktionary {
 	private WordDatabase database;
 	private Searcher     searcher;
 	private History      history;
+	private Configs      configs;
 
-	public Quicktionary() {
+	public Quicktionary(Map<String, Object> map) {
+		handleConfig(map);
 		database = new WordDatabase();
 		searcher = new Searcher(database);
 		history = new History();
 
 		//searchThread = new Thread(searcher);
 		//searchThread.start();
+	}
+
+	/**
+	 * Set the default configs, read the config and
+	 * overwrite the commandline.
+	 */
+	private void handleConfig(Map<String, Object> map) {
+		String separator;
+
+		separator = File.separator;
+		configs = new Configs();
+
+		/* set default */
+		configs.setOption("appFolder", System.getProperty("user.home") + separator + ".quicktionary");
+		configs.setOption("database", Configs.getOption("appFolder") + separator + "datastore.db");
+
+		/* create the app directory if it doesn't already exist */
+		new File((String)Configs.getOption("appFolder")).mkdirs();
+
+		/* parse the config file */
+		configs.parseConfigFile(new File(Configs.getOption("appFolder") + separator + "config"));
+
+		for(Map.Entry<String, Object> entry : map.entrySet()) {
+			configs.setOption(entry.getKey(), entry.getValue());
+		}
 	}
 
 	/**
