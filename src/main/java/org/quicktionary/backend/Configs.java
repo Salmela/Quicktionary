@@ -40,7 +40,36 @@ public class Configs {
 	}
 
 	public static Object getOption(String key) {
-		return options.get(key);
+		Object obj = options.get(key);
+
+		if(obj == null) {
+			throw new Error("Option \"" + key + "\" is not defined");
+		}
+		return obj;
+	}
+
+	public static boolean getOptionBoolean(String key) {
+		Boolean bool = (Boolean)getOption(key);
+		if(!(bool instanceof Boolean)) {
+			throw new Error("Option is not boolean");
+		}
+		return bool.booleanValue();
+	}
+
+	public static String getOptionString(String key) {
+		String str = (String)getOption(key);
+		if(!(str instanceof String)) {
+			throw new Error("Option is not string");
+		}
+		return str;
+	}
+
+	public static int getOptionInt(String key) {
+		Integer num = (Integer)getOption(key);
+		if(!(num instanceof Integer)) {
+			throw new Error("Option is not integer");
+		}
+		return num.intValue();
 	}
 
 	/**
