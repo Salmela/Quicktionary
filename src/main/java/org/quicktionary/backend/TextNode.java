@@ -21,8 +21,6 @@ import java.util.ArrayList;
 /**
  * Node in document tree. The node has type
  * and children or text content.
- *
- * TODO: Rename to TextNode and move to own file.
  */
 public class TextNode {
 	private TextNode parent;
@@ -64,11 +62,15 @@ public class TextNode {
 	}
 
 	/*TODO: rename to setTextContent */
-	public void setContent(String content) {
+	public void setContent(String textContent) {
+		System.out.println("The setContent method is deprecated.");
+		setTextContent(textContent);
+	}
+	public void setTextContent(String textContent) {
 		if(childs.size() != 0) {
 			throw new Error("TextNode must have only child nodes or text content.");
 		}
-		this.content = content;
+		this.content = textContent;
 	}
 
 	/**
@@ -233,6 +235,7 @@ public class TextNode {
 	}
 
 	public String getContent() {
+		System.out.println("The getContent method is deprecated");
 		return content;
 	}
 
