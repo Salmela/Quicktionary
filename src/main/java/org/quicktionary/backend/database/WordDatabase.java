@@ -96,7 +96,7 @@ public class WordDatabase {
 	 * @param wordEntry The entry that we want to be filled.
 	 */
 	public void fetchPage(WordEntry wordEntry) {
-		if(wordEntry.isLoaded()) {
+		if(!wordEntry.isLoaded()) {
 			io.fetchWordEntry(wordEntry.getIO());
 		}
 	}
