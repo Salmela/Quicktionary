@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 
 import org.quicktionary.backend.WordEntry;
+import org.quicktionary.backend.TextNode;
 
 public class WordEntryIO {
 	protected long address;
@@ -50,9 +51,11 @@ public class WordEntryIO {
 	protected void setData(byte[] buffer) {
 		DataInputStream input;
 		String word, source;
+		TextNode root;
 		int length;
 
 		word = source = null;
+		root = null;
 
 		try {
 			input = new DataInputStream(new ByteArrayInputStream(buffer));
@@ -64,11 +67,16 @@ public class WordEntryIO {
 			length = input.readInt();
 			buffer = new byte[length];
 			source = new String(buffer, "UTF-8");
+
+			length = input.readInt();
+			buffer = new byte[length];
+			root = TextNodeIO.decodeData(buffer);
+
 		} catch(UnsupportedEncodingException exception) {
 		} catch(IOException exception) {
 		}
 
-		this.data = new WordEntry(word, source, null);
+		this.data = new WordEntry(word, source, root);
 	}
 
 	protected byte[] getData() {
@@ -96,6 +104,10 @@ public class WordEntryIO {
 			} else {
 				output.writeInt(0);
 			}
+
+			byte[] buf = TextNodeIO.encodeData(data.getContent());
+			output.writeInt(buf.length);
+			output.write(buf);
 
 			return stream.toByteArray();
 		} catch(UnsupportedEncodingException exception) {
