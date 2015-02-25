@@ -45,7 +45,6 @@ import org.quicktionary.backend.Configs;
 public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
 	static final String REQUEST_SEARCH_RESULTS_EVENT = "request-search-results-event";
-	static final String PAGE_LOAD_EVENT = "page-load-event";
 
 	private SearchResultRenderer renderer;
 	private SearchResultModel    model;
@@ -111,42 +110,22 @@ public class SearchResults extends JList {
 	}
 
 	/**
-	 *
+	 * Open the page of the search item when user clicks it.
 	 */
-	public class mouseHandler extends MouseAdapter {
+	private class mouseHandler extends MouseAdapter {
 		public void mouseClicked(MouseEvent event) {
-			if (event.getClickCount() == 2) {
-				PageLoadEvent emittedEvent;
-				int i = getSelectedIndex();
+			if (event.getClickCount() != 2) {
+				return;
+			}
+			int i = getSelectedIndex();
+			SearchItem item = model.getSearchItemAt(i);
 
-				System.out.println("double click");
-				emittedEvent = new PageLoadEvent(this, (SearchItem)model.getElementAt(i));
+			if(item != null) {
+				PageLoadEvent emittedEvent;
+
+				emittedEvent = new PageLoadEvent(this, item.getWordEntry());
 				listener.actionPerformed(emittedEvent);
 			}
-		}
-	}
-
-	public class PageLoadEvent extends ActionEvent {
-		final static long serialVersionUID = 1L;
-		private String searchQuery;
-		private SearchItem searchItem;
-
-		public PageLoadEvent(Object source, SearchItem item) {
-			super(source, ActionEvent.ACTION_PERFORMED, PAGE_LOAD_EVENT);
-			this.searchItem = item;
-			this.searchQuery = null;
-		}
-
-		public SearchItem getSearchItem() {
-			return searchItem;
-		}
-
-		public void setSearchQuery(String query) {
-			searchQuery = query;
-		}
-
-		public String getSearchQuery() {
-			return searchQuery;
 		}
 	}
 

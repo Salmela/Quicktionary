@@ -328,17 +328,14 @@ public class MainWindow extends JFrame implements ActionListener {
 		if(event.getActionCommand() == SearchBox.SEARCH_EVENT ||
 		   event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
 			SearchBox.SearchEvent e = (SearchBox.SearchEvent)event;
+
 			e.setSearchResultCount(searchResults.getVisibleRowCount());
 			changeToSearchResultView();
 			app.actionPerformed(event);
 
-		/* do nothing special for page load requests */
-		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
-			app.actionPerformed(event);
-
-		/* do nothing special for search result requests */
-		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
-			app.actionPerformed(event);
+			return;
 		}
+		/* do nothing special for the rest of the events */
+		app.actionPerformed(event);
 	}
 }

@@ -67,7 +67,7 @@ public class Application implements ActionListener {
 			handleSearchRequest(event);
 		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
 			handleLoadFirstResultRequest(event);
-		} else if(event.getActionCommand() == SearchResults.PAGE_LOAD_EVENT) {
+		} else if(event.getActionCommand() == PageLoadEvent.PAGE_LOAD_EVENT) {
 			handlePageLoadRequest(event);
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
 			handleSearchResultRequest(event);
@@ -118,12 +118,12 @@ public class Application implements ActionListener {
 	}
 
 	private void handlePageLoadRequest(ActionEvent event) {
-		SearchResults.PageLoadEvent pageEvent;
+		PageLoadEvent pageEvent;
 		WordEntry page;
 		String pageTitle;
 
-		pageEvent = (SearchResults.PageLoadEvent)event;
-		page = dictionary.getPageContent(pageEvent.getSearchItem());
+		pageEvent = (PageLoadEvent)event;
+		page = dictionary.getPageContent(pageEvent.getWordEntry());
 		pageTitle = capitalizeWord(page.getWord());
 
 		mainWindow.openPage(pageTitle, page);
@@ -137,15 +137,6 @@ public class Application implements ActionListener {
 	}
 
 	private void handlePageChange(ActionEvent event) {
-		PageArea.PageChangeEvent pageEvent;
-		WordEntry page;
-		String pageTitle;
-
-		pageEvent = (PageArea.PageChangeEvent)event;
-		page = dictionary.getPageContent(pageEvent.getWord());
-		pageTitle = capitalizeWord(page.getWord());
-
-		mainWindow.openPage(pageTitle, page);
 	}
 
 	private void handleReadDatabaseRequest(ActionEvent event) {
