@@ -25,6 +25,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.AbstractListModel;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -39,8 +40,7 @@ import org.quicktionary.backend.WordEntry;
 import org.quicktionary.backend.Configs;
 
 /**
- * It seems that the JList UI doesn't update the setVisibileRowCount in Classpath runtime.
- * setVisibleRowCount(getPreferredSize().height / size.height);
+ * This component shows the search results after user typed into search box.
  */
 public class SearchResults extends JList {
 	static final long serialVersionUID = 1L;
@@ -154,11 +154,13 @@ public class SearchResults extends JList {
 		private final SearchItem loadingItem;
 		private ArrayList<SearchItem> results;
 		private boolean isLoading;
+		private int oldLength;
 
 		public SearchResultModel() {
 			loadingItem = new SearchItem("Loading...", "", null);
 			results = new ArrayList<SearchItem>();
 			isLoading = true;
+			oldLength = 0;
 		}
 
 		public Object getElementAt(int index) {
@@ -189,21 +191,39 @@ public class SearchResults extends JList {
 		 * The Searcher object inserts the search results with this method.
 		 */
 		public void appendSearchResult(SearchItem item) {
-			int index;
-
 			if(item == null) {
 				isLoading = false;
-				fireIntervalRemoved(this, results.size(), results.size());
 				return;
 			}
 
 			results.add(item);
-			index = results.size() - 1;
-			fireIntervalAdded(this, index, index);
+		}
+
+		public void showResults() {
+			SwingUtilities.invokeLater(new DataListenerNotifier());
+		}
+		private void updateResults() {
+			int lastIndex;
+			if(isLoading) {
+				lastIndex = results.size();
+			} else {
+				lastIndex = results.size() - 1;
+			}
+			fireContentsChanged(this, oldLength, oldLength);
+			fireIntervalAdded(this, oldLength, results.size() - 1);
+			oldLength = results.size();
+			///* remove the 'loading...' item at the end */
+			//fireIntervalRemoved(this, results.size(), results.size());
+		}
+		private class DataListenerNotifier implements Runnable {
+			public void run() {
+				updateResults();
+			}
 		}
 
 		public void resetSearchResults() {
 			isLoading = true;
+			oldLength = 0;
 			results.clear();
 			fireIntervalRemoved(this, 0, results.size());
 		}

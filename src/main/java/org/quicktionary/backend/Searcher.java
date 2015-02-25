@@ -18,6 +18,9 @@ package org.quicktionary.backend;
 
 import org.quicktionary.backend.database.WordDatabase;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * The Searcher class parses the search queries from WordDatabase and
  * sends results to the gui.
@@ -25,14 +28,52 @@ import org.quicktionary.backend.database.WordDatabase;
 class Searcher {
 	private WordDatabase database;
 	private int processedEntries;
-	private boolean searchRunning;
+	private AtomicBoolean searchRunning;
+	private AtomicInteger requestCount;
+	private SearcherThread searchThread;
 
 	private SearchResultListener resultListener;
 
 	public Searcher(WordDatabase database) {
+		Thread thread;
+
+		this.searchRunning = new AtomicBoolean(false);
+		this.requestCount = new AtomicInteger(0);
+
 		this.database = database;
 		this.processedEntries = 0;
-		this.searchRunning = false;
+
+		searchThread = new SearcherThread();
+		thread = new Thread(searchThread);
+		thread.start();
+	}
+
+	private class SearcherThread implements Runnable {
+		private final Object lock = new Object();
+		public void run() {
+			while(true) {
+				try {
+					searchResults();
+				} catch(Exception e) {
+					/*TODO write this to log */
+				}
+				waitNextSearch();
+			}
+		}
+		private void waitNextSearch() {
+			synchronized(lock) {
+				try {
+					lock.wait(5000);
+				} catch(InterruptedException e) {
+				}
+			}
+		}
+
+		public void process() {
+			synchronized(lock) {
+				lock.notify();
+			}
+		}
 	}
 
 	/**
@@ -45,11 +86,39 @@ class Searcher {
 		parseSearchQuery(query);
 
 		processedEntries = 0;
-		searchRunning = true;
+		if(searchRunning.get()) {
+			throw new Error("The search should not be running anymore");
+		}
+		searchRunning.set(true);
 		resultListener.resetSearchResults();
 
 		/*TODO: move to another thread */
 		database.requestResults(query);
+	}
+
+	/**
+	 * Fetch the words from WordDatabase that fit the search term
+	 * and send them to SearchResultListener. This method also
+	 * will possibly reorder the search results.
+	 * @param offset First search result that is wanted
+	 * @param count  The number of search results
+	 * @return True if the request was successful
+	 */
+	public boolean requestSearchResults(int offset, int count) {
+		/* check that result listener is actually set */
+		if(resultListener == null) {
+			searchRunning.set(false);
+			throw new Error("The result listener is not set");
+		}
+
+		requestCount.set(offset + count - processedEntries);
+
+		if(requestCount.get() <= 0) {
+			searchRunning.set(false);
+			throw new Error("Invalid search result request");
+		}
+		searchThread.process();
+		return false;
 	}
 
 	/**
@@ -60,7 +129,7 @@ class Searcher {
 	 * @return true if the search is complete
 	 */
 	public boolean hasCompleted() {
-		return this.searchRunning == false;
+		return searchRunning.get() == false;
 	}
 
 	/**
@@ -86,32 +155,14 @@ class Searcher {
 		return false;
 	}
 
-	/**
-	 * Fetch the words from WordDatabase that fit the search term
-	 * and send them to SearchResultListener. This method also
-	 * will possibly reorder the search results.
-	 * @param offset First search result that is wanted
-	 * @param count  The number of search results
-	 * @return True if the request was successful
-	 */
-	public boolean requestSearchResults(int offset, int count) {
+	private boolean searchResults() {
 		WordEntry[] entries;
 		int resultCount, requestCount, i;
 
-		if(resultListener == null) {
-			searchRunning = false;
-			return false;
-		}
+		requestCount = this.requestCount.get();
 
+		/* allocate space for results */
 		resultCount = 0;
-		requestCount = offset + count - processedEntries;
-
-		if(requestCount <= 0) {
-			searchRunning = false;
-			System.out.println("ERROR: Invalid search result request");
-			return false;
-		}
-
 		entries = new WordEntry[requestCount];
 
 		while(resultCount < requestCount) {
@@ -134,7 +185,9 @@ class Searcher {
 		}
 
 		processedEntries += resultCount;
-		searchRunning = false;
+		searchRunning.set(false);
+
+		resultListener.showResults();
 		return true;
 	}
 

@@ -35,9 +35,6 @@ public class Quicktionary {
 		database = new WordDatabase();
 		searcher = new Searcher(database);
 		history = new History();
-
-		//searchThread = new Thread(searcher);
-		//searchThread.start();
 	}
 
 	/**
