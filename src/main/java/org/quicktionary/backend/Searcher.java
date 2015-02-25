@@ -155,9 +155,13 @@ class Searcher {
 		return false;
 	}
 
-	private boolean searchResults() {
+	private void searchResults() {
 		WordEntry[] entries;
 		int resultCount, requestCount, i;
+
+		if(resultListener == null) {
+			return;
+		}
 
 		requestCount = this.requestCount.get();
 
@@ -188,7 +192,7 @@ class Searcher {
 		searchRunning.set(false);
 
 		resultListener.showResults();
-		return true;
+		return;
 	}
 
 	/**
