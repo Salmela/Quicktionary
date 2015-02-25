@@ -56,11 +56,14 @@ class TextNodeIO {
 		/* read the parameter */
 		length = input.readInt();
 		buffer = new byte[length];
+		input.readFully(buffer);
 		parameter = new String(buffer, "UTF-8");
 
 		/* create the node */
 		node = new TextNode(type, parameter);
-		parent.appendChild(node);
+		if(parent != null) {
+			parent.appendChild(node);
+		}
 
 		if(childCount == -1) {
 			String textContent;
@@ -107,6 +110,7 @@ class TextNodeIO {
 	private static void writeTextNode(DataOutput output, TextNode node) throws IOException {
 		ArrayList<TextNode> childs;
 		String parameter, textContent;
+		byte[] buffer;
 		int childCount;
 
 		childs = node.getChildren();
@@ -124,15 +128,17 @@ class TextNodeIO {
 
 		/* write the parameter */
 		if(parameter != null) {
-			output.writeInt(parameter.length());
-			output.write(parameter.getBytes("UTF-8"));
+			buffer = parameter.getBytes("UTF-8");
+			output.writeInt(buffer.length);
+			output.write(buffer);
 		} else {
 			output.writeInt(0);
 		}
 
 		if(textContent != null) {
-			output.writeInt(textContent.length());
-			output.write(textContent.getBytes("UTF-8"));
+			buffer = textContent.getBytes("UTF-8");
+			output.writeInt(buffer.length);
+			output.write(buffer);
 			return;
 		}
 

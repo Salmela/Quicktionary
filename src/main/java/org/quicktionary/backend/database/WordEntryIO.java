@@ -60,16 +60,19 @@ public class WordEntryIO {
 		try {
 			input = new DataInputStream(new ByteArrayInputStream(buffer));
 
+			/* read the word */
 			length = input.readInt();
 			buffer = new byte[length];
 			input.readFully(buffer);
 			word = new String(buffer, "UTF-8");
 
+			/* read the source */
 			length = input.readInt();
 			buffer = new byte[length];
 			input.readFully(buffer);
 			source = new String(buffer, "UTF-8");
 
+			/* read the content of the page */
 			length = input.readInt();
 			if(length != 0) {
 				buffer = new byte[length];
@@ -86,7 +89,6 @@ public class WordEntryIO {
 		}
 		this.data.addSource(source);
 		this.data.setContent(root);
-		System.out.println("content " + root);
 	}
 
 	protected byte[] getData() {
@@ -98,26 +100,33 @@ public class WordEntryIO {
 		source = data.getSource();
 
 		try {
+			byte[] buffer;
+
 			stream = new ByteArrayOutputStream();
 			output = new DataOutputStream(stream);
 
+			/* write the word */
 			if(word != null) {
-				output.writeInt(word.length());
-				output.write(word.getBytes("UTF-8"));
+				buffer = word.getBytes("UTF-8");
+				output.writeInt(buffer.length);
+				output.write(buffer);
 			} else {
 				output.writeInt(0);
 			}
 
+			/* write the source */
 			if(source != null) {
-				output.writeInt(source.length());
-				output.write(source.getBytes("UTF-8"));
+				buffer = source.getBytes("UTF-8");
+				output.writeInt(buffer.length);
+				output.write(buffer);
 			} else {
 				output.writeInt(0);
 			}
 
-			byte[] buf = TextNodeIO.encodeData(data.getContent());
-			output.writeInt(buf.length);
-			output.write(buf);
+			/* write the content of the page */
+			buffer = TextNodeIO.encodeData(data.getContent());
+			output.writeInt(buffer.length);
+			output.write(buffer);
 
 			return stream.toByteArray();
 		} catch(UnsupportedEncodingException exception) {
