@@ -21,6 +21,7 @@ import java.util.Map;
 import java.io.File;
 
 import org.quicktionary.backend.WordEntry;
+import org.quicktionary.backend.Configs;
 
 /**
  * The database class for the quicktionary.
@@ -32,8 +33,14 @@ public class WordDatabase {
 	private String searchWord;
 	private Map.Entry<String, WordEntryIO> currentEntry;
 
+	/**
+	 * Create the database.
+	 */
 	public WordDatabase() {
-		io = new DataStoreIO(new File("tmp/test.db"));
+		String filename;
+
+		filename = Configs.getOptionString("database");
+		io = new DataStoreIO(new File(filename));
 		map = this.io.getIndex();
 
 		if(map == null) {
