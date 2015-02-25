@@ -32,6 +32,7 @@ public class WordDatabase {
 
 	private String searchWord;
 	private Map.Entry<String, WordEntryIO> currentEntry;
+	private Object lock;
 
 	/**
 	 * Create the database.
@@ -39,6 +40,7 @@ public class WordDatabase {
 	public WordDatabase() {
 		String filename;
 
+		lock = this;
 		filename = Configs.getOptionString("database");
 		io = new DataStoreIO(new File(filename));
 		map = this.io.getIndex();
@@ -50,33 +52,34 @@ public class WordDatabase {
 
 	/**
 	 * Add new word to the database.
+	 * @param word The word that we want to create
+	 * @return A WordEntry for the word
 	 */
 	public WordEntry newWord(String word) {
 		WordEntry entry = new WordEntry(word);
-		map.put(word, io.createNewEntry(entry));
+		synchronized(lock) {
+			map.put(word, io.createNewEntry(entry));
+		}
 		return entry;
 	}
 
 	/**
 	 * Remove a word from the database.
+	 * @param word The word that we want to remove
 	 */
 	public void removeWord(String word) {
-		map.remove(word);
-	}
-
-	public void updateWord(WordEntry entry) {
-		io.markAsChanged(entry.getIO());
+		synchronized(lock) {
+			map.remove(word);
+		}
 	}
 
 	/**
-	 * Get a page for the word.
+	 * Mark the word entry so that it will be written
+	 * next time to the database.
+	 * @param word The word that was modified
 	 */
-	public WordEntry fetchWordEntry(String word) {
-		WordEntryIO entry = map.get(word);
-		if(entry == null) {
-			return new WordEntry(word, null, null);
-		}
-		return entry.data;
+	public void updateWord(WordEntry entry) {
+		io.markAsChanged(entry.getIO());
 	}
 
 	/**
@@ -99,6 +102,23 @@ public class WordDatabase {
 	}
 
 	/**
+	 * Get a page for the word.
+	 * @param word The word that we want to fetch
+	 * @return The WordEntry for the word
+	 */
+	public WordEntry fetchWordEntry(String word) {
+		WordEntryIO entry;
+
+		synchronized(lock) {
+			entry = map.get(word);
+			if(entry == null) {
+				return new WordEntry(word, null, null);
+			}
+		}
+		return entry.data;
+	}
+
+	/**
 	 * Requests items with key that has the word as prefix. This method
 	 * itself doesn't give the items. You have to call the fetchResults
 	 * method to get the items.
@@ -106,24 +126,29 @@ public class WordDatabase {
 	 * @param word The prefix of wanted keys
 	 */
 	public void requestResults(String word) {
-		searchWord = word;
-		currentEntry = map.ceilingEntry(word);
+		synchronized(lock) {
+			searchWord = word;
+			currentEntry = map.ceilingEntry(word);
+		}
 	}
 
 	/**
 	 * Fetches requested items and inserts them to the entries array.
 	 *
 	 * @param entries The list to be filled
-	 * @param count   The number of items wanted
+	 * @param count The number of items wanted
+	 * @return The number of items found
 	 */
 	public int fetchResults(WordEntry[] entries, int count) {
 		int i;
 
-		for(i = 0; i < count && currentEntry != null; i++) {
-			if(!currentEntry.getKey().startsWith(searchWord)) break;
+		synchronized(lock) {
+			for(i = 0; i < count && currentEntry != null; i++) {
+				if(!currentEntry.getKey().startsWith(searchWord)) break;
 
-			entries[i] = currentEntry.getValue().data;
-			currentEntry = map.higherEntry(currentEntry.getKey());
+				entries[i] = currentEntry.getValue().data;
+				currentEntry = map.higherEntry(currentEntry.getKey());
+			}
 		}
 
 		/* append null terminator to the list */
@@ -134,10 +159,16 @@ public class WordDatabase {
 		return i;
 	}
 
+	/**
+	 * Write the WordEntry changes to the file.
+	 */
 	public void sync() {
 		io.syncFile(map);
 	}
 
+	/**
+	 * Close the database safely.
+	 */
 	public void close() {
 		sync();
 	}
