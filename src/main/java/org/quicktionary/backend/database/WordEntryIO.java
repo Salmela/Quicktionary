@@ -34,6 +34,7 @@ public class WordEntryIO {
 	protected WordEntryIO(WordEntry entry, long address) {
 		this.data = entry;
 		this.address = address;
+		setModified(false);
 
 		if(entry != null) {
 			entry.setIO(this);

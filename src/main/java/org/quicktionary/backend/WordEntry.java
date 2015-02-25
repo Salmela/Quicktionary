@@ -39,18 +39,26 @@ public class WordEntry {
 		this.sourceWeak = null;
 		this.contentWeak = null;
 
+		/**/
 		if(source != null) {
 			this.sourceWeak = new SoftReference<String>(source);
 		}
 		if(content != null) {
 			this.contentWeak = new SoftReference<TextNode>(content);
 		}
+		/**/
 	}
 
 	public WordEntry(String word) {
 		this(word, null, null);
 	}
 
+	//public void addSource(String source) {
+	//	this.source = source;
+	//}
+	//public void setContent(TextNode content) {
+	//	this.content = content;
+	//}
 	public void addSource(String source) {
 		this.source = source;
 		if(source != null) {
@@ -69,6 +77,15 @@ public class WordEntry {
 		return word;
 	}
 
+	//public TextNode getContent() {
+	//	return content;
+	//}
+	//public String getSource() {
+	//	return source;
+	//}
+	//public boolean isLoaded() {
+	//	return content != null;
+	//}
 	public TextNode getContent() {
 		if(content != null) return content;
 		return (contentWeak != null) ? contentWeak.get() : null;
