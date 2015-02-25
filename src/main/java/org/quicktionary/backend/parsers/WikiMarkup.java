@@ -302,7 +302,7 @@ public class WikiMarkup extends Parser {
 			TextNode node;
 			/* add extra whitespace */
 			node = new TextNode(TextNode.PLAIN_TYPE);
-			node.setContent(" ");
+			node.setTextContent(" ");
 			getCurrentFragment().appendChild(node);
 		}
 	}
@@ -781,7 +781,7 @@ public class WikiMarkup extends Parser {
 		/* create the node for text content */
 		parent = getCurrentFragment();
 		node = new TextNode(TextNode.PLAIN_TYPE);
-		node.setContent(lineBuffer.substring(startIndex, endIndex));
+		node.setTextContent(lineBuffer.substring(startIndex, endIndex));
 
 		/* append the text node into the parent */
 		getCurrentFragment().appendChild(node);

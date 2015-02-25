@@ -101,8 +101,8 @@ public class PageArea extends JPanel {
 	private String generateHTML(TextNode node) {
 		StringBuilder content = new StringBuilder();
 
-		if(node.getContent() != null) {
-			content.append(node.getContent());
+		if(node.getTextContent() != null) {
+			content.append(node.getTextContent());
 		} else {
 			for(TextNode child : node.getChildren()) {
 				content.append(generateHTML(child));
@@ -162,8 +162,8 @@ public class PageArea extends JPanel {
 		String markdown, content;
 
 		content = markdown = "";
-		if(node.getContent() != null) {
-			content += node.getContent();
+		if(node.getTextContent() != null) {
+			content += node.getTextContent();
 		} else {
 			for(TextNode child : node.getChildren()) {
 				content += generateSubMarkdown(child);

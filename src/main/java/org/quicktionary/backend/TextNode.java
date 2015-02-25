@@ -61,11 +61,6 @@ public class TextNode {
 		this(type, null);
 	}
 
-	/*TODO: rename to setTextContent */
-	public void setContent(String textContent) {
-		System.out.println("The setContent method is deprecated.");
-		setTextContent(textContent);
-	}
 	public void setTextContent(String textContent) {
 		if(childs.size() != 0) {
 			throw new Error("TextNode must have only child nodes or text content.");
@@ -207,14 +202,14 @@ public class TextNode {
 				}
 			} else {
 				if(firstText != null) {
-					firstText.setContent(normalizedText.toString());
+					firstText.setTextContent(normalizedText.toString());
 				}
 				firstText = null;
 				normalizedText.setLength(0);
 			}
 		}
 		if(firstText != null) {
-			firstText.setContent(normalizedText.toString());
+			firstText.setTextContent(normalizedText.toString());
 		}
 	}
 
@@ -232,11 +227,6 @@ public class TextNode {
 
 	public ArrayList<TextNode> getChildren() {
 		return childs;
-	}
-
-	public String getContent() {
-		System.out.println("The getContent method is deprecated");
-		return content;
 	}
 
 	public String getTextContent() {

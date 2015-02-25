@@ -160,23 +160,23 @@ public class MainWindow extends JFrame implements ActionListener {
 		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));
 		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
-		header.setContent("Welcome!");
+		header.setTextContent("Welcome!");
 
 		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
-		text.setContent("Read database and write something to the search box.");
+		text.setTextContent("Read database and write something to the search box.");
 
 		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
 		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
-		text.setContent("Go to Settings > Read database and select the enwiktionarycat.xml " +
+		text.setTextContent("Go to Settings > Read database and select the enwiktionarycat.xml " +
 			"from the root folder of the repository. You can open the readed page about ");
 
 		link = paragraph.appendChild(new TextNode(TextNode.LINK_TYPE));
 		text = link.appendChild(new TextNode(TextNode.PLAIN_TYPE));
-		text.setContent("cat");
+		text.setTextContent("cat");
 
 		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
-		text.setContent(" or you can search it.");
+		text.setTextContent(" or you can search it.");
 
 		return root;
 	}
@@ -188,10 +188,10 @@ public class MainWindow extends JFrame implements ActionListener {
 		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));
 		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
-		header.setContent("Sorry!");
+		header.setTextContent(string);
 
 		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
-		text.setContent("We couldn't find the page for the word " + string +".");
+		text.setTextContent("Sorry, this page is empty.");
 
 		return root;
 	}

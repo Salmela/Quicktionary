@@ -132,7 +132,7 @@ public class Test {
 			TextNode textNode;
 			textNode = new TextNode(TextNode.PLAIN_TYPE);
 			node.appendChild(textNode);
-			textNode.setContent(text);
+			textNode.setTextContent(text);
 		}
 		return node;
 	}
@@ -154,7 +154,7 @@ public class Test {
 
 		textNode = new TextNode(TextNode.PLAIN_TYPE);
 		parent.appendChild(textNode);
-		textNode.setContent(text);
+		textNode.setTextContent(text);
 	}
 
 	public void header() {
