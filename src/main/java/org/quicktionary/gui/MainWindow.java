@@ -182,7 +182,7 @@ public class MainWindow extends JFrame implements ActionListener {
 	}
 
 	private TextNode generateNotFound(String string) {
-		TextNode root, paragraph, header, link, text;
+		TextNode root, paragraph, header, text;
 
 		root = new TextNode(TextNode.ROOT_TYPE);
 		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));

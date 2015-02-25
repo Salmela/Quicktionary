@@ -210,10 +210,8 @@ public class SearchResults extends JList {
 				lastIndex = results.size() - 1;
 			}
 			fireContentsChanged(this, oldLength, oldLength);
-			fireIntervalAdded(this, oldLength, results.size() - 1);
+			fireIntervalAdded(this, oldLength, lastIndex);
 			oldLength = results.size();
-			///* remove the 'loading...' item at the end */
-			//fireIntervalRemoved(this, results.size(), results.size());
 		}
 		private class DataListenerNotifier implements Runnable {
 			public void run() {

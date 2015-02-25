@@ -607,7 +607,7 @@ public class WikiMarkup extends Parser {
 		}
 
 		if(list.getType() != TextNode.LIST_TYPE) {
-			printDebug("ERROR: must be list");
+			throw new Error("ERROR: must be list");
 		}
 
 		printDebug("New list item " + getSourceLocation());

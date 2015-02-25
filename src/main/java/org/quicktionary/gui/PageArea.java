@@ -33,8 +33,11 @@ import org.quicktionary.backend.WordEntry;
 
 import org.quicktionary.backend.Configs;
 
+/**
+ * This component renderes the current page.
+ */
 public class PageArea extends JPanel {
-	static final int serialVersionUID = 1;
+	public static final long serialVersionUID = 1;
 
 	public static final String PAGE_CHANGE_EVENT = "page-change-event";
 	private Application app;

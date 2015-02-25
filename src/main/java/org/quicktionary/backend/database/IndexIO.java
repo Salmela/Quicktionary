@@ -213,7 +213,6 @@ class IndexIO {
 			word = new String(wordArray, "UTF-8");
 			entry = createWordEntry(word, address);
 			entries[i] = new AbstractMap.SimpleEntry<String, WordEntryIO>(word, entry);
-			System.out.println("DB: read from the index: " + entries[i].getValue().data.getWord());
 		}
 		return new SortedArray<String, WordEntryIO>(entries);
 	}
@@ -234,8 +233,6 @@ class IndexIO {
 
 		for(Map.Entry<String, WordEntryIO> entry : map.entrySet()) {
 			byte[] word;
-
-			System.out.println("DB: write word to index: " + entry.getValue().data.getWord());
 
 			word = entry.getKey().getBytes("UTF-8");
 			/* length of the word */
