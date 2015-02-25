@@ -52,6 +52,12 @@ public class Application implements ActionListener {
 
 		/* add the main page to the history */
 		dictionary.storeEvent("page", "");
+	}
+
+	/**
+	 * Start the gui.
+	 */
+	public void run() {
 		mainWindow.setVisible(true);
 	}
 
@@ -80,9 +86,9 @@ public class Application implements ActionListener {
 		} else if(event.getActionCommand() == SettingsButton.OPEN_PREFERENCES_EVENT) {
 			new SettingsDialog(mainWindow, this);
 		} else if(event.getActionCommand() == MainWindow.GO_NEXT_EVENT) {
-				mainWindow.updateHistoryButtons("next", dictionary.getNextView(true));
+			mainWindow.updateHistoryButtons("next", dictionary.getNextView(true));
 		} else if(event.getActionCommand() == MainWindow.GO_BACK_EVENT) {
-				mainWindow.updateHistoryButtons("back", dictionary.getPreviousView(true));
+			mainWindow.updateHistoryButtons("back", dictionary.getPreviousView(true));
 		} else {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");
@@ -97,7 +103,6 @@ public class Application implements ActionListener {
 	}
 
 	private void handleSearchRequest(ActionEvent event) {
-		SearchBox searchBox = (SearchBox)event.getSource();
 		SearchBox.SearchEvent searchEvent;
 
 		searchEvent = (SearchBox.SearchEvent)event;

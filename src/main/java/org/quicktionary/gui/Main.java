@@ -82,6 +82,7 @@ public class Main {
 
 		quicktionary = new Quicktionary(options);
 		application = new Application(quicktionary);
+		application.run();
 
 		/* write the changes to the database at exit */
 		Runtime.getRuntime().addShutdownHook(new ExitHook(quicktionary));
