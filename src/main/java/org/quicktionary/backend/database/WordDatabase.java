@@ -73,6 +73,15 @@ public class WordDatabase {
 	}
 
 	/**
+	 * Check if the database already has the word.
+	 * @param word The word to be checked
+	 * @return True if the word is already in database
+	 */
+	public boolean containsWordEntry(String word) {
+		return map.containsKey(word);
+	}
+
+	/**
 	 * Get the data for the word.
 	 * TODO: remove
 	 */

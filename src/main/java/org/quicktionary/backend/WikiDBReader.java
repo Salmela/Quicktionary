@@ -34,6 +34,7 @@ public class WikiDBReader implements Runnable {
 	private WikiMarkup wikiParser;
 	private WordDatabase database;
 	private File file;
+	private boolean dontOverwrite;
 
 	private static final int NAMESPACE_TAG = 0;
 	private static final int TITLE_TAG = 1;
@@ -45,6 +46,7 @@ public class WikiDBReader implements Runnable {
 		this.parser = new XMLParser();
 		this.wikiParser = new WikiMarkup();
 		this.database = database;
+		this.dontOverwrite = true;
 
 		parser.setTagNameId("ns", NAMESPACE_TAG);
 		parser.setTagNameId("title", TITLE_TAG);
@@ -74,13 +76,20 @@ public class WikiDBReader implements Runnable {
 	}
 
 	private void createPage(String text, String title, String ns) {
-		/*TODO: check that title and text is set */
+		if(text == null || title == null || ns == null) {
+			return;
+		}
+		/* check that the page is normal page */
 		if(!"0".equals(ns)) {
 			return;
 		}
 
 		TextNode node;
 		WordEntry entry;
+
+		if(dontOverwrite && database.containsWordEntry(title)) {
+			return;
+		}
 
 		try {
 			wikiParser.parse(new StringReader(text));
