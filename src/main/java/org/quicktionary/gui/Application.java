@@ -71,8 +71,6 @@ public class Application implements ActionListener {
 			handlePageLoadRequest(event);
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
 			handleSearchResultRequest(event);
-		} else if(event.getActionCommand() == PageArea.PAGE_CHANGE_EVENT) {
-			handlePageChange(event);
 		} else if(event.getActionCommand() == SettingsButton.READ_DATABASE_EVENT) {
 			handleReadDatabaseRequest(event);
 		} else if(event.getActionCommand() == SettingsButton.ASK_NEW_WORD_EVENT) {
@@ -134,9 +132,6 @@ public class Application implements ActionListener {
 
 		requestEvent = (SearchResults.RequestSearchResultEvent)event;
 		dictionary.requestSearchResults(requestEvent.getStart(), requestEvent.getEnd());
-	}
-
-	private void handlePageChange(ActionEvent event) {
 	}
 
 	private void handleReadDatabaseRequest(ActionEvent event) {

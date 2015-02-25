@@ -19,29 +19,33 @@ package org.quicktionary.gui;
 import java.lang.StringBuilder;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import javax.swing.text.html.StyleSheet;
 
+import java.util.Map;
+import java.util.HashMap;
 import org.quicktionary.backend.TextNode;
 import org.quicktionary.backend.WordEntry;
 
 import org.quicktionary.backend.Configs;
 
 public class PageArea extends JPanel {
+	static final int serialVersionUID = 1;
+
 	public static final String PAGE_CHANGE_EVENT = "page-change-event";
 	private Application app;
 	private JEditorPane pane;
 	private JTextArea area;
+	private Map<String, WordEntry> linkMap;
 
 	public PageArea(Application app) {
 		super(new BorderLayout());
 		this.app = app;
+		this.linkMap = new HashMap<String, WordEntry>();
 
 		if((Boolean)Configs.getOptionBoolean("gui.useHTML")) {
 			HTMLEditorKit htmlEditor = new HTMLEditorKit();
@@ -58,26 +62,16 @@ public class PageArea extends JPanel {
 		}
 	}
 
-	class PageChangeEvent extends ActionEvent {
-		final static long serialVersionUID = 1L;
-		private String word;
-
-		public PageChangeEvent(String word) {
-			super(PageArea.this, ActionEvent.ACTION_PERFORMED, PageArea.PAGE_CHANGE_EVENT);
-			this.word = word;
-		}
-
-		public String getWord() {
-			return word;
-		}
-	}
-
 	class LinkListener implements HyperlinkListener {
 		public void hyperlinkUpdate(HyperlinkEvent event) {
-			if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-				System.out.println("link " + event.getDescription());
-				app.actionPerformed(new PageChangeEvent(event.getDescription()));
+			if(event.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
+				return;
 			}
+			WordEntry entry = linkMap.get(event.getDescription());
+			if(entry == null) {
+				return;
+			}
+			app.actionPerformed(new PageLoadEvent(this, entry));
 		}
 	}
 
@@ -98,7 +92,7 @@ public class PageArea extends JPanel {
 			source = generateMarkdown(root);
 			area.setText(source);
 		}
-		System.out.println(source);
+		linkMap.clear();
 	}
 
 	private String generateHTML(TextNode node) {
@@ -123,6 +117,7 @@ public class PageArea extends JPanel {
 		case TextNode.EM_TYPE:
 			return "<em>" + content + "</em>";
 		case TextNode.LINK_TYPE:
+			/*TODO put the WordEntry of the word into linkMap */
 			return "<a href=\'" + content + "\'>" + content + "</a>";
 		case TextNode.LIST_TYPE:
 			return "<ul>" + content + "</ul>";
