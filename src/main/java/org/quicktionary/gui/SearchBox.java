@@ -40,7 +40,7 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 
 		this.searchListener = searchListener;
 
-		changeListener = new onChangeEvents(this, searchListener);
+		changeListener = new onChangeEvents(searchListener);
 		getDocument().addDocumentListener(changeListener);
 		addFocusListener(this);
 		addActionListener(this);
@@ -79,11 +79,9 @@ public class SearchBox extends JTextField implements FocusListener, ActionListen
 
 	private class onChangeEvents implements DocumentListener {
 		private final ActionListener listener;
-		private final SearchBox searchBox;
 
-		public onChangeEvents(SearchBox searchBox, ActionListener listener) {
+		public onChangeEvents(ActionListener listener) {
 			this.listener  = listener;
-			this.searchBox = searchBox;
 		}
 		/**
 		 * Sends the search signal when user changes the text
