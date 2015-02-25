@@ -22,6 +22,8 @@ import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.Quicktionary;
 import org.quicktionary.backend.WordEntry;
+import org.quicktionary.backend.SearchItem;
+import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.gui.dialogs.SettingsDialog;
 
 /**
@@ -72,7 +74,7 @@ public class Application implements ActionListener {
 		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
 			handleSearchRequest(event);
 		} else if(event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
-			handleLoadFirstResultRequest(event);
+			handleSearchEnterRequest(event);
 		} else if(event.getActionCommand() == PageLoadEvent.PAGE_LOAD_EVENT) {
 			handlePageLoadRequest(event);
 		} else if(event.getActionCommand() == SearchResults.REQUEST_SEARCH_RESULTS_EVENT) {
@@ -111,13 +113,16 @@ public class Application implements ActionListener {
 		dictionary.requestSearchResults(0, searchEvent.getSearchResultCount());
 	}
 
-	private void handleLoadFirstResultRequest(ActionEvent event) {
-		handleLoadFirstResultRequest(event);
-		SearchBox searchBox = (SearchBox)event.getSource();
-		System.out.println("main window: search event " + searchBox.getText());
+	private void handleSearchEnterRequest(ActionEvent event) {
+		SearchResultListener listener;
+		SearchItem item;
 
-		//dictionary.search(searchBox.getText());
-		/*TODO: show the first item's page */
+		listener = mainWindow.getSearchResultListener();
+		item = listener.getSearchItemAt(0);
+
+		if(item != null) {
+			handlePageLoadRequest(new PageLoadEvent(this, item.getWordEntry()));
+		}
 	}
 
 	private void handlePageLoadRequest(ActionEvent event) {

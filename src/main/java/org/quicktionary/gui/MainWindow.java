@@ -324,9 +324,8 @@ public class MainWindow extends JFrame implements ActionListener {
 	 * wanted search result count and passes the event to the app.
 	 */
 	public void actionPerformed(ActionEvent event) {
-		/* set the search result count for SearchEvents */
-		if(event.getActionCommand() == SearchBox.SEARCH_EVENT ||
-		   event.getActionCommand() == SearchBox.SEARCH_ENTER_EVENT) {
+		/* set the search result count to the search event */
+		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
 			SearchBox.SearchEvent e = (SearchBox.SearchEvent)event;
 
 			e.setSearchResultCount(searchResults.getVisibleRowCount());
