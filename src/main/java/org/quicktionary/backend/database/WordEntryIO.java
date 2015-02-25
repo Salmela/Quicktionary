@@ -62,21 +62,31 @@ public class WordEntryIO {
 
 			length = input.readInt();
 			buffer = new byte[length];
+			input.readFully(buffer);
 			word = new String(buffer, "UTF-8");
 
 			length = input.readInt();
 			buffer = new byte[length];
+			input.readFully(buffer);
 			source = new String(buffer, "UTF-8");
 
 			length = input.readInt();
-			buffer = new byte[length];
-			root = TextNodeIO.decodeData(buffer);
+			if(length != 0) {
+				buffer = new byte[length];
+				input.readFully(buffer);
+				root = TextNodeIO.decodeData(buffer);
+			}
 
 		} catch(UnsupportedEncodingException exception) {
 		} catch(IOException exception) {
 		}
 
-		this.data = new WordEntry(word, source, root);
+		if(!this.data.getWord().equals(word)) {
+			throw new Error("The word in the file doesn't match the WordEntry");
+		}
+		this.data.addSource(source);
+		this.data.setContent(root);
+		System.out.println("content " + root);
 	}
 
 	protected byte[] getData() {

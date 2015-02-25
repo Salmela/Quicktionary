@@ -39,6 +39,7 @@ class TextNodeIO {
 
 		} catch(UnsupportedEncodingException exception) {
 		} catch(IOException exception) {
+			System.out.println("Failed to decode the data");
 		}
 		return null;
 	}
@@ -66,6 +67,7 @@ class TextNodeIO {
 
 			length = input.readInt();
 			buffer = new byte[length];
+			input.readFully(buffer);
 			textContent = new String(buffer, "UTF-8");
 			node.setTextContent(textContent);
 
@@ -97,6 +99,7 @@ class TextNodeIO {
 
 		} catch(UnsupportedEncodingException exception) {
 		} catch(IOException exception) {
+			System.out.println("Failed to encode the data");
 		}
 		return new byte[0];
 	}
