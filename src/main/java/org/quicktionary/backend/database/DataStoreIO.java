@@ -195,6 +195,7 @@ class DataStoreIO {
 		try {
 			readWordEntry(entry);
 		} catch(IOException exception) {
+			System.out.println("exception");
 		}
 	}
 
@@ -220,8 +221,10 @@ class DataStoreIO {
 	 */
 	public void syncFile(TreeMap map) {
 		try {
-			pushChanges();
-			index.writeIndex(map);
+			if(!changedEntries.isEmpty()) {
+				pushChanges();
+				index.writeIndex(map);
+			}
 		} catch(IOException exception) {
 		}
 	}
