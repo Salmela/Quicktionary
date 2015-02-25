@@ -123,7 +123,7 @@ public class ReadDatabaseDialog extends JDialog implements ActionListener {
 	public void openFileChooser() {
 		String titleStr = "Select the database file";
 
-		if(Configs.getOptionBoolean("useNativeFileDialog")) {
+		if(Configs.getOptionBoolean("gui.useNativeFileDialog")) {
 			FileDialog dialog;
 
 			dialog = new FileDialog(this, titleStr, FileDialog.LOAD);
