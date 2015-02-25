@@ -256,7 +256,6 @@ class DataStoreIO {
 
 	private void writeWord(WordEntryIO entry) throws IOException {
 		byte[] buffer;
-		System.out.println("DB: word " + entry.data.getWord());
 
 		/* get the data from the data structures */
 		buffer = entry.getData();

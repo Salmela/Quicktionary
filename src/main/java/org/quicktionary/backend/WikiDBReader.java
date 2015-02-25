@@ -84,7 +84,6 @@ public class WikiDBReader implements Runnable {
 			return;
 		}
 
-		TextNode node;
 		WordEntry entry;
 
 		if(dontOverwrite && database.containsWordEntry(title)) {

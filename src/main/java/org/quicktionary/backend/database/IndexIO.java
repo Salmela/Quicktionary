@@ -191,8 +191,6 @@ class IndexIO {
 		int size = stream.readInt();
 		entries = (Map.Entry<String, WordEntryIO>[])new Map.Entry[size];
 
-		System.out.println("DB: word count: " + size);
-
 		/* read sorted list of the words and their addresses */
 		for(int i = 0; i < size; i++) {
 			WordEntryIO entry;
@@ -229,7 +227,6 @@ class IndexIO {
 
 	private void writeSortedList(DataOutputStream stream, TreeMap<String, WordEntryIO> map) throws IOException {
 		stream.writeInt(map.size());
-		System.out.println("DB: word count: " + map.size());
 
 		for(Map.Entry<String, WordEntryIO> entry : map.entrySet()) {
 			byte[] word;

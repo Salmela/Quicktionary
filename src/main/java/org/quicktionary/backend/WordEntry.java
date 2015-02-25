@@ -18,6 +18,7 @@ package org.quicktionary.backend;
 
 import org.quicktionary.backend.TextNode;
 import org.quicktionary.backend.database.WordEntryIO;
+import java.lang.ref.SoftReference;
 
 /**
  * This class contains all information about particular word.
@@ -27,10 +28,23 @@ public class WordEntry {
 	private TextNode content;
 	private WordEntryIO io;
 
+	private SoftReference<String> sourceWeak;
+	private SoftReference<TextNode> contentWeak;
+
 	public WordEntry(String word, String source, TextNode content) {
 		this.word = word;
 		this.source = source;
 		this.content = content;
+
+		this.sourceWeak = null;
+		this.contentWeak = null;
+
+		if(source != null) {
+			this.sourceWeak = new SoftReference<String>(source);
+		}
+		if(content != null) {
+			this.contentWeak = new SoftReference<TextNode>(content);
+		}
 	}
 
 	public WordEntry(String word) {
@@ -39,10 +53,16 @@ public class WordEntry {
 
 	public void addSource(String source) {
 		this.source = source;
+		if(source != null) {
+			sourceWeak = new SoftReference<String>(source);
+		}
 	}
 
 	public void setContent(TextNode content) {
 		this.content = content;
+		if(content != null) {
+			contentWeak = new SoftReference<TextNode>(content);
+		}
 	}
 
 	public String getWord() {
@@ -50,15 +70,32 @@ public class WordEntry {
 	}
 
 	public TextNode getContent() {
-		return content;
+		if(content != null) return content;
+		return (contentWeak != null) ? contentWeak.get() : null;
 	}
 
 	public String getSource() {
-		return source;
+		if(source != null) return source;
+		return (sourceWeak != null) ? sourceWeak.get() : null;
 	}
 
 	public boolean isLoaded() {
+		if(contentWeak != null) {
+			TextNode weak = contentWeak.get();
+			if(weak != null) return true;
+		}
 		return content != null;
+	}
+
+	/**
+	 * This must only be called from WordEntryIO.
+	 */
+	public void setModified(boolean modified) {
+		if(!modified) {
+			/* remove hard references */
+			source = null;
+			content = null;
+		}
 	}
 
 	public void setIO(WordEntryIO io) {

@@ -40,12 +40,13 @@ public class WordEntryIO {
 		}
 	}
 
-	protected boolean isModified() {
+	public boolean isModified() {
 		return modified;
 	}
 
 	protected void setModified(boolean modified) {
 		this.modified = modified;
+		this.data.setModified(modified);
 	}
 
 	protected void setData(byte[] buffer) {
