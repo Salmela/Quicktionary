@@ -90,10 +90,12 @@ public class WordDatabase {
 
 	/**
 	 * Get the data for the word.
-	 * TODO: remove
+	 * @param wordEntry The entry that we want to be filled.
 	 */
-	public String fetchPage(WordEntry wordEntry) {
-		return wordEntry.getSource();
+	public void fetchPage(WordEntry wordEntry) {
+		if(entry.isLoaded()) {
+			io.fetchWordEntry(wordEntry.getIO());
+		}
 	}
 
 	/**

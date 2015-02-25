@@ -94,14 +94,14 @@ class DataStoreIO {
 		}
 
 		dataStore.seek(0);
+
+		/* check the signature */
 		dataStore.read(signature);
 		if(DATASTORE_HEADER_SIGNATURE.equals(signature)) {
 			throw new Error("This is not word database file");
 		}
+		/* read the path of the index file */
 		indexFilename = readIndexFilename();
-
-		System.out.println("DB: loaded database index at \"" + indexFilename + "\"");
-
 		indexFile = new File(indexFilename);
 
 		/* check if the index file is accidentally removed */
@@ -191,7 +191,14 @@ class DataStoreIO {
 	 * Read a single word entry from data store.
 	 * @param entry The entry to be filled
 	 */
-	public void readWordEntry(WordEntryIO entry) throws IOException {
+	public void fetchWordEntry(WordEntryIO entry) {
+		try {
+			readWordEntry(entry);
+		} catch(IOException exception) {
+		}
+	}
+
+	private void readWordEntry(WordEntryIO entry) throws IOException {
 		byte[] buffer;
 		int size;
 

@@ -160,9 +160,7 @@ public class Quicktionary {
 	public WordEntry getPageContent(WordEntry entry) {
 		history.saveEvent("page", "" + entry.getWord());
 
-		if(entry.isLoaded()) {
-			database.fetchPage(entry);
-		}
+		database.fetchPage(entry);
 		return entry;
 	}
 
@@ -172,9 +170,7 @@ public class Quicktionary {
 		entry = database.fetchWordEntry(word);
 		history.saveEvent("page", "" + entry.getWord());
 
-		if(entry.isLoaded()) {
-			database.fetchPage(entry);
-		}
+		database.fetchPage(entry);
 		return entry;
 	}
 
