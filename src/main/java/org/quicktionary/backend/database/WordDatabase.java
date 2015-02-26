@@ -37,17 +37,17 @@ public class WordDatabase {
 	/**
 	 * Create the database.
 	 */
-	public WordDatabase() {
-		String filename;
-
+	public WordDatabase(String filename) {
 		lock = this;
-		filename = Configs.getOptionString("database");
 		io = new DataStoreIO(new File(filename));
 		map = this.io.getIndex();
 
 		if(map == null) {
 			map = new TreeMap<String, WordEntryIO>();
 		}
+	}
+	public WordDatabase() {
+		this(Configs.getOptionString("database"));
 	}
 
 	/**
