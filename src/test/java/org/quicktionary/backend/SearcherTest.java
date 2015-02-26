@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Assume;
 
+import org.quicktionary.backend.database.WordDatabase;
 import java.util.ArrayList;
 
 public class SearcherTest implements SearchResultListener {
@@ -35,8 +36,8 @@ public class SearcherTest implements SearchResultListener {
 
 	public SearcherTest() {
 		results = new ArrayList<SearchItem>();
-		database = new WordDatabase(null);
-		searcher = new Searcher(null, database);
+		database = new WordDatabase();
+		searcher = new Searcher(database);
 		searcher.setResultListener(this);
 		RESET = new SearchItem("RESET", "RESET", null);
 	}

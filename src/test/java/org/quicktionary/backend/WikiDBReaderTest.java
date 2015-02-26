@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Assume;
 
-//import org.quicktionary.backend.WordDatabase;
+import org.quicktionary.backend.database.WordDatabase;
 //import org.quicktionary.backend.SearchItem;
 
 public class WikiDBReaderTest {
@@ -32,7 +32,7 @@ public class WikiDBReaderTest {
 	private WikiDBReader reader;
 
 	public WikiDBReaderTest() {
-		db = new WordDatabase(null);
+		db = new WordDatabase();
 		reader = new WikiDBReader(db);
 	}
 

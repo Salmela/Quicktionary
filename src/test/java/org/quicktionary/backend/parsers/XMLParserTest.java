@@ -18,8 +18,8 @@ import org.quicktionary.backend.parsers.XMLParser;
 public class XMLParserTest {
 	private XMLParser parser;
 
-	@Rule
-	public Timeout globalTimeout = new Timeout(500);
+	//@Rule
+	//public Timeout globalTimeout = new Timeout(500);
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
