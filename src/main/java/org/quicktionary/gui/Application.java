@@ -75,6 +75,25 @@ public class Application implements ActionListener {
 		return word.substring(0, 1).toUpperCase() + word.substring(1);
 	}
 
+	/**
+	 * Open new page in main window.
+	 */
+	private void openPage(WordEntry page, boolean setEvent) {
+		String pageTitle;
+
+		if(page.getWord() == mainPageTitle) {
+			pageTitle = mainPageTitle;
+		} else {
+			dictionary.getPageContent(page);
+			pageTitle = capitalizeWord(page.getWord());
+		}
+
+		mainWindow.openPage(pageTitle, page);
+		if(setEvent) {
+			dictionary.storeEvent(new PageLoadHistoryEvent(page));
+		}
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		if(event.getActionCommand() == SearchBox.SEARCH_EVENT) {
 			handleSearchRequest(event);
@@ -139,14 +158,19 @@ public class Application implements ActionListener {
 
 	private void handlePageLoadRequest(ActionEvent event) {
 		PageLoadEvent pageEvent;
-		WordEntry page;
-		String pageTitle;
+		WordEntry entry;
+		String name;
 
 		pageEvent = (PageLoadEvent)event;
-		page = dictionary.getPageContent(pageEvent.getWordEntry());
-		pageTitle = capitalizeWord(page.getWord());
+		name = pageEvent.getName();
 
-		mainWindow.openPage(pageTitle, page);
+		if(name != null) {
+			entry = dictionary.getWordEntry(name);
+		} else {
+			entry = pageEvent.getWordEntry();
+		}
+
+		openPage(entry, true);
 	}
 
 	private void handleSearchResultRequest(ActionEvent event) {
