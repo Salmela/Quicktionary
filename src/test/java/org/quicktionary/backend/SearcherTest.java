@@ -39,23 +39,30 @@ public class SearcherTest implements SearchResultListener {
 	private List<SearchItem> results;
 
 	final SearchItem RESET;
+	final Object lock;
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	public SearcherTest() throws Exception {
-		results = Collections.synchronizedList(new ArrayList<SearchItem>());
+		//results = Collections.synchronizedList(new ArrayList<SearchItem>());
+		results = new ArrayList<SearchItem>();
 		database = new WordDatabase(null);
 		searcher = new Searcher(database);
 		searcher.setResultListener(this);
 		RESET = new SearchItem("RESET", "RESET", null);
+		lock = new Object();
 	}
 
 	public void appendSearchResult(SearchItem item) {
-		results.add(item);
+		synchronized(lock) {
+			results.add(item);
+		}
 	}
 
 	public void resetSearchResults() {
-		results.add(RESET);
+		synchronized(lock) {
+			results.add(RESET);
+		}
 	}
 
 	public void setStatistics(int totalCount, int time) {
@@ -66,12 +73,16 @@ public class SearcherTest implements SearchResultListener {
 
 	@Override
 	public int getSize() {
-		return results.size();
+		synchronized(lock) {
+			return results.size();
+		}
 	}
 
 	@Override
 	public SearchItem getSearchItemAt(int index) {
-		return results.get(index);
+		synchronized(lock) {
+			return results.get(index);
+		}
 	}
 
 	private void getResults(int count) {
@@ -98,8 +109,6 @@ public class SearcherTest implements SearchResultListener {
 		searcher.search("hello");
 
 		getResults();
-		/* here is some multithreading issues */
-		Assert.assertNull(results.get(results.size() - 1));
 		Assert.assertEquals(2, results.size());
 	}
 

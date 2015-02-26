@@ -17,6 +17,7 @@ public class QuicktionaryTest implements SearchResultListener {
 	   More complete tests for searching are done at Searcher test suite.
 	 */
 	private SearchItem firstSearchItem;
+	private Object lock;
 
 	public QuicktionaryTest() throws Exception {
 		Map<String, Object> options = new HashMap<String, Object>();
@@ -28,15 +29,20 @@ public class QuicktionaryTest implements SearchResultListener {
 		options.put("database", file.toString());
 		quicktionary = new Quicktionary(null, options);
 		firstSearchItem = null;
+		lock = new Object();
 	}
 
 	public void appendSearchResult(SearchItem item) {
-		if(firstSearchItem != null) return;
-		firstSearchItem = item;
+		synchronized(lock) {
+			if(firstSearchItem != null) return;
+			firstSearchItem = item;
+		}
 	}
 
 	public void resetSearchResults() {
-		firstSearchItem = null;
+		synchronized(lock) {
+			firstSearchItem = null;
+		}
 	}
 
 	public void setStatistics(int totalCount, int time) {
@@ -46,11 +52,15 @@ public class QuicktionaryTest implements SearchResultListener {
 	}
 
 	public int getSize() {
-		return (firstSearchItem == null) ? 0 : 1;
+		synchronized(lock) {
+			return (firstSearchItem == null) ? 0 : 1;
+		}
 	}
 
 	public SearchItem getSearchItemAt(int index) {
-		return (index == 0) ? firstSearchItem : null;
+		synchronized(lock) {
+			return (index == 0) ? firstSearchItem : null;
+		}
 	}
 
 
@@ -66,6 +76,10 @@ public class QuicktionaryTest implements SearchResultListener {
 		quicktionary.newWord("test");
 		quicktionary.search("test");
 		quicktionary.requestSearchResults(0, 1);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException ex) {
+		}
 		assertEquals(firstSearchItem.getWord(), "test");
 	}
 
@@ -76,7 +90,11 @@ public class QuicktionaryTest implements SearchResultListener {
 		quicktionary.removeWord("test");
 		quicktionary.search("test");
 		quicktionary.requestSearchResults(0, 1);
-		assertEquals(firstSearchItem, null);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException ex) {
+		}
+		assertNull(firstSearchItem);
 	}
 
 	@Test
