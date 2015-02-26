@@ -28,8 +28,20 @@
     		<source>1.7</source>
     		<target>1.7</target>
     	    </configuration>
-    	    <version>2.5</version>
-    	</plugin>
+            <version>2.5</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.5</version>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>org.quicktionary.gui.Main</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
