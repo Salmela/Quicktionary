@@ -1,5 +1,9 @@
 package org.quicktionary.backend;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,8 +18,15 @@ public class QuicktionaryTest implements SearchResultListener {
 	 */
 	private SearchItem firstSearchItem;
 
-	public QuicktionaryTest() {
-		quicktionary = new Quicktionary();
+	public QuicktionaryTest() throws Exception {
+		Map<String, Object> options = new HashMap<String, Object>();
+
+		File file;
+		file = File.createTempFile("database.db", "ext");
+		file.deleteOnExit();
+
+		options.put("database", file.toString());
+		quicktionary = new Quicktionary(null, options);
 		firstSearchItem = null;
 	}
 
@@ -29,7 +40,9 @@ public class QuicktionaryTest implements SearchResultListener {
 	}
 
 	public void setStatistics(int totalCount, int time) {
-		
+	}
+
+	public void showResults() {
 	}
 
 	public int getSize() {
@@ -71,10 +84,9 @@ public class QuicktionaryTest implements SearchResultListener {
 		quicktionary.readDatabase("src/test/java/org/quicktionary/backend/test_pages.xml", true);
 
 		quicktionary.setSearchResultListener(this);
-		quicktionary.search("Some");
-		quicktionary.requestSearchResults(0, 1);
-		assertEquals(firstSearchItem.getWord(), "Some word");
-		assertEquals(quicktionary.getPageContent(firstSearchItem.getWordEntry()).getSource(), "Test page 2");
+		WordEntry e = quicktionary.getWordEntry("Some word");
+		assertEquals(e.getWord(), "Some word");
+		assertEquals(quicktionary.getPageContent(e).getSource(), "Test page 2");
 	}
 
 	@Test
@@ -93,20 +105,40 @@ public class QuicktionaryTest implements SearchResultListener {
 		assertNull(quicktionary.getPreviousView(false));
 	}
 
+	private class E implements HistoryEvent {
+		public int id;
+		public E(int id) {
+			this.id = id;
+		}
+		public String getEventType() {
+			return "e";
+		}
+
+		public boolean truncateSimilar() {
+			return false;
+		}
+	}
+
+	@Test
+	public void storeEvent() {
+		/* check that there isn't exceptions */
+		quicktionary.storeEvent(new E(1));
+	}
+
 	@Test
 	public void getNextThatExists() {
-		quicktionary.setSearchResultListener(this);
-		quicktionary.search("test");
-		quicktionary.search("test");
+		HistoryEvent e = new E(2);
+		quicktionary.storeEvent(new E(1));
+		quicktionary.storeEvent(e);
 		quicktionary.getPreviousView(true);
-		assertNotNull(quicktionary.getNextView(false));
+		assertEquals(e, quicktionary.getNextView(false));
 	}
 
 	@Test
 	public void getPreviousThatExists() {
-		quicktionary.setSearchResultListener(this);
-		quicktionary.search("test");
-		quicktionary.search("test");
-		assertNotNull(quicktionary.getPreviousView(false));
+		HistoryEvent e = new E(1);
+		quicktionary.storeEvent(e);
+		quicktionary.storeEvent(new E(2));
+		assertEquals(e, quicktionary.getPreviousView(false));
 	}
 }
