@@ -100,7 +100,7 @@ public class WikiMarkupTest {
 	public void header() {
 		TextNode wanted;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
-		newNode(wanted, "test", TextNode.HEADER_TYPE);
+		newNode(wanted, "test", TextNode.HEADER_TYPE, "2");
 
 		fragment = parse("==test==\n");
 		assertEquals(wanted, fragment);
@@ -109,7 +109,7 @@ public class WikiMarkupTest {
 	public void headerWithSpace() {
 		TextNode wanted;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
-		newNode(wanted, "test", TextNode.HEADER_TYPE);
+		newNode(wanted, "test", TextNode.HEADER_TYPE, "2");
 
 		fragment = parse("== test == \n");
 		assertEquals(wanted, fragment);
@@ -118,7 +118,7 @@ public class WikiMarkupTest {
 	public void headerAndParagraph() {
 		TextNode wanted;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
-		newNode(wanted, "test", TextNode.HEADER_TYPE);
+		newNode(wanted, "test", TextNode.HEADER_TYPE, "2");
 		newNode(wanted, "hello", TextNode.PARAGRAPH_TYPE);
 
 		fragment = parse("== test == \nhello");
@@ -149,7 +149,7 @@ public class WikiMarkupTest {
 	public void headerAndtwoParagraphs() {
 		TextNode wanted;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
-		newNode(wanted, "hello", TextNode.HEADER_TYPE);
+		newNode(wanted, "hello", TextNode.HEADER_TYPE, "2");
 		newNode(wanted, "test hello", TextNode.PARAGRAPH_TYPE);
 		newNode(wanted, "cool lol", TextNode.PARAGRAPH_TYPE);
 
@@ -160,7 +160,7 @@ public class WikiMarkupTest {
 	public void headerWithEmAndParagraph() {
 		TextNode wanted, header;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
-		header = newNode(wanted, TextNode.HEADER_TYPE);
+		header = newNode(wanted, TextNode.HEADER_TYPE, "2");
 		newNode(wanted, "hello", TextNode.PARAGRAPH_TYPE);
 
 		addText(header, "t");
@@ -175,22 +175,22 @@ public class WikiMarkupTest {
 		TextNode wanted;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
 		newNode(wanted, "Hello", TextNode.PARAGRAPH_TYPE);
-		newNode(wanted, "Test", TextNode.HEADER_TYPE);
+		newNode(wanted, "Test", TextNode.HEADER_TYPE, "4");
 		newNode(wanted, "en-noun", TextNode.TEMPLATE_TYPE);
 
 		fragment = parse("Hello\n\n====Test====\n{{en-noun}}\n");
 		assertEquals(wanted, fragment);
 	}
-	/*@Test
+	@Test
 	public void horizontalLineAndHeader() {
 		TextNode wanted;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
-		newNode(wanted, TextNode.PARAGRAPH_TYPE);
-		newNode(wanted, "test", TextNode.HEADER_TYPE);
+		newNode(wanted, TextNode.RULER_TYPE);
+		newNode(wanted, "test", TextNode.HEADER_TYPE, "2");
 
 		fragment = parse("----\n== test ==");
 		assertEquals(wanted, fragment);
-	}*/
+	}
 	@Test
 	public void headerAfterList() {
 		TextNode wanted, list, item;
@@ -199,7 +199,7 @@ public class WikiMarkupTest {
 		item = newNode(list, "hello", TextNode.LIST_ITEM_TYPE);
 		list = newNode(item, TextNode.LIST_TYPE, "ol");
 		item = newNode(list, "cool", TextNode.LIST_ITEM_TYPE);
-		newNode(wanted, "test", TextNode.HEADER_TYPE);
+		newNode(wanted, "test", TextNode.HEADER_TYPE, "2");
 
 		fragment = parse("#hello\n##cool\n== test ==");
 		assertEquals(wanted, fragment);
@@ -384,7 +384,7 @@ public class WikiMarkupTest {
 		TextNode wanted, paragraph, parentTemplate;
 		wanted = newNode(null, TextNode.ROOT_TYPE);
 		paragraph = newNode(wanted, "hello", TextNode.PARAGRAPH_TYPE);
-		paragraph = newNode(wanted, "Derived terms", TextNode.HEADER_TYPE);
+		paragraph = newNode(wanted, "Derived terms", TextNode.HEADER_TYPE, "4");
 
 		addText(paragraph, "This is ");
 		parentTemplate = newNode(wanted, TextNode.TEMPLATE_TYPE, "der3");
