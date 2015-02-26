@@ -43,12 +43,10 @@ public class PageArea extends JPanel {
 	private Application app;
 	private JEditorPane pane;
 	private JTextArea area;
-	private Map<String, WordEntry> linkMap;
 
 	public PageArea(Application app) {
 		super(new BorderLayout());
 		this.app = app;
-		this.linkMap = new HashMap<String, WordEntry>();
 
 		if((Boolean)Configs.getOptionBoolean("gui.useHTML")) {
 			HTMLEditorKit htmlEditor = new HTMLEditorKit();
@@ -70,11 +68,7 @@ public class PageArea extends JPanel {
 			if(event.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
 				return;
 			}
-			WordEntry entry = linkMap.get(event.getDescription());
-			if(entry == null) {
-				return;
-			}
-			app.actionPerformed(new PageLoadEvent(this, entry));
+			app.actionPerformed(new PageLoadEvent(this, event.getDescription()));
 		}
 	}
 
@@ -88,6 +82,10 @@ public class PageArea extends JPanel {
 	public void setPage(TextNode root) {
 		String source;
 
+		if(root == null) {
+			return;
+		}
+
 		if(Configs.getOptionBoolean("gui.useHTML")) {
 			source = generateHTML(root);
 			pane.setText(source);
@@ -95,7 +93,6 @@ public class PageArea extends JPanel {
 			source = generateMarkdown(root);
 			area.setText(source);
 		}
-		linkMap.clear();
 	}
 
 	private String generateHTML(TextNode node) {
@@ -120,7 +117,6 @@ public class PageArea extends JPanel {
 		case TextNode.EM_TYPE:
 			return "<em>" + content + "</em>";
 		case TextNode.LINK_TYPE:
-			/*TODO put the WordEntry of the word into linkMap */
 			return "<a href=\'" + content + "\'>" + content + "</a>";
 		case TextNode.LIST_TYPE:
 			return "<ul>" + content + "</ul>";

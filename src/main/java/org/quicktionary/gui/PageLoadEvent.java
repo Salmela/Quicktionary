@@ -28,13 +28,26 @@ public class PageLoadEvent extends ActionEvent {
 	final static String PAGE_LOAD_EVENT = "page-load-event";
 
 	private WordEntry entry;
+	private String name;
 
 	public PageLoadEvent(Object source, WordEntry entry) {
 		super(source, ActionEvent.ACTION_PERFORMED, PAGE_LOAD_EVENT);
 		this.entry = entry;
+		this.name = null;
+	}
+
+	public PageLoadEvent(Object source, String name) {
+		super(source, ActionEvent.ACTION_PERFORMED, PAGE_LOAD_EVENT);
+		this.name = name;
+		this.entry = null;
 	}
 
 	public WordEntry getWordEntry() {
 		return entry;
+	}
+
+	/* ugly solution for links in PageArea */
+	public String getName() {
+		return name;
 	}
 }
