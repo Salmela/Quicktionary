@@ -85,7 +85,6 @@ class History {
 	 * Get the previous page from history.
 	 */
 	public HistoryEvent getPrevious(boolean go) {
-		int index;
 		if(currentIndex <= 0) {
 			return null;
 		}

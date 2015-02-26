@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.lang.StringBuilder;
 
 import org.quicktionary.backend.TextNode;

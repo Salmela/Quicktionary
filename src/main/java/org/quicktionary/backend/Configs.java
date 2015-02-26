@@ -28,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * The config system that stores settings/options. The class

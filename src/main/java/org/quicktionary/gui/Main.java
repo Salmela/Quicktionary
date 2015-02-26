@@ -18,7 +18,6 @@ package org.quicktionary.gui;
 
 import java.lang.Runtime;
 import org.quicktionary.backend.Quicktionary;
-import org.quicktionary.backend.Configs;
 
 import java.util.HashMap;
 import java.util.Map;

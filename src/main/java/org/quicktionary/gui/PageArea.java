@@ -26,10 +26,7 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
-import java.util.Map;
-import java.util.HashMap;
 import org.quicktionary.backend.TextNode;
-import org.quicktionary.backend.WordEntry;
 
 import org.quicktionary.backend.Configs;
 

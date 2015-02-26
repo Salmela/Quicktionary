@@ -19,7 +19,6 @@ package org.quicktionary.backend.database;
 import java.lang.String;
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.DataInputStream;

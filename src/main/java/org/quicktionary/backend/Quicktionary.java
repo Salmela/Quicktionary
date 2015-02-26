@@ -20,7 +20,6 @@ import org.quicktionary.backend.database.WordDatabase;
 
 import java.io.File;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * The backend class for the Quicktionary.
