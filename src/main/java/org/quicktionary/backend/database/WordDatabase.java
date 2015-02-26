@@ -32,15 +32,19 @@ public class WordDatabase {
 
 	private String searchWord;
 	private Map.Entry<String, WordEntryIO> currentEntry;
-	private Object lock;
+	final private Object lock;
 
 	/**
 	 * Create the database.
 	 */
 	public WordDatabase(String filename) {
 		lock = this;
-		io = new DataStoreIO(new File(filename));
-		map = this.io.getIndex();
+		io = null;
+
+		if(filename != null) {
+			io = new DataStoreIO(new File(filename));
+			map = this.io.getIndex();
+		}
 
 		if(map == null) {
 			map = new TreeMap<String, WordEntryIO>();
@@ -58,7 +62,13 @@ public class WordDatabase {
 	public WordEntry newWord(String word) {
 		WordEntry entry = new WordEntry(word);
 		synchronized(lock) {
-			map.put(word, io.createNewEntry(entry));
+			WordEntryIO entryIO;
+			if(io == null) {
+				entryIO = new WordEntryIO(entry, 0);
+			} else {
+				entryIO = io.createNewEntry(entry);
+			}
+			map.put(word, entryIO);
 		}
 		return entry;
 	}
@@ -79,6 +89,9 @@ public class WordDatabase {
 	 * @param word The word that was modified
 	 */
 	public void updateWord(WordEntry entry) {
+		if(io == null) {
+			return;
+		}
 		io.markAsChanged(entry.getIO());
 	}
 
@@ -96,6 +109,9 @@ public class WordDatabase {
 	 * @param wordEntry The entry that we want to be filled.
 	 */
 	public void fetchPage(WordEntry wordEntry) {
+		if(io == null) {
+			return;
+		}
 		if(!wordEntry.isLoaded() && wordEntry.isStorable()) {
 			io.fetchWordEntry(wordEntry.getIO());
 		}
@@ -163,7 +179,9 @@ public class WordDatabase {
 	 * Write the WordEntry changes to the file.
 	 */
 	public void sync() {
-		io.syncFile(map);
+		if(io != null) {
+			io.syncFile(map);
+		}
 	}
 
 	/**
