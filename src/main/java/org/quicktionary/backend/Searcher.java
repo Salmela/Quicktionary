@@ -179,11 +179,16 @@ class Searcher {
 
 			/* go through all words that datbase gave to us */
 			for(i = 0; i < requestCount && entries[i] != null; i++) {
+				SearchItem searchItem;
+				String desc;
+
 				/* remove duplicates */
 				if(isSearchResultDuplicate(entries[i])) continue;
 
 				/* give the new item to gui */
-				resultListener.appendSearchResult(new SearchItem(entries[i].getWord(), "Test", entries[i]));
+				desc = entries[i].getDescription();
+				searchItem = new SearchItem(entries[i].getWord(), desc, entries[i]);
+				resultListener.appendSearchResult(searchItem);
 				resultCount++;
 			}
 		}
