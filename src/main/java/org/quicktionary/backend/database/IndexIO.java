@@ -195,21 +195,32 @@ class IndexIO {
 			WordEntryIO entry;
 			int length;
 			long address;
-			byte[] wordArray;
-			String word;
-			
-			/* length of the word */
+			byte[] buffer;
+			String word, description;
+
+			/* read the word */
 			length = stream.readInt();
-			wordArray = new byte[length];
-			/* append the word */
-			stream.read(wordArray);
+			buffer = new byte[length];
+			stream.read(buffer);
+			word = new String(buffer, "UTF-8");
+
+			/* read the description */
+			length = stream.readInt();
+			buffer = new byte[length];
+			stream.read(buffer);
+			description = new String(buffer, "UTF-8");
+
 			/* append the address of the word */
 			address = stream.readLong();
 
 			/* create new entry to the entries array */
-			word = new String(wordArray, "UTF-8");
 			entry = createWordEntry(word, address);
 			entries[i] = new AbstractMap.SimpleEntry<String, WordEntryIO>(word, entry);
+
+			if(description.length() > 0) {
+				WordEntry data = entry.data;
+				data.setDescription(description);
+			}
 		}
 		return new SortedArray<String, WordEntryIO>(entries);
 	}
@@ -228,13 +239,23 @@ class IndexIO {
 		stream.writeInt(map.size());
 
 		for(Map.Entry<String, WordEntryIO> entry : map.entrySet()) {
-			byte[] word;
+			byte[] buffer;
 
-			word = entry.getKey().getBytes("UTF-8");
-			/* length of the word */
-			stream.writeInt(word.length);
-			/* append the word */
-			stream.write(word);
+			/* write the word */
+			buffer = entry.getKey().getBytes("UTF-8");
+			stream.writeInt(buffer.length);
+			stream.write(buffer);
+
+			/* write the description */
+			WordEntry data = entry.getValue().data;
+			if(data.getDescription() != null) {
+				buffer = data.getDescription().getBytes("UTF-8");
+				stream.writeInt(buffer.length);
+				stream.write(buffer);
+			} else {
+				stream.writeInt(0);
+			}
+
 			/* append the address of the word */
 			stream.writeLong(entry.getValue().address);
 		}
