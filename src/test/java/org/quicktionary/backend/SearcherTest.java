@@ -16,6 +16,7 @@
  */
 package org.quicktionary.backend;
 
+import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,20 +24,37 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.Assume;
+import org.junit.rules.ExpectedException;
 
 import org.quicktionary.backend.database.WordDatabase;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.Assume;
+import org.junit.Rule;
 
 public class SearcherTest implements SearchResultListener {
 	private Searcher searcher;
 	private WordDatabase database;
-	private ArrayList<SearchItem> results;
+	private List<SearchItem> results;
 
 	final SearchItem RESET;
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
-	public SearcherTest() {
-		results = new ArrayList<SearchItem>();
-		database = new WordDatabase();
+	public SearcherTest() throws Exception {
+		//Map<String, Object> options = new HashMap<String, Object>();
+
+		File file;
+		file = File.createTempFile("database.db", "ext");
+		file.deleteOnExit();
+
+		//options.put("database", file.toString());
+
+		results = Collections.synchronizedList(new ArrayList<SearchItem>());
+		database = new WordDatabase(file.toString());
 		searcher = new Searcher(database);
 		searcher.setResultListener(this);
 		RESET = new SearchItem("RESET", "RESET", null);
@@ -53,6 +71,9 @@ public class SearcherTest implements SearchResultListener {
 	public void setStatistics(int totalCount, int time) {
 	}
 
+	public void showResults() {
+	}
+
 	@Override
 	public int getSize() {
 		return results.size();
@@ -63,21 +84,18 @@ public class SearcherTest implements SearchResultListener {
 		return results.get(index);
 	}
 
-	private boolean getResults(int count) {
-		boolean ret;
-		ret = searcher.requestSearchResults(0, count);
+	private void getResults(int count) {
+		searcher.requestSearchResults(0, count);
 
-		if(!ret) {
-			Assert.assertTrue(searcher.hasCompleted());
+		try {
+			Thread.sleep(200);
+		} catch(InterruptedException e) {
 		}
-
-		/* this will fail when the searcher is threaded */
 		Assume.assumeTrue(searcher.hasCompleted());
-		return ret;
 	}
 
-	private boolean getResults() {
-		return getResults(20);
+	private void getResults() {
+		getResults(20);
 	}
 
 	@Test
@@ -90,6 +108,8 @@ public class SearcherTest implements SearchResultListener {
 		searcher.search("hello");
 
 		getResults();
+		/* here is some multithreading issues */
+		Assert.assertNull(results.get(results.size() - 1));
 		Assert.assertEquals(2, results.size());
 	}
 
@@ -113,7 +133,8 @@ public class SearcherTest implements SearchResultListener {
 	public void returnFalseAfterNegativeResultCount() {
 		searcher.search("hello");
 
-		Assert.assertFalse(getResults(-50));
+		thrown.expect(Error.class);
+		getResults(-50);
 	}
 
 	@Test
@@ -158,7 +179,7 @@ public class SearcherTest implements SearchResultListener {
 
 		getResults(5);
 		Assert.assertEquals(5 + 1, results.size());
-		searcher.requestSearchResults(0, 10);
+		getResults(10);
 		Assert.assertEquals(10 + 1, results.size());
 	}
 }
