@@ -16,6 +16,8 @@
  */
 package org.quicktionary.backend;
 
+import java.io.File;
+import java.io.IOException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -31,8 +33,12 @@ public class WikiDBReaderTest {
 	private WordDatabase db;
 	private WikiDBReader reader;
 
-	public WikiDBReaderTest() {
-		db = new WordDatabase();
+	public WikiDBReaderTest() throws IOException {
+		File file;
+		file = File.createTempFile("database.db", "ext");
+		file.deleteOnExit();
+
+		db = new WordDatabase(file.toString());
 		reader = new WikiDBReader(db);
 	}
 
