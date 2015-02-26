@@ -26,10 +26,11 @@ import java.util.Map;
  * The Main class parses the command line arguments and starts the application.
  */
 public class Main {
-	public static void init(Map<String, Object> options) {
-		options.put("gui.useNativeFileDialog", new Boolean(false));
-		options.put("gui.themeName", "native");
-		options.put("gui.useHTML", new Boolean(true));
+	public static void init(Map<String, Object> defaults) {
+		defaults.put("gui.useNativeFileDialog", new Boolean(false));
+		defaults.put("gui.themeName", "native");
+		defaults.put("gui.useHTML", new Boolean(true));
+		defaults.put("gui.demo", new Boolean(false));
 	}
 
 	/**
@@ -58,6 +59,10 @@ public class Main {
 			} else if(option.equals("--help") ||
 			          option.equals("-h")) {
 				System.out.println("TODO!");
+
+			} else if(option.equals("--demo") ||
+			          option.equals("-d")) {
+				options.put("gui.demo", new Boolean(true));
 
 			} else if(option.charAt(0) != '-') {
 				options.put("databasePath", args[++i]);

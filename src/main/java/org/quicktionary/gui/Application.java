@@ -40,17 +40,15 @@ public class Application implements ActionListener {
 		this.mainWindow = new MainWindow(this);
 		this.dictionary = dictionary;
 
-		dictionary.newWord("hello");
-		dictionary.newWord("hey");
-		dictionary.newWord("he");
-		dictionary.newWord("hi");
-		dictionary.newWord("howdy");
-		dictionary.newWord("crody");
-		dictionary.newWord("foggy");
-		dictionary.newWord("hay");
-		dictionary.newWord("bay");
-		dictionary.newWord("say");
-		dictionary.newWord("lay");
+		if(Configs.getOptionBoolean("gui.demo")) {
+			dictionary.newWord("hello");
+			dictionary.newWord("howdy");
+			dictionary.newWord("hi");
+			dictionary.newWord("hey");
+			dictionary.newWord("bye");
+			dictionary.newWord("cool");
+			dictionary.newWord("test");
+		}
 
 		dictionary.setSearchResultListener(mainWindow.getSearchResultListener());
 
