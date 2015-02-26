@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Quicktionary
+GenericName=Offline dictionary
+Comment=Find out meaning of words
+Icon=quicktionary.png
+
+Exec=bash -c "export PATH=$PATH:`dirname %k`;sed -i \"s,Icon=.*,Icon=$PWD/quicktionary-icon.png,g\" Quicktionary.desktop;quicktionary-gui"
+
+Actions=Demo
+
+[Desktop Action Demo]
+Name=Demo
+Exec=quicktionary --demo
+OnlyShowIn=Unity;
