@@ -251,8 +251,12 @@ public class SearchResults extends JList {
 			item = (SearchItem)object;
 			/* ugly way to format the search items */
 			if(Configs.getOptionBoolean("gui.useHTML")) {
-				setText("<html><body><font size='+1'><b>" + item.getWord() + "</b></font>" +
-				        "<br>" + item.getDescription() + "</body></html>");
+				if(item.getDescription() == null) {
+					setText("<html><body><font size='+1'><b>" + item.getWord() + "</b></font></body></html>");
+				} else {
+					setText("<html><body><font size='+1'><b>" + item.getWord() + "</b></font>" +
+						"<br>" + item.getDescription() + "</body></html>");
+				}
 			} else {
 				setText(item.getWord() + " - " + item.getDescription());
 			}
