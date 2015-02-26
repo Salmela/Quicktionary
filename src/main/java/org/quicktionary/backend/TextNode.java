@@ -86,6 +86,16 @@ public class TextNode {
 		return node;
 	}
 
+	public TextNode prependChild(TextNode node) {
+		if(content != null) {
+			throw new Error("TextNode must have only child nodes or text content.");
+		}
+		this.childs.add(0, node);
+		node.parent = this;
+
+		return node;
+	}
+
 	public void removeChild(int index) {
 		this.childs.remove(index);
 	}
