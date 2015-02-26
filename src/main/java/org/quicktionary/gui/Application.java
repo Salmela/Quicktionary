@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.Quicktionary;
 import org.quicktionary.backend.WordEntry;
+import org.quicktionary.backend.HistoryEvent;
 import org.quicktionary.backend.SearchItem;
 import org.quicktionary.backend.SearchResultListener;
 import org.quicktionary.gui.dialogs.SettingsDialog;
@@ -53,7 +54,7 @@ public class Application implements ActionListener {
 		dictionary.setSearchResultListener(mainWindow.getSearchResultListener());
 
 		/* add the main page to the history */
-		dictionary.storeEvent("page", "");
+		dictionary.storeEvent(new PageLoadHistoryEvent(mainPage));
 	}
 
 	/**
@@ -88,9 +89,9 @@ public class Application implements ActionListener {
 		} else if(event.getActionCommand() == SettingsButton.OPEN_PREFERENCES_EVENT) {
 			new SettingsDialog(mainWindow, this);
 		} else if(event.getActionCommand() == MainWindow.GO_NEXT_EVENT) {
-			mainWindow.updateHistoryButtons("next", dictionary.getNextView(true));
+			goInHistory(dictionary.getNextView(true));
 		} else if(event.getActionCommand() == MainWindow.GO_BACK_EVENT) {
-			mainWindow.updateHistoryButtons("back", dictionary.getPreviousView(true));
+			goInHistory(dictionary.getPreviousView(true));
 		} else {
 			System.out.println("main window: unknown event (" +
 			                   event.getActionCommand() + ")");
@@ -102,6 +103,13 @@ public class Application implements ActionListener {
 	private void updateHistory() {
 		mainWindow.updateHistoryButtons("next", dictionary.getNextView(false));
 		mainWindow.updateHistoryButtons("back", dictionary.getPreviousView(false));
+	}
+
+	private void goInHistory(HistoryEvent event) {
+		if(event instanceof PageLoadHistoryEvent) {
+			PageLoadHistoryEvent e = (PageLoadHistoryEvent)event;
+			openPage(e.getWordEntry(), false);
+		}
 	}
 
 	private void handleSearchRequest(ActionEvent event) {

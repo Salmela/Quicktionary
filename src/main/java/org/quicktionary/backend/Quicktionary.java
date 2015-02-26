@@ -68,7 +68,6 @@ public class Quicktionary {
 	 * @param searchQuery The search query
 	 */
 	public void search(String searchQuery) {
-		history.saveEvent("search", searchQuery);
 		searcher.search(searchQuery);
 	}
 
@@ -103,19 +102,15 @@ public class Quicktionary {
 
 	/**
 	 * Allow Gui to store an event to history.
-	 * This is sort of hack, so try not use this method.
-	 * It is currently only used to store the opening page at gui.
 	 *
-	 * @param type The type of the event
-	 * @param data The internal data of the event
+	 * @param event The data of the event
 	 */
-	public void storeEvent(String type, String data) {
-		history.saveEvent(type, data);
+	public void storeEvent(HistoryEvent event) {
+		history.saveEvent(event);
 	}
 
 	/**
 	 * Parse a Wiktionary database and push the words to the WordDatabase.
-	 * TODO: Somehow reduce the size of this method
 	 *
 	 * @param filename The filename for the database
 	 */
@@ -151,15 +146,11 @@ public class Quicktionary {
 
 	/**
 	 * Get the content of the page for word.
-	 * TODO: remove the searchQuery.
 	 *
 	 * @param item The SearchItem for the wanted page
-	 * @param searchQuery Search query used to find the page
 	 * @return The data for the page
 	 */
 	public WordEntry getPageContent(WordEntry entry) {
-		history.saveEvent("page", "" + entry.getWord());
-
 		database.fetchPage(entry);
 		return entry;
 	}
@@ -168,7 +159,6 @@ public class Quicktionary {
 		WordEntry entry;
 
 		entry = database.fetchWordEntry(word);
-		history.saveEvent("page", "" + entry.getWord());
 
 		database.fetchPage(entry);
 		return entry;
@@ -179,7 +169,7 @@ public class Quicktionary {
 	 * @param go Load the next page
 	 * @return The view
 	 */
-	public Object getNextView(boolean go) {
+	public HistoryEvent getNextView(boolean go) {
 		return history.getNext(go);
 	}
 
@@ -188,7 +178,7 @@ public class Quicktionary {
 	 * @param go Load the previous page
 	 * @return The view
 	 */
-	public Object getPreviousView(boolean go) {
+	public HistoryEvent getPreviousView(boolean go) {
 		return history.getPrevious(go);
 	}
 

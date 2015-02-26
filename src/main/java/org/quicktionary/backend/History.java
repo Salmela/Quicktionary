@@ -24,16 +24,11 @@ import java.util.ArrayList;
  * TODO: somehow compress many search events into one.
  */
 class History {
-	private ArrayList<Event> events;
+	private ArrayList<HistoryEvent> events;
 	private int currentIndex;
 
-	private class Event{
-		public String event;
-		public String data;
-	}
-
 	public History() {
-		events = new ArrayList<Event>();
+		events = new ArrayList<HistoryEvent>();
 		currentIndex = -1;
 	}
 
@@ -44,8 +39,13 @@ class History {
 	/**
 	 * Store a event to the history.
 	 */
-	public void saveEvent(String event, String data) {
-		Event e = new Event();
+	public void saveEvent(HistoryEvent event) {
+		if(event.truncateSimilar() && currentIndex > 0) {
+			HistoryEvent prev = getPrevious(false);
+			if(prev != null && prev.getEventType() == event.getEventType()) {
+				getPrevious(true);
+			}
+		}
 
 		/* truncate the list if we aren't at the end */
 		if(indexOfLastEvent() > currentIndex) {
@@ -54,13 +54,12 @@ class History {
 		}
 
 		/* append the new event */
-		e.event = event;
-		e.data = data;
-		events.add(e);
+		events.add(event);
 		currentIndex++;
+		//System.out.println("history now " + currentIndex + " / " + events.size());
 	}
 
-	private Object getRelative(int offset, boolean go) {
+	private HistoryEvent getRelative(int offset, boolean go) {
 		int newIndex;
 
 		newIndex = currentIndex + offset;
@@ -68,13 +67,14 @@ class History {
 		if(go) {
 			currentIndex = newIndex;
 		}
+		//System.out.println("history current " + currentIndex + " / " + events.size());
 		return events.get(newIndex);
 	}
 
 	/**
 	 * Get the next page from history.
 	 */
-	public Object getNext(boolean go) {
+	public HistoryEvent getNext(boolean go) {
 		if(indexOfLastEvent() <= currentIndex) {
 			return null;
 		}
@@ -84,7 +84,7 @@ class History {
 	/**
 	 * Get the previous page from history.
 	 */
-	public Object getPrevious(boolean go) {
+	public HistoryEvent getPrevious(boolean go) {
 		int index;
 		if(currentIndex <= 0) {
 			return null;
@@ -95,7 +95,7 @@ class History {
 	/**
 	 * Return the current page.
 	 */
-	public Object getCurrent() {
+	public HistoryEvent getCurrent() {
 		if(currentIndex == -1) {
 			return null;
 		}
