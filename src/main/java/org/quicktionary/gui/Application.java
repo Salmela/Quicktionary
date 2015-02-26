@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.quicktionary.backend.Quicktionary;
+import org.quicktionary.backend.Configs;
 import org.quicktionary.backend.WordEntry;
 import org.quicktionary.backend.HistoryEvent;
 import org.quicktionary.backend.SearchItem;
