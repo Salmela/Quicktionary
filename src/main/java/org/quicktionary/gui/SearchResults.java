@@ -209,8 +209,12 @@ public class SearchResults extends JList {
 			} else {
 				lastIndex = results.size() - 1;
 			}
-			fireContentsChanged(this, oldLength, oldLength);
-			fireIntervalAdded(this, oldLength, lastIndex);
+			if(oldLength > 0) {
+				fireContentsChanged(this, oldLength, oldLength);
+			}
+			if(oldLength < lastIndex) {
+				fireIntervalAdded(this, oldLength, lastIndex);
+			}
 			oldLength = results.size();
 		}
 		private class DataListenerNotifier implements Runnable {
