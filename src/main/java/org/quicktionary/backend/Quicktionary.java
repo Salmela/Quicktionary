@@ -155,12 +155,17 @@ public class Quicktionary {
 		return entry;
 	}
 
-	public WordEntry getPageContent(String word) {
+	/**
+	 * Get the word entry for the name.
+	 * This is only used for page links.
+	 *
+	 * @param word The name of the page
+	 * @return The WordEntry for the page
+	 */
+	public WordEntry getWordEntry(String word) {
 		WordEntry entry;
 
 		entry = database.fetchWordEntry(word);
-
-		database.fetchPage(entry);
 		return entry;
 	}
 
