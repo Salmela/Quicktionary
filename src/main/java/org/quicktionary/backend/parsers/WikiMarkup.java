@@ -365,7 +365,7 @@ public class WikiMarkup extends Parser {
 			}
 		}
 
-		node = new TextNode(TextNode.HEADER_TYPE);
+		node = new TextNode(TextNode.HEADER_TYPE, "" + start.count);
 		getRoot().appendChild(node);
 		itemListTruncate(1);
 		parentList.add(node);
