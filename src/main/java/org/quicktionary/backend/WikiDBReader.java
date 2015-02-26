@@ -22,6 +22,8 @@ import java.io.FileReader;
 import java.io.StringReader;
 import java.io.IOException;
 
+import java.util.Calendar;
+
 import org.quicktionary.backend.parsers.XMLParser;
 import org.quicktionary.backend.parsers.WikiMarkup;
 import org.quicktionary.backend.database.WordDatabase;
@@ -139,11 +141,21 @@ public class WikiDBReader implements Runnable {
 	}
 
 	public void run() {
+		Calendar next;
 		if(!parser.isInitialized()) {
 			throw new Error("You have to run first the check method.");
 		}
 
+		next = Calendar.getInstance();
+		next.roll(Calendar.MINUTE, 10);
+
 		while(parser.findElement(PAGE_TAG)) {
+			/* check if 10 minutes is gone */
+			if(next.before(Calendar.getInstance())) {
+				database.sync();
+				next = Calendar.getInstance();
+				next.roll(Calendar.MINUTE, 10);
+			}
 			readPage();
 		}
 		database.sync();
