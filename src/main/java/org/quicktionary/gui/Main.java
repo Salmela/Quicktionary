@@ -18,6 +18,7 @@ package org.quicktionary.gui;
 
 import java.lang.Runtime;
 import org.quicktionary.backend.Quicktionary;
+import org.quicktionary.backend.Configs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,19 +79,26 @@ public class Main {
 		Quicktionary quicktionary;
 		Application application;
 		Map<String, Object> options;
+		Map<String, Object> defaults;
 
 		//Test test = new Test();
 
+		/* get the gui defaults */
+		defaults = new HashMap<String, Object>();
+		Main.init(defaults);
+
+		/* parse commandline arguments */
 		options = new HashMap<String, Object>();
-		Main.init(options);
 		Main.parseCommandlineArgs(options, args);
 
-		quicktionary = new Quicktionary(options);
+		/* create the main classes */
+		quicktionary = new Quicktionary(defaults, options);
 		application = new Application(quicktionary);
-		application.run();
 
 		/* write the changes to the database at exit */
 		Runtime.getRuntime().addShutdownHook(new ExitHook(quicktionary));
+
+		application.run();
 	}
 
 	private static final class ExitHook extends Thread {

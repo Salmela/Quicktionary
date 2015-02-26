@@ -20,6 +20,7 @@ import org.quicktionary.backend.database.WordDatabase;
 
 import java.io.File;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The backend class for the Quicktionary.
@@ -30,18 +31,21 @@ public class Quicktionary {
 	private History      history;
 	private Configs      configs;
 
-	public Quicktionary(Map<String, Object> map) {
-		handleConfig(map);
+	public Quicktionary(Map<String, Object> uiDefaults, Map<String, Object> forcedOptions) {
+		handleConfig(uiDefaults, forcedOptions);
 		database = new WordDatabase();
 		searcher = new Searcher(database);
 		history = new History();
+	}
+	public Quicktionary() {
+		this(null, null);
 	}
 
 	/**
 	 * Set the default configs, read the config and
 	 * overwrite the commandline.
 	 */
-	private void handleConfig(Map<String, Object> map) {
+	private void handleConfig(Map<String, Object> uiDefaults, Map<String, Object> forcedOptions) {
 		String separator;
 
 		separator = File.separator;
@@ -54,11 +58,21 @@ public class Quicktionary {
 		/* create the app directory if it doesn't already exist */
 		new File((String)Configs.getOption("appFolder")).mkdirs();
 
+		/* set gui defaults */
+		if(uiDefaults != null) {
+			for(Map.Entry<String, Object> entry : uiDefaults.entrySet()) {
+				configs.setOption(entry.getKey(), entry.getValue());
+			}
+		}
+
 		/* parse the config file */
 		configs.parseConfigFile(new File(Configs.getOption("appFolder") + separator + "config"));
 
-		for(Map.Entry<String, Object> entry : map.entrySet()) {
-			configs.setOption(entry.getKey(), entry.getValue());
+		/* set the commandline options */
+		if(forcedOptions != null) {
+			for(Map.Entry<String, Object> entry : forcedOptions.entrySet()) {
+				configs.setOption(entry.getKey(), entry.getValue());
+			}
 		}
 	}
 
