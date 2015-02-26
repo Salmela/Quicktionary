@@ -98,9 +98,16 @@ public class WikiDBReader implements Runnable {
 			return;
 		}
 
+		TextNode root = wikiParser.getRoot();
+
+		/* add a header to the page */
+		TextNode header = new TextNode(TextNode.HEADER_TYPE, "1");
+		header.setTextContent(title);
+		root.prependChild(header);
+
 		entry = database.newWord(title);
 		entry.addSource(text);
-		entry.setContent(wikiParser.getRoot());
+		entry.setContent(root);
 	}
 
 	private void readPage() {
