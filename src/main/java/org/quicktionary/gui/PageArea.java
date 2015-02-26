@@ -72,7 +72,7 @@ public class PageArea extends JPanel {
 	private StyleSheet generateStyleSheet(HTMLEditorKit kit) {
 		StyleSheet styleSheet = kit.getStyleSheet();
 		styleSheet.addRule("body {font-family: Cantarell;}");
-		styleSheet.addRule("h1 {border-bottom: 1px solid #444444; padding-bottom: 5px}");
+		styleSheet.addRule("h1, h2, h3, h4, h5, h6 {border-bottom: 1px solid #444444; padding-bottom: 5px}");
 		return styleSheet;
 	}
 
