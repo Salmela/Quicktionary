@@ -40,10 +40,10 @@ class History {
 	 * Store a event to the history.
 	 */
 	public void saveEvent(HistoryEvent event) {
-		if(event.truncateSimilar() && currentIndex > 0) {
-			HistoryEvent prev = getPrevious(false);
+		if(event.truncateSimilar() && currentIndex >= 0) {
+			HistoryEvent prev = getCurrent();
 			if(prev != null && prev.getEventType() == event.getEventType()) {
-				getPrevious(true);
+				currentIndex -= 1;
 			}
 		}
 
