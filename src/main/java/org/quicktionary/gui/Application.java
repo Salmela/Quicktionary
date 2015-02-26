@@ -32,6 +32,7 @@ import org.quicktionary.gui.dialogs.SettingsDialog;
  */
 public class Application implements ActionListener {
 	static final long serialVersionUID = 1L;
+	private static String mainPageTitle = "Main Page";
 	private MainWindow mainWindow;
 	private Quicktionary dictionary;
 
@@ -54,7 +55,10 @@ public class Application implements ActionListener {
 		dictionary.setSearchResultListener(mainWindow.getSearchResultListener());
 
 		/* add the main page to the history */
+		WordEntry mainPage;
+		mainPage = new WordEntry(mainPageTitle, "", mainWindow.getStartPage(), false);
 		dictionary.storeEvent(new PageLoadHistoryEvent(mainPage));
+		mainWindow.openPage(mainPageTitle, mainPage);
 	}
 
 	/**

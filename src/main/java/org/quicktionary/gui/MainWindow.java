@@ -153,7 +153,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		return headerBar;
 	}
 
-	private TextNode generateStartPage() {
+	public TextNode getStartPage() {
 		TextNode root, paragraph, header, link, text;
 
 		root = new TextNode(TextNode.ROOT_TYPE);
@@ -223,11 +223,11 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		/* create components for the main view */
 		mainPane = new JScrollPane();
-		mainPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		mainPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		searchResults = new SearchResults(this);
 
 		pageArea = new PageArea(app);
-		pageArea.setPage(generateStartPage());
+		pageArea.setPage(null);
 		mainPane.setViewportView(pageArea);
 
 		/* add event listeners for the history buttons */

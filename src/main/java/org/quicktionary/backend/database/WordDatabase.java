@@ -96,7 +96,7 @@ public class WordDatabase {
 	 * @param wordEntry The entry that we want to be filled.
 	 */
 	public void fetchPage(WordEntry wordEntry) {
-		if(!wordEntry.isLoaded()) {
+		if(!wordEntry.isLoaded() && wordEntry.isStorable()) {
 			io.fetchWordEntry(wordEntry.getIO());
 		}
 	}
@@ -112,7 +112,7 @@ public class WordDatabase {
 		synchronized(lock) {
 			entry = map.get(word);
 			if(entry == null) {
-				return new WordEntry(word, null, null);
+				return new WordEntry(word, null, null, false);
 			}
 		}
 		return entry.data;

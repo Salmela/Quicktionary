@@ -27,14 +27,16 @@ public class WordEntry {
 	private String word, source;
 	private TextNode content;
 	private WordEntryIO io;
+	private boolean storable;
 
 	private SoftReference<String> sourceWeak;
 	private SoftReference<TextNode> contentWeak;
 
-	public WordEntry(String word, String source, TextNode content) {
+	public WordEntry(String word, String source, TextNode content, boolean storable) {
 		this.word = word;
 		this.source = source;
 		this.content = content;
+		this.storable = storable;
 
 		this.sourceWeak = null;
 		this.contentWeak = null;
@@ -47,6 +49,9 @@ public class WordEntry {
 			this.contentWeak = new SoftReference<TextNode>(content);
 		}
 		/**/
+	}
+	public WordEntry(String word, String source, TextNode content) {
+		this(word, source, content, true);
 	}
 
 	public WordEntry(String word) {
@@ -102,6 +107,10 @@ public class WordEntry {
 			if(weak != null) return true;
 		}
 		return content != null;
+	}
+
+	public boolean isStorable() {
+		return storable;
 	}
 
 	/**
