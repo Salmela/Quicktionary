@@ -157,7 +157,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		TextNode root, paragraph, header, link, text;
 
 		root = new TextNode(TextNode.ROOT_TYPE);
-		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));
+		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE, "1"));
 		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
 		header.setTextContent("Welcome!");
@@ -181,17 +181,32 @@ public class MainWindow extends JFrame implements ActionListener {
 		return root;
 	}
 
-	private TextNode generateNotFound(String string) {
+	private TextNode generateNotFound(String wordName) {
 		TextNode root, paragraph, header, text;
 
 		root = new TextNode(TextNode.ROOT_TYPE);
-		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE));
+		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE, "1"));
 		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
 
-		header.setTextContent(string);
+		header.setTextContent("Page not found");
 
 		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
-		text.setTextContent("Sorry, this page is empty.");
+		text.setTextContent("There is not page for word "+ wordName + ".");
+
+		return root;
+	}
+
+	public TextNode generateNewPage(String wordName) {
+		TextNode root, paragraph, header, text;
+
+		root = new TextNode(TextNode.ROOT_TYPE);
+		header = root.appendChild(new TextNode(TextNode.HEADER_TYPE, "1"));
+		paragraph = root.appendChild(new TextNode(TextNode.PARAGRAPH_TYPE));
+
+		header.setTextContent(wordName);
+
+		text = paragraph.appendChild(new TextNode(TextNode.PLAIN_TYPE));
+		text.setTextContent("(This page is empty)");
 
 		return root;
 	}
@@ -274,9 +289,9 @@ public class MainWindow extends JFrame implements ActionListener {
 		if(entry.getContent() == null) {
 			pageArea.setPage(generateNotFound(title));
 		} else {
-			System.out.println("\nPrint out:");
-			entry.getContent().print(2);
-			System.out.println("\nPrint out end\n");
+			//System.out.println("\nPrint out:");
+			//entry.getContent().print(2);
+			//System.out.println("\nPrint out end\n");
 
 			pageArea.setPage(entry.getContent());
 		}
