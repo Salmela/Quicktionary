@@ -29,9 +29,7 @@ import org.junit.rules.ExpectedException;
 import org.quicktionary.backend.database.WordDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.Assume;
 import org.junit.Rule;
 
@@ -45,16 +43,8 @@ public class SearcherTest implements SearchResultListener {
 	public ExpectedException thrown = ExpectedException.none();
 
 	public SearcherTest() throws Exception {
-		//Map<String, Object> options = new HashMap<String, Object>();
-
-		File file;
-		file = File.createTempFile("database.db", "ext");
-		file.deleteOnExit();
-
-		//options.put("database", file.toString());
-
 		results = Collections.synchronizedList(new ArrayList<SearchItem>());
-		database = new WordDatabase(file.toString());
+		database = new WordDatabase(null);
 		searcher = new Searcher(database);
 		searcher.setResultListener(this);
 		RESET = new SearchItem("RESET", "RESET", null);
