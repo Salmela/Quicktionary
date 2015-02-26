@@ -24,7 +24,7 @@ import java.lang.ref.SoftReference;
  * This class contains all information about particular word.
  */
 public class WordEntry {
-	private String word, source;
+	private String word, source, description;
 	private TextNode content;
 	private WordEntryIO io;
 	private boolean storable;
@@ -78,8 +78,16 @@ public class WordEntry {
 		}
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getWord() {
 		return word;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	//public TextNode getContent() {
