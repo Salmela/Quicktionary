@@ -14,6 +14,34 @@ public class HistoryTest {
 		history = new History();
 	}
 
+	private class E implements HistoryEvent {
+		public int id;
+		public E(int id) {
+			this.id = id;
+		}
+		public String getEventType() {
+			return "e";
+		}
+
+		public boolean truncateSimilar() {
+			return false;
+		}
+	}
+
+	private class ETruncatable implements HistoryEvent {
+		public int id;
+		public ETruncatable(int id) {
+			this.id = id;
+		}
+		public String getEventType() {
+			return "f";
+		}
+
+		public boolean truncateSimilar() {
+			return true;
+		}
+	}
+
 	@Test
 	public void getCurrentFromEmptyHistory() {
 		assertNull(history.getCurrent());
@@ -21,37 +49,88 @@ public class HistoryTest {
 
 	@Test
 	public void storeEvent() {
-		history.saveEvent("search", "something");
-		assertNotNull(history.getCurrent());
+		HistoryEvent e = new E(0);
+		history.saveEvent(e);
+		assertEquals(e, history.getCurrent());
 	}
 
 	@Test
 	public void getNextAtEndOfHistory() {
-		history.saveEvent("search", "something");
-		history.saveEvent("page", "something");
+		HistoryEvent e = new E(1);
+		HistoryEvent e2 = new E(2);
+		history.saveEvent(e);
+		history.saveEvent(e2);
 		assertNull(history.getNext(false));
 	}
 
 	@Test
 	public void getNextAtStartOfHistory() {
-		history.saveEvent("search", "something");
-		history.saveEvent("page", "something");
+		HistoryEvent e = new E(1);
+		HistoryEvent e2 = new E(2);
+		history.saveEvent(e);
+		history.saveEvent(e2);
 		history.getPrevious(true);
-		assertNotNull(history.getNext(false));
+		assertEquals(e2, history.getNext(false));
 	}
 
 	@Test
 	public void getPreviousAtEndOfHistory() {
-		history.saveEvent("search", "something");
-		history.saveEvent("page", "something");
-		assertNotNull(history.getPrevious(false));
+		HistoryEvent e = new E(1);
+		HistoryEvent e2 = new E(2);
+		history.saveEvent(e);
+		history.saveEvent(e2);
+		assertEquals(e, history.getPrevious(false));
 	}
 
 	@Test
 	public void getPreviousAtStartOfHistory() {
-		history.saveEvent("search", "something");
-		history.saveEvent("page", "something");
+		HistoryEvent e = new E(1);
+		HistoryEvent e2 = new E(2);
+		history.saveEvent(e);
+		history.saveEvent(e2);
 		history.getPrevious(true);
 		assertNull(history.getPrevious(false));
+	}
+
+
+	@Test
+	public void getCurrentForTruncatedEvent() {
+		HistoryEvent e = new ETruncatable(1);
+		HistoryEvent e2 = new ETruncatable(2);
+		history.saveEvent(e);
+		history.saveEvent(e2);
+		assertEquals(e2, history.getCurrent());
+	}
+
+	@Test
+	public void getPreviousForTruncatedEvent() {
+		HistoryEvent e = new ETruncatable(1);
+		HistoryEvent e2 = new ETruncatable(2);
+		history.saveEvent(e);
+		history.saveEvent(e2);
+		assertNull(history.getPrevious(false));
+	}
+
+	@Test
+	public void getPreviousAfterTruncatedEvents() {
+		HistoryEvent e = new E(1);
+		HistoryEvent e1 = new ETruncatable(2);
+		HistoryEvent e2 = new ETruncatable(3);
+		history.saveEvent(e);
+		history.saveEvent(e1);
+		history.saveEvent(e2);
+		assertEquals(e, history.getPrevious(false));
+	}
+
+	@Test
+	public void getNextAtStartOfTruncatedEvents() {
+		HistoryEvent e = new E(1);
+		HistoryEvent e1 = new ETruncatable(2);
+		HistoryEvent e2 = new ETruncatable(3);
+		history.saveEvent(e);
+		history.saveEvent(e1);
+		history.saveEvent(e2);
+		history.getPrevious(true);
+		assertEquals(e2, history.getNext(false));
 	}
 }
