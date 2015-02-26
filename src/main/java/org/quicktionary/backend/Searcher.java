@@ -104,7 +104,7 @@ class Searcher {
 	 * @param count  The number of search results
 	 * @return True if the request was successful
 	 */
-	public boolean requestSearchResults(int offset, int count) {
+	public void requestSearchResults(int offset, int count) {
 		/* check that result listener is actually set */
 		if(resultListener == null) {
 			searchRunning.set(false);
@@ -118,7 +118,6 @@ class Searcher {
 			throw new Error("Invalid search result request");
 		}
 		searchThread.process();
-		return false;
 	}
 
 	/**
