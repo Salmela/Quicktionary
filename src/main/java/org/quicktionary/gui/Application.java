@@ -187,11 +187,29 @@ public class Application implements ActionListener {
 	}
 
 	private void handleAskNewWordRequest(ActionEvent event) {
-		String name = (String)JOptionPane.showInputDialog(mainWindow,
-		                      "Create a new word.\nWrite the name of the word into textbox?",
-		                      "Create a word", JOptionPane.PLAIN_MESSAGE, null, null, null);
-		if(name != null) {
-			dictionary.newWord(name);
+		JTextField nameInput, descInput;
+		JPanel panel;
+
+		panel = new JPanel();
+		nameInput = new JTextField(10);
+		descInput = new JTextField(10);
+
+		panel.add(new JLabel("Name:"));
+		panel.add(nameInput);
+		/* padding */
+		panel.add(Box.createHorizontalStrut(16));
+
+		panel.add(new JLabel("Description:"));
+		panel.add(descInput);
+		nameInput.requestFocusInWindow();
+
+		int res = JOptionPane.showConfirmDialog(mainWindow, panel,
+			"Write the name of the word and its description?",
+			JOptionPane.OK_CANCEL_OPTION);
+		if(res == JOptionPane.OK_OPTION) {
+			WordEntry entry = dictionary.newWord(nameInput.getText());
+			entry.setContent(mainWindow.generateNewPage(nameInput.getText()));
+			entry.setDescription(descInput.getText());
 		}
 		/*TODO update the search results */
 	}
