@@ -106,7 +106,11 @@ public class PageArea extends JPanel {
 		case TextNode.ROOT_TYPE:
 			return "<html><body>" + content + "</body></html>";
 		case TextNode.HEADER_TYPE:
-			return "<h1>" + content + "</h1>";
+			String level = "6";
+			if(node.getParameter() != null) {
+				level = node.getParameter();
+			}
+			return "<h" + level + ">" + content + "</h" + level + ">";
 		case TextNode.PARAGRAPH_TYPE:
 			return "<p>" + content + "</p>";
 		case TextNode.STRONG_TYPE:
