@@ -1,16 +1,18 @@
-package org.quicktionary.gui;
+package org.quicktionary.backend;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import org.quicktionary.backend.HistoryEvent;
 import org.quicktionary.backend.parsers.XMLParser;
 import org.quicktionary.backend.parsers.WikiMarkup;
 import org.quicktionary.backend.TextNode;
+import org.quicktionary.backend.History;
 
 /**
  * This file is for debugging the test cases.
  */
-public class Test {
+public final class Test {
 	private XMLParser  parserXML;
 	private WikiMarkup parserWiki;
 	private TextNode node;
@@ -23,6 +25,7 @@ public class Test {
 		parserXML = new XMLParser();
 		parserWiki = new WikiMarkup();
 
+		historyTest();
 		xmlParserTest();
 		wikiParserTest();
 
@@ -79,6 +82,34 @@ public class Test {
 		System.out.println("\n\nresults " + testSuccess + " / " + testTotal);
 	}
 
+	private class E implements HistoryEvent {
+		public int id;
+		public E(int id) {
+			this.id = id;
+		}
+		public String getEventType() {
+			return "e";
+		}
+
+		public boolean truncateSimilar() {
+			return false;
+		}
+	}
+
+	private class ETruncatable implements HistoryEvent {
+		public int id;
+		public ETruncatable(int id) {
+			this.id = id;
+		}
+		public String getEventType() {
+			return "b";
+		}
+
+		public boolean truncateSimilar() {
+			return true;
+		}
+	}
+
 	private boolean result(boolean success) {
 		if(success) {
 			testSuccess++;
@@ -116,6 +147,16 @@ public class Test {
 
 		parserXML.findElement("");
 		System.out.println(!parserXML.parsingErrorHappened());
+	}
+	public void historyTest() {
+		History history = new History();
+		HistoryEvent e = new E(1);
+		HistoryEvent e1 = new ETruncatable(2);
+		HistoryEvent e2 = new ETruncatable(3);
+		history.saveEvent(e);
+		history.saveEvent(e1);
+		history.saveEvent(e2);
+		System.out.println("result " + history.getPrevious(false));
 	}
 	public void wikiParserTest() {
 	}
