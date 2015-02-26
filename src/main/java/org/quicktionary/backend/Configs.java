@@ -50,6 +50,7 @@ public class Configs {
 	 */
 	protected void setOption(String key, Object value) {
 		options.put(key, value);
+		//System.out.println("config set " + key + " " + valueToString(value));
 	}
 
 	/**
@@ -59,6 +60,7 @@ public class Configs {
 	 */
 	public static Object getOption(String key) {
 		Object obj = options.get(key);
+		//System.out.println("config get " + key);
 
 		if(obj == null) {
 			throw new Error("Option \"" + key + "\" is not defined");
@@ -128,7 +130,7 @@ public class Configs {
 			if(option == null) {
 				continue;
 			}
-			options.put(option.getKey(), option.getValue());
+			setOption(option.getKey(), option.getValue());
 		}
 	}
 
