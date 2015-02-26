@@ -225,4 +225,18 @@ public class TextNodeTest {
 
 		assertSame(g.getChildren().get(0), f.getChildren().get(0));
 	}
+
+	@Test
+	public void prependTwoChildrenToNode() {
+		TextNode f, g;
+		f = new TextNode(0, null);
+		f.prependChild(new TextNode(0, null));
+		f.prependChild(new TextNode(1, null));
+
+		g = new TextNode(0, null);
+		g.appendChild(new TextNode(1, null));
+		g.appendChild(new TextNode(0, null));
+
+		assertTrue(g.equals(f));
+	}
 }
