@@ -56,6 +56,7 @@ class Searcher {
 					searchResults();
 				} catch(Exception e) {
 					/*TODO write this to log */
+					System.out.println("Error in search results");
 				}
 				waitNextSearch();
 			}
@@ -176,7 +177,7 @@ class Searcher {
 				break;
 			}
 
-			/* go through all words that datbase gave to us */
+			/* go through all words that database gave to us */
 			for(i = 0; i < requestCount && entries[i] != null; i++) {
 				SearchItem searchItem;
 				String desc;
